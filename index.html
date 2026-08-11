@@ -899,6 +899,17 @@ const QUESTIONS = [
     sug:['Acteur / actrice de l\'histoire','Voyeur — je regarde sans participer','Invisible — l\'histoire se passe sans moi','Je regarde… puis je me joins'],
     customPh:'Un autre rôle — précisez…' },
 
+  { id:'genre', section:'Personnages', type:'single',
+    title:'Vous êtes… ?',
+    sub:'Pour vous proposer les bons mots.',
+    sug:['Un homme','Une femme'],
+    customPh:'Autrement — dites-le avec vos mots…' },
+
+  { id:'orientation', section:'Personnages', type:'single',
+    title:'L\'orientation du récit ?',
+    sug:['Hétérosexuel','Lesbien','Gay','Bisexuel'],
+    customPh:'Autre — précisez…' },
+
   { id:'moi', section:'Personnages', type:'multitext', optional:true,
     showIf:()=>roleValue()!==ROLE_INVISIBLE,
     title:'Parlez-moi de vous',
@@ -917,11 +928,6 @@ const QUESTIONS = [
     sub:'Optionnel — un tiers, des silhouettes, des regards…',
     sug:['Personne — juste nous','Un inconnu au regard insistant','Une inconnue troublante','Le serveur du bar','La masseuse','Un couple d\'amis','Le/la meilleur·e ami·e','Un ex qui rôde','Des témoins au loin'],
     customPh:'Précisez qui, et son rôle…' },
-
-  { id:'orientation', section:'Personnages', type:'single',
-    title:'L\'orientation du récit ?',
-    sug:['Hétérosexuel','Lesbien','Gay','Bisexuel'],
-    customPh:'Autre — précisez…' },
 
   { id:'A', section:'Vos envies', type:'multi', optional:true,
     title:'Jeux de bouche & léchage',
@@ -1195,6 +1201,21 @@ const LOC_PAR_VIBE={
  'Luxe & pouvoir':['Penthouse sur la ville','Palace parisien'],
  'Retrouvailles':['Maison en bord de mer']
 };
+const TRAITS_HOMME=['Grand & athlétique','Carrure large','Mince & nerveux','Barbe soignée','Poivre et sel','Regard autoritaire','Voix grave','Mains expertes','Tatouages discrets','Dominant','Soumis','Timide en apparence','Joueur','Sensuel et lent'];
+const TRAITS_FEMME=['Silhouette fine','Formes généreuses','Brune aux yeux verts','Blonde solaire','Rousse','Longs cheveux noirs','Regard qui trouble','Lèvres pleines','Tatouages discrets','Dominante','Soumise','Timide en apparence','Joueuse','Sensuelle et lente'];
+const PART_HOMME=['Grand & ténébreux','Carrure rassurante','Barbe naissante','Regard qui déshabille','Mains expertes','Voix grave','Tatoué','Dominant','Soumis','Tendre & attentionné','Insaisissable'];
+const PART_FEMME=['Brune incendiaire','Blonde solaire','Rousse','Courbes affolantes','Silhouette délicate','Regard qui trouble','Nuque parfumée','Tatouée','Dominante','Soumise','Douce & joueuse','Insaisissable'];
+function genreValue(){
+  const a=S.answers.genre;
+  return a ? (a.sel||(a.custom&&a.custom.trim())||'') : '';
+}
+function partnerGender(){
+  const g=genreValue(), o=(S.answers.orientation&&S.answers.orientation.sel)||'';
+  if(o==='Hétérosexuel') return g==='Un homme'?'F':(g==='Une femme'?'H':'');
+  if(o==='Gay') return 'H';
+  if(o==='Lesbien') return 'F';
+  return '';
+}
 const ROLE_ACTOR='Acteur / actrice de l\'histoire';
 const ROLE_VOYEUR='Voyeur — je regarde sans participer';
 const ROLE_INVISIBLE='Invisible — l\'histoire se passe sans moi';
@@ -1234,6 +1255,16 @@ function ctxRule(rules, txt){
   return null;
 }
 function suggestionsFor(q){
+  if(q.id==='moi'){
+    const g=genreValue();
+    if(g==='Un homme') return {list:TRAITS_HOMME, hint:null};
+    if(g==='Une femme') return {list:TRAITS_FEMME, hint:null};
+  }
+  if(q.id==='partenaire'){
+    const pg=partnerGender();
+    if(pg==='H') return {list:PART_HOMME, hint:null};
+    if(pg==='F') return {list:PART_FEMME, hint:null};
+  }
   if(q.id==='role'&&S._fdsPrefill){
     return {list:q.sug, hint:'Décor, lieux et scénario sont déjà posés par le fantasme du soir — il ne reste que vous.'};
   }
@@ -1527,6 +1558,7 @@ function startWizard(mode){
   });
   S.answers.longueur.sel = 4800;
   /* pré-remplissage depuis le profil */
+  if(profile.genre) S.answers.genre.sel=profile.genre;
   if(profile.moi) S.answers.moi.custom=profile.moi;
   if(profile.partenaire) S.answers.partenaire.custom=profile.partenaire;
   if(profile.orientation) S.answers.orientation.sel=profile.orientation;
@@ -1715,6 +1747,7 @@ function collectParams(){
     orientation: joinAnswer('orientation','Hétérosexuel'),
     role: roleValue(),
     longueur: (S.answers.longueur && S.answers.longueur.sel) || 4800,
+    genre: joinAnswer('genre','Non précisé'),
     styleEcriture: joinAnswer('styleEcriture','Libre — une voix élégante, immersive et sensorielle'),
     moi: joinAnswer('moi','Non précisé — inventer une description cohérente'),
     partenaire: joinAnswer('partenaire','Non précisé — inventer une description cohérente'),
@@ -1747,7 +1780,7 @@ function buildSystemPrompt(p){
 
 **Personnages :**
 
-- Moi :
+- Moi (${p.genre}) :
   Description : ${p.moi}
 
 - Partenaire principale :
@@ -1921,6 +1954,8 @@ function finishGeneration(hasText){
     if(S.mode==='couple' || S.mode==='continue'){
       document.getElementById('sharebox').style.display='block';
     }
+    const g=genreValue();
+    if(g) profile.genre=g;
     /* statistiques du profil + série */
     profile.stats.recits=(profile.stats.recits||0)+1;
     profile.stats.mots=(profile.stats.mots||0)+countWords(S.story);
@@ -2534,8 +2569,8 @@ window.addEventListener('error',e=>{
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='2.4.2';
-const APP_BUILD='11/08/2026 15:46 (Paris)';
+const APP_VERSION='2.5.0';
+const APP_BUILD='11/08/2026 15:50 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
