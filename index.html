@@ -90,8 +90,8 @@ header{
 .screen{display:none;animation:fade .55s var(--ease)}
 .screen.on{display:block}
 @keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@keyframes slideq{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:none}}
-@keyframes slideqb{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+@keyframes slideq{from{opacity:.25;transform:translateX(26px)}to{opacity:1;transform:none}}
+@keyframes slideqb{from{opacity:.25;transform:translateX(-26px)}to{opacity:1;transform:none}}
 
 /* ---------- Gate (désactivée) ---------- */
 #gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
@@ -278,6 +278,9 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 
 /* ---------- Questionnaire ---------- */
 body.wizmode footer{display:none}
+body.wizmode::before{animation:none;opacity:.5}
+body.wizmode::after{display:none}
+body.wizmode #liquid{display:none}
 body.wizmode .wrap{padding-bottom:0}
 body.wizmode{overflow:hidden;height:100dvh}
 #wizard.on{
@@ -285,7 +288,7 @@ body.wizmode{overflow:hidden;height:100dvh}
   height:calc(100dvh - 104px);min-height:400px;overflow:hidden;
   padding-bottom:calc(84px + var(--safe-b));
 }
-#qCard{flex:1;display:flex;flex-direction:column;min-height:0}
+#qCard{flex:1;display:flex;flex-direction:column;min-height:0;will-change:transform,opacity}
 .qtop{flex:0 0 auto}
 .qscroll{
   flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
@@ -303,8 +306,8 @@ body.wizmode{overflow:hidden;height:100dvh}
 .qprogress .cnt .sec{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--peach)}
 .qprogress .cnt span:last-child{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--mut)}
 
-#qCard{animation:slideq .5s var(--ease)}
-#qCard.back{animation:slideqb .5s var(--ease)}
+#qCard{animation:slideq .3s var(--ease)}
+#qCard.back{animation:slideqb .3s var(--ease)}
 .qtitle{
   font-family:var(--serif);font-weight:500;
   font-size:clamp(23px,5.8vw,34px);letter-spacing:-.02em;line-height:1.1;
@@ -315,12 +318,12 @@ body.wizmode{overflow:hidden;height:100dvh}
 
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{
-  font-family:var(--sans);font-size:13.5px;font-weight:450;letter-spacing:-.005em;
-  padding:11px 15px;border-radius:13px;
+  font-family:var(--sans);font-size:13px;font-weight:450;letter-spacing:-.005em;
+  padding:10px 13px;border-radius:12px;
   border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.17);
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
   color:#CDBEC5;cursor:pointer;
-  transition:all .3s var(--ease);min-height:42px;
+  transition:all .3s var(--ease);min-height:40px;
 }
 .chip:active{transform:scale(.95)}
 .chip:hover{border-color:var(--line2);color:var(--txt);background:rgba(255,255,255,.055)}
@@ -521,14 +524,15 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 
 /* ---------- Toast ---------- */
 #toast{
-  position:fixed;bottom:calc(32px + var(--safe-b));left:50%;transform:translateX(-50%) translateY(90px);
+  position:fixed;bottom:calc(32px + var(--safe-b));left:50%;
+  opacity:0;visibility:hidden;transform:translateX(-50%) translateY(140px);
   background:rgba(34,16,25,.72);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
   border:1px solid rgba(255,92,56,.45);color:var(--peach);
   padding:14px 26px;border-radius:16px;font-size:13.5px;font-weight:500;
-  transition:transform .4s var(--ease);z-index:200;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;
+  transition:transform .4s var(--ease), opacity .3s, visibility 0s .4s;z-index:200;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;
   box-shadow:0 16px 44px rgba(0,0,0,.5);
 }
-#toast.on{transform:translateX(-50%) translateY(0)}
+#toast.on{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);transition:transform .4s var(--ease), opacity .3s, visibility 0s}
 
 /* ---------- Audio ---------- */
 .audiobar{
@@ -872,14 +876,14 @@ const QUESTIONS = [
     showIf:()=>!S._fdsPrefill,
     title:'Où cela se passe-t-il ?',
     sub:'Le grand décor de l\'histoire.',
-    sug:['Château en Provence','Hôtel particulier à Paris','Villa sur la côte amalfitaine','Chalet isolé sous la neige','Riad à Marrakech','Loft à New York','Yacht en Méditerranée','Maison de famille en bord de mer'],
+    sug:['Château en Provence','Hôtel à Paris','Villa amalfitaine','Chalet sous la neige','Riad à Marrakech','Loft new-yorkais','Yacht privé','Maison en bord de mer'],
     customPh:'Ex : Château de la Gaude, Rue Dauphine…' },
 
   { id:'lieux', section:'Ambiance', type:'multi',
     showIf:()=>!S._fdsPrefill,
     title:'Dans quels lieux précis ?',
     sub:'Les endroits où les scènes se déroulent.',
-    sug:['Suite d\'hôtel','Avion','Ascenseur','Terrasse la nuit','Cuisine','Piscine','Plage déserte','Voiture','Bureau après la fermeture','Salle de bain','Cave à vin','Bibliothèque'],
+    sug:['Suite d\'hôtel','Avion','Ascenseur','Terrasse la nuit','Cuisine','Piscine','Plage déserte','Voiture','Le bureau, après l\'heure','Salle de bain','Cave à vin','Bibliothèque'],
     customPh:'Un autre lieu…' },
 
   { id:'scenario', section:'Ambiance', type:'scenario',
@@ -908,10 +912,11 @@ const QUESTIONS = [
     sug:['Grand & athlétique','Silhouette fine','Formes généreuses','Brun·e ténébreux·se','Blond·e solaire','Rousse incendiaire','Regard qui déshabille','Mains expertes','Voix grave','Tatoué·e','Dominant·e','Soumis·e','Tendre & attentionné·e','Insaisissable'],
     customPh:'Décrivez votre partenaire avec vos mots…' },
 
-  { id:'autres', section:'Personnages', type:'textarea', optional:true,
+  { id:'autres', section:'Personnages', type:'multitext', optional:true,
     title:'D\'autres personnages ?',
     sub:'Optionnel — un tiers, des silhouettes, des regards…',
-    customPh:'Ex : le serveur du bar, une amie de passage… (ou passez)' },
+    sug:['Personne — juste nous','Un inconnu au regard insistant','Une inconnue troublante','Le serveur du bar','La masseuse','Un couple d\'amis','Le/la meilleur·e ami·e','Un ex qui rôde','Des témoins au loin'],
+    customPh:'Précisez qui, et son rôle…' },
 
   { id:'orientation', section:'Personnages', type:'single',
     title:'L\'orientation du récit ?',
@@ -955,10 +960,11 @@ const QUESTIONS = [
     sug:['Anaïs Nin — poétique & charnel','Histoire d\'O — cérémonial & envoûtant','Cinquante nuances — moderne & addictif','Marguerite Duras — épuré & obsédant','Roman de gare — direct & assumé','Journal intime — première personne','Lettre à un amant','Cru & sans détour'],
     customPh:'Un auteur, un livre, un ton…' },
 
-  { id:'commentaires', section:'Finitions', type:'textarea', optional:true,
+  { id:'commentaires', section:'Finitions', type:'multitext', optional:true,
     title:'Un dernier mot pour l\'auteur ?',
     sub:'Limites, envies particulières, détails à ne pas oublier…',
-    customPh:'Optionnel — tout ce que l\'auteur doit savoir…' },
+    sug:['Beaucoup de préliminaires','Montée très progressive','Beaucoup de dialogues','Peu de dialogues','Vocabulaire très cru','Rester élégant, jamais vulgaire','Fin heureuse','Fin ouverte, à suivre','Une pointe d\'humour','Aucune limite'],
+    customPh:'Tout ce que l\'auteur doit savoir…' },
 
   { id:'longueur', section:'Finitions', type:'length',
     title:'Quelle longueur de récit ?',
@@ -1162,15 +1168,15 @@ function renderSuggest(){
    Suggestions adaptatives — les réponses influencent les suivantes
 ================================================================ */
 const LIEUX_CTX=[
- {re:/chalet|neige|montagne|ski/i, tag:'le chalet', list:['Devant la cheminée','Sur la peau de bête du salon','La chambre sous les combles','Le sauna','Le bain nordique sous la neige','La douche chaude après le froid','Contre la fenêtre face à la tempête','La mezzanine']},
+ {re:/chalet|neige|montagne|ski/i, tag:'le chalet', list:['Devant la cheminée','La peau de bête','La chambre sous les combles','Le sauna','Le bain nordique','La douche après le froid','Contre la fenêtre','La mezzanine']},
  {re:/ch[âa]teau|manoir|demeure/i, tag:'le château', list:['La suite à baldaquin','La bibliothèque','Le grand escalier','La cave à vin','Le boudoir','Les jardins la nuit','La piscine du parc','Les cuisines endormies']},
- {re:/villa|amalfi|toscane|c[ôo]te/i, tag:'la villa', list:['La terrasse face à la mer','La chambre aux volets entrouverts','La piscine à débordement','La crique privée en contrebas','La cuisine d\'été','La douche extérieure','Le ponton au crépuscule']},
+ {re:/villa|amalfi|toscane|c[ôo]te/i, tag:'la villa', list:['La terrasse face à la mer','La chambre, volets clos','La piscine à débordement','La crique privée','La cuisine d\'été','La douche extérieure','Le ponton au crépuscule']},
  {re:/riad|marrakech|maroc|hammam/i, tag:'le riad', list:['Le patio aux mosaïques','Le hammam privé','La terrasse sous les étoiles','La chambre aux voilages','Le bassin intérieur','L\'alcôve aux lanternes']},
- {re:/loft|penthouse|new york|appartement|gratte/i, tag:'le loft', list:['Contre la baie vitrée face à la ville','Le canapé du salon','La douche à l\'italienne','Le rooftop','L\'ascenseur privé','L\'îlot de la cuisine','Le dressing']},
- {re:/yacht|bateau|voilier|croisi/i, tag:'le yacht', list:['La cabine principale','Le pont arrière la nuit','Le jacuzzi du pont supérieur','La plage arrière au mouillage','La cabine de pilotage']},
- {re:/plage|bord de mer|oc[ée]an|dune|crique/i, tag:'la maison de bord de mer', list:['La chambre d\'enfance','La plage à marée basse','La véranda','Le grenier','Les dunes au coucher du soleil','La douche de jardin','Le hamac à la tombée du soir']},
- {re:/h[ôo]tel|palace|suite/i, tag:'l\'hôtel', list:['La suite au dernier étage','Le couloir désert','L\'ascenseur','Le spa après la fermeture','La baignoire en marbre','Le bar de l\'hôtel','Le room service qui s\'attarde']},
- {re:/train|orient|wagon/i, tag:'le train de nuit', list:['Le compartiment privé','Le couloir étroit du wagon','La voiture-restaurant déserte','La couchette exiguë','Le quai de gare à l\'aube']},
+ {re:/loft|penthouse|new york|appartement|gratte/i, tag:'le loft', list:['Contre la baie vitrée','Le canapé du salon','La douche à l\'italienne','Le rooftop','L\'ascenseur privé','L\'îlot de la cuisine','Le dressing']},
+ {re:/yacht|bateau|voilier|croisi/i, tag:'le yacht', list:['La cabine principale','Le pont arrière la nuit','Le jacuzzi du pont','La plage arrière','La cabine de pilotage']},
+ {re:/plage|bord de mer|oc[ée]an|dune|crique/i, tag:'la maison de bord de mer', list:['La chambre d\'enfance','La plage à marée basse','La véranda','Le grenier','Les dunes au couchant','La douche de jardin','Le hamac à la tombée du soir']},
+ {re:/h[ôo]tel|palace|suite/i, tag:'l\'hôtel', list:['La suite au dernier étage','Le couloir désert','L\'ascenseur','Le spa après la fermeture','La baignoire en marbre','Le bar de l\'hôtel','Le room service']},
+ {re:/train|orient|wagon/i, tag:'le train de nuit', list:['Le compartiment privé','Le couloir étroit du wagon','Le wagon-restaurant','La couchette exiguë','Le quai de gare à l\'aube']},
  {re:/cabaret|sc[èe]ne|th[ée][âa]tre/i, tag:'le cabaret', list:['La loge après le spectacle','Les coulisses','La scène après minuit','Le bar feutré','L\'escalier de service']}
 ];
 const SCEN_CTX=[
@@ -1182,12 +1188,12 @@ const SCEN_CTX=[
  {re:/riad|marrakech|hammam/i, list:['Le hammam privatisé pour deux','La chaleur de l\'après-midi, les voilages, la sieste']}
 ];
 const LOC_PAR_VIBE={
- 'Années folles':['Cabaret parisien','Train de nuit Orient-Express'],
- 'Époque victorienne':['Manoir anglais isolé'],
- 'Été brûlant':['Villa sur la côte amalfitaine','Crique déserte au soleil couchant'],
- 'Nuit d\'orage':['Vieille demeure isolée sous l\'orage'],
- 'Luxe & pouvoir':['Penthouse avec vue sur la ville','Palace parisien'],
- 'Retrouvailles':['Maison de famille en bord de mer']
+ 'Années folles':['Cabaret parisien','Orient-Express'],
+ 'Époque victorienne':['Manoir anglais'],
+ 'Été brûlant':['Villa amalfitaine','Crique déserte'],
+ 'Nuit d\'orage':['Demeure isolée sous l\'orage'],
+ 'Luxe & pouvoir':['Penthouse sur la ville','Palace parisien'],
+ 'Retrouvailles':['Maison en bord de mer']
 };
 const ROLE_ACTOR='Acteur / actrice de l\'histoire';
 const ROLE_VOYEUR='Voyeur — je regarde sans participer';
@@ -1703,14 +1709,14 @@ function collectParams(){
     localisation: joinAnswer('localisation','Au choix de l\'auteur, cohérente avec le scénario'),
     lieux: joinAnswer('lieux','Au choix de l\'auteur'),
     scenario: scenario,
-    commentaires: textAnswer('commentaires','Aucun'),
+    commentaires: joinAnswer('commentaires','Aucun'),
     orientation: joinAnswer('orientation','Hétérosexuel'),
     role: roleValue(),
     longueur: (S.answers.longueur && S.answers.longueur.sel) || 4800,
     styleEcriture: joinAnswer('styleEcriture','Libre — une voix élégante, immersive et sensorielle'),
-    moi: textAnswer('moi','Non précisé — inventer une description cohérente'),
-    partenaire: textAnswer('partenaire','Non précisé — inventer une description cohérente'),
-    autres: textAnswer('autres','Aucun'),
+    moi: joinAnswer('moi','Non précisé — inventer une description cohérente'),
+    partenaire: joinAnswer('partenaire','Non précisé — inventer une description cohérente'),
+    autres: joinAnswer('autres','Aucun'),
     A:practiceList('A'), B:practiceList('B'), C:practiceList('C'),
     D:practiceList('D'), E:practiceList('E'), F:practiceList('F')
   };
@@ -2509,8 +2515,8 @@ if(window.matchMedia('(hover:hover)').matches){
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='2.2.0';
-const APP_BUILD='11/08/2026 15:33 (Paris)';
+const APP_VERSION='2.4.0';
+const APP_BUILD='11/08/2026 15:43 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
