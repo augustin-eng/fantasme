@@ -73,7 +73,7 @@ body::after{
 /* ---------- Header ---------- */
 header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:22px 0 16px;margin-bottom:30px;
+  padding:16px 0 12px;margin-bottom:20px;
 }
 .logo{font-family:var(--serif);font-size:27px;font-weight:500;font-style:italic;letter-spacing:-.01em;color:var(--txt);cursor:pointer;user-select:none}
 .logo .dot{background:var(--emberG);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -105,9 +105,10 @@ header{
 /* ---------- Typographie ---------- */
 h2.title{
   font-family:var(--serif);font-weight:500;
-  font-size:clamp(34px,8.5vw,46px);letter-spacing:-.02em;line-height:1.05;
-  margin-bottom:14px;
+  font-size:clamp(30px,7.6vw,44px);letter-spacing:-.02em;line-height:1.05;
+  margin-bottom:12px;
 }
+.title .acc{font-style:italic;background:var(--emberG);-webkit-background-clip:text;background-clip:text;color:transparent}
 p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-width:520px}
 .eyebrow{
   font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
@@ -192,14 +193,13 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 .scard .sc-meta b{color:var(--peach);font-weight:600}
 
 /* ---------- Cards (home) ---------- */
-.cards{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:28px}
-@media(min-width:700px){.cards{grid-template-columns:1fr 1fr}}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
 .card{
   position:relative;overflow:hidden;cursor:pointer;
   background:linear-gradient(150deg,rgba(255,255,255,.075),rgba(255,255,255,.015) 48%),rgba(24,14,22,.52);
   backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);
   border:1px solid rgba(255,255,255,.09);border-top-color:rgba(255,255,255,.22);
-  border-radius:24px;padding:30px 26px 34px;
+  border-radius:22px;padding:20px 18px 30px;
   transition:all .45s var(--ease);transform-style:preserve-3d;
   box-shadow:0 24px 60px rgba(0,0,0,.4), 0 44px 90px -40px rgba(226,42,80,.22);
 }
@@ -210,8 +210,8 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
   opacity:0;transition:opacity .5s;
 }
 .card::after{
-  content:'→';position:absolute;right:26px;bottom:20px;
-  font-size:22px;color:var(--mut);transition:all .35s var(--ease);
+  content:'→';position:absolute;right:16px;bottom:12px;
+  font-size:18px;color:var(--mut);transition:all .35s var(--ease);
 }
 .card:hover{border-color:var(--line2);transform:translateY(-3px)}
 .card:hover::before{opacity:1}
@@ -222,8 +222,8 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
   color:var(--peach);background:rgba(226,42,80,.14);
   padding:6px 11px;border-radius:9px;margin-bottom:16px;
 }
-.card h3{font-family:var(--serif);font-size:27px;font-weight:500;letter-spacing:-.015em;margin-bottom:9px}
-.card p{color:var(--mut);font-size:13.5px;line-height:1.65;max-width:92%}
+.card h3{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.015em;margin-bottom:7px}
+.card p{color:var(--mut);font-size:12px;line-height:1.55}
 .linklike{
   background:none;border:none;color:var(--mut);font-family:var(--sans);font-size:14px;font-weight:500;
   cursor:pointer;padding:7px 0;transition:color .3s;text-decoration:none;
@@ -248,9 +248,55 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 .btn-quiet{background:none;border:1px solid var(--line);color:var(--mut)}
 .btn-quiet:hover{color:var(--txt);border-color:var(--line2)}
 
+/* ---------- Bottom bar ---------- */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:60;display:none;
+  padding:8px 14px calc(8px + var(--safe-b));
+  background:linear-gradient(transparent, rgba(14,9,16,.96) 42%);
+  backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
+}
+.tabbar.on{display:block}
+.tabbar .inner{max-width:520px;margin:0 auto;display:flex;align-items:flex-end;justify-content:space-between}
+.tab{
+  background:none;border:none;color:var(--mut);cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  font-family:var(--sans);font-size:9.5px;font-weight:550;letter-spacing:.02em;
+  flex:1;padding:6px 0 2px;transition:color .3s;
+}
+.tab svg{width:22px;height:22px}
+.tab.on{color:var(--peach)}
+.tabplus{
+  width:56px;height:56px;border-radius:50%;flex:0 0 auto;margin:0 6px -2px;
+  display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 45%),var(--emberG);
+  border:none;box-shadow:0 10px 28px rgba(226,42,80,.5), inset 0 1px 0 rgba(255,255,255,.3);
+  transition:all .3s var(--ease);
+}
+.tabplus svg{width:24px;height:24px}
+.tabplus:active{transform:scale(.92)}
+#home.on,#profile.on,#discoverScreen.on{padding-bottom:104px}
+
 /* ---------- Questionnaire ---------- */
-#wizard{padding-bottom:124px}
-.qprogress{margin-bottom:34px}
+body.wizmode footer{display:none}
+body.wizmode .wrap{padding-bottom:0}
+body.wizmode{overflow:hidden;height:100dvh}
+#wizard.on{
+  display:flex;flex-direction:column;
+  height:calc(100dvh - 104px);min-height:400px;overflow:hidden;
+  padding-bottom:calc(84px + var(--safe-b));
+}
+#qCard{flex:1;display:flex;flex-direction:column;min-height:0}
+.qtop{flex:0 0 auto}
+.qscroll{
+  flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:2px 0 14px;scrollbar-width:none;
+  mask-image:linear-gradient(#000 88%,transparent);
+  -webkit-mask-image:linear-gradient(#000 88%,transparent);
+}
+.qscroll::-webkit-scrollbar{display:none}
+.qbottom{flex:0 0 auto;padding-top:10px}
+.qbottom textarea{min-height:56px}
+.qprogress{margin-bottom:18px;flex:0 0 auto}
 .qprogress .track{height:2px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
 .qprogress .fill{height:100%;background:var(--emberG);width:0%;transition:width .6s var(--ease);border-radius:2px;box-shadow:0 0 14px rgba(255,92,56,.5)}
 .qprogress .cnt{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
@@ -261,20 +307,20 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 #qCard.back{animation:slideqb .5s var(--ease)}
 .qtitle{
   font-family:var(--serif);font-weight:500;
-  font-size:clamp(28px,7vw,38px);letter-spacing:-.02em;line-height:1.08;
-  margin-bottom:12px;
+  font-size:clamp(23px,5.8vw,34px);letter-spacing:-.02em;line-height:1.1;
+  margin-bottom:8px;
 }
-.qsub{color:var(--mut);font-size:14px;line-height:1.65;margin-bottom:26px;max-width:520px}
-.ctxhint{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--peach);margin:-12px 0 22px}
+.qsub{color:var(--mut);font-size:12.5px;line-height:1.55;margin-bottom:14px;max-width:520px}
+.ctxhint{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--peach);margin:-6px 0 12px}
 
 .chips{display:flex;flex-wrap:wrap;gap:10px}
 .chip{
-  font-family:var(--sans);font-size:14px;font-weight:450;letter-spacing:-.005em;
-  padding:13px 18px;border-radius:14px;
+  font-family:var(--sans);font-size:13.5px;font-weight:450;letter-spacing:-.005em;
+  padding:11px 15px;border-radius:13px;
   border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.17);
   background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
   color:#CDBEC5;cursor:pointer;
-  transition:all .3s var(--ease);min-height:46px;
+  transition:all .3s var(--ease);min-height:42px;
 }
 .chip:active{transform:scale(.95)}
 .chip:hover{border-color:var(--line2);color:var(--txt);background:rgba(255,255,255,.055)}
@@ -284,8 +330,8 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
   box-shadow:0 10px 26px rgba(226,42,80,.42), inset 0 -2px 4px rgba(120,10,30,.3);
 }
 
-.customwrap{margin-top:22px}
-.customwrap .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:10px}
+.customwrap{margin-top:0}
+.customwrap .lbl{font-size:10px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:7px}
 input[type=text],input[type=password],textarea{
   width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--txt);
   font-family:var(--sans);font-weight:400;font-size:16px;padding:16px 18px;border-radius:16px;
@@ -594,7 +640,7 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
 <!-- ============ HOME ============ -->
 <section id="home" class="screen">
   <div class="eyebrow" id="homeEyebrow">Votre histoire, vos règles</div>
-  <h2 class="title">Quel fantasme vivrez-vous ce&nbsp;soir&nbsp;?</h2>
+  <h2 class="title">Quel <span class="acc">fantasme</span> vivrez-vous ce&nbsp;soir&nbsp;?</h2>
   <div class="whisper">Ce qui s'écrit ici reste entre nous.</div>
   <div class="statstrip" id="statStrip"></div>
   <div id="resumeBox"></div>
@@ -612,7 +658,13 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
       <p>Vous écrivez le premier chapitre selon vos envies, puis vous l'envoyez à votre partenaire — qui écrit la suite selon les siennes.</p>
     </div>
   </div>
-  <div id="discover"></div>
+</section>
+
+<!-- ============ DÉCOUVRIR ============ -->
+<section id="discoverScreen" class="screen">
+  <div class="eyebrow">Découvrir</div>
+  <h2 class="title">Des histoires à <span class="acc">saisir</span></h2>
+  <div id="discoverList"></div>
 </section>
 
 <!-- ============ PROFIL ============ -->
@@ -739,8 +791,30 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
 </div>
 
 <footer>
-  Un projet du studio The K Ventura
+  Un projet du studio The K Ventura<br>
+  <span id="buildTag" style="opacity:.6"></span>
 </footer>
+
+<!-- ============ BOTTOM BAR ============ -->
+<nav class="tabbar" id="tabbar">
+  <div class="inner">
+    <button class="tab on" id="tab_home" onclick="tabGo('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.5 3-2.5 4.5-2.5 8a4.5 4.5 0 0 0 9 0c0-2-1-3.5-2-4.5 0 1.5-1 2-1.5 2C16 6 14 4 12 3z"/><path d="M9.5 15.5c0 1.8 1.1 3 2.5 3s2.5-1.2 2.5-3"/></svg>
+      Ce soir</button>
+    <button class="tab" id="tab_discover" onclick="tabGo('discover')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9.5 13 13l-3.5 1.5L11 11z"/></svg>
+      Découvrir</button>
+    <button class="tabplus" onclick="startWizard('solo')" title="Nouvelle histoire">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+    </button>
+    <button class="tab" id="tab_read" onclick="tabGo('read')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6c-1.5-1.5-3.5-2-6-2v14c2.5 0 4.5.5 6 2 1.5-1.5 3.5-2 6-2V4c-2.5 0-4.5.5-6 2z"/><path d="M12 6v14"/></svg>
+      Lecture</button>
+    <button class="tab" id="tab_profile" onclick="tabGo('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.6-3.4 4.3-5 7.5-5s5.9 1.6 7.5 5"/></svg>
+      Profil</button>
+  </div>
+</nav>
 
 <!-- ============ AJUSTEMENTS EN LECTURE ============ -->
 <div class="sheet-bg" id="tuneSheet">
@@ -1360,7 +1434,7 @@ function scardHtml(c){
 function sheadHtml(t,sub){ return '<div class="shead"><h3>'+t+'</h3><span>'+sub+'</span></div>'; }
 function hrowHtml(list){ return '<div class="hrow">'+list.map(scardHtml).join('')+'</div>'; }
 function renderDiscover(){
-  const box=document.getElementById('discover'); if(!box) return;
+  const box=document.getElementById('discoverList'); if(!box) return;
   const ap=profile.activePath;
   const editorial=CATALOG.filter(c=>!c.by);
   /* Pour vous : la voie active d'abord, puis le ton doux */
@@ -1382,11 +1456,34 @@ function renderDiscover(){
 /* ================================================================
    Navigation écrans
 ================================================================ */
+const TAB_SCREENS={home:'home',discoverScreen:'discover',profile:'profile'};
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
   document.getElementById(id).classList.add('on');
   document.getElementById('qnav').classList.toggle('on', id==='wizard');
+  document.body.classList.toggle('wizmode', id==='wizard');
+  const tb=document.getElementById('tabbar');
+  if(tb){
+    tb.classList.toggle('on', id in TAB_SCREENS);
+    if(TAB_SCREENS[id]) updateTabs(TAB_SCREENS[id]);
+  }
   window.scrollTo({top:0});
+}
+function updateTabs(t){
+  ['home','discover','read','profile'].forEach(x=>{
+    const el=document.getElementById('tab_'+x);
+    if(el) el.classList.toggle('on', x===t);
+  });
+}
+function tabGo(t){
+  if(t==='home'){ goHome(); }
+  else if(t==='discover'){ renderDiscover(); showScreen('discoverScreen'); }
+  else if(t==='profile'){ openProfile(); }
+  else if(t==='read'){
+    const l=storeGet('fantasme_last');
+    if(l&&l.text) resumeReading();
+    else { toast('Aucune lecture en cours — écrivez votre première histoire'); }
+  }
 }
 function enterApp(){
   document.getElementById('gate').style.display='none';
@@ -1479,34 +1576,40 @@ function renderQuestion(){
   const isChips = (q.type==='multi'||q.type==='single'||q.type==='scenario'||q.type==='length'||q.type==='multitext');
   const isMulti = (q.type==='multi'||q.type==='multitext');
 
-  let html = '<div class="qtitle">'+title+'</div>';
+  let html = '<div class="qtop"><div class="qtitle">'+title+'</div>';
   if(sub) html += '<div class="qsub">'+sub+'</div>';
   if(ctx.hint) html += '<div class="ctxhint">✦ '+ctx.hint+'</div>';
+  html += '</div>';
 
+  let chipsHtml='';
   if(isChips){
-    html += '<div class="chips" id="qChips">';
+    chipsHtml += '<div class="chips" id="qChips">';
     sugs.forEach((s,i)=>{
       const label = (typeof s==='object') ? s.label : s;
       const isSel = isMulti ? a.sel.includes(label)
                   : (q.type==='length') ? a.sel===s.value
                   : a.sel===label;
-      html += '<button type="button" class="chip'+(isSel?' sel':'')+'" data-i="'+i+'">'+label+'</button>';
+      chipsHtml += '<button type="button" class="chip'+(isSel?' sel':'')+'" data-i="'+i+'">'+label+'</button>';
     });
-    html += '</div>';
+    chipsHtml += '</div>';
+  }
+
+  if(q.type==='textarea'){
+    html += '<div class="qscroll"><textarea id="qCustom" rows="6" placeholder="'+ph+'"></textarea></div>';
+  } else {
+    html += '<div class="qscroll">'+chipsHtml+'</div>';
   }
 
   if(q.type==='scenario'){
-    html += '<div class="customwrap"><div class="lbl">Précisez (recommandé)</div>'
-          + '<textarea id="qCustom" rows="4" placeholder="'+ph+'"></textarea></div>';
+    html += '<div class="qbottom"><div class="customwrap"><div class="lbl">Précisez (recommandé)</div>'
+          + '<textarea id="qCustom" rows="2" placeholder="'+ph+'"></textarea></div></div>';
   } else if(q.type==='multitext'){
-    html += '<div class="customwrap"><div class="lbl">Complétez librement</div>'
-          + '<textarea id="qCustom" rows="3" placeholder="'+ph+'"></textarea></div>';
-  } else if(q.type==='textarea'){
-    html += '<textarea id="qCustom" rows="4" placeholder="'+ph+'"></textarea>';
-  } else if(q.type!=='length'){
-    html += '<div class="customwrap"><div class="lbl">Ou écrivez le vôtre</div>'
+    html += '<div class="qbottom"><div class="customwrap"><div class="lbl">Complétez librement</div>'
+          + '<textarea id="qCustom" rows="2" placeholder="'+ph+'"></textarea></div></div>';
+  } else if(q.type!=='length'&&q.type!=='textarea'){
+    html += '<div class="qbottom"><div class="customwrap"><div class="lbl">Ou écrivez le vôtre</div>'
           + '<input type="text" id="qCustom" placeholder="'+ph+'">'
-          + '</div>';
+          + '</div></div>';
   }
 
   card.innerHTML = html;
@@ -2402,6 +2505,17 @@ if(window.matchMedia('(hover:hover)').matches){
     if(tiltEl&&!e.target.closest('.card,.pathcard,.suggest')){ tiltEl.style.transform=''; tiltEl.classList.remove('tilted'); tiltEl=null; }
   });
 }
+
+/* ---- version ----
+   À incrémenter à chaque déploiement ; la date de build est
+   régénérée automatiquement quand Claude produit le fichier. */
+const APP_VERSION='2.2.0';
+const APP_BUILD='11/08/2026 15:33 (Paris)';
+(function(){
+  const bt=document.getElementById('buildTag');
+  if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
+  console.log('fantas.me v'+APP_VERSION+' — build '+APP_BUILD);
+})();
 
 /* ---- init ---- */
 enterApp(); /* porte 18+ désactivée temporairement */
