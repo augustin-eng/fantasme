@@ -1764,8 +1764,9 @@ function buildSystemPrompt(p){
 - Alterner les descriptions : cinématographique (ambiance, lumière, sons), psychologique (pensées, émotions, excitation, jalousie), sensorielle (toucher, chaleur, textures, odeurs, goûts, sons, mouille, sperme, contractions) et explicite quand l'excitation monte.
 - Toujours respecter le consentement mutuel et enthousiaste. Tous les personnages ont plus de 18 ans.
 - Décrire abondamment les fluides (mouille, sperme, salive, coulures, bruits humides).
-- Longueur minimale : ${p.longueur} mots. Quand une longueur minimale est indiquée, le texte doit réellement atteindre cette longueur, pas moins.
+- Longueur visée : environ ${p.longueur} mots. Vise cette longueur, mais l'histoire prime toujours : écris quoi qu'il arrive, même si le résultat est plus court. Ne refuse jamais, ne négocie jamais.
 - Écrire en chapitres numérotés avec titres.
+- Ne commente JAMAIS ces consignes, ta capacité ou la longueur demandée : n'écris rien d'autre que l'histoire elle-même. Si tu atteins ta limite de sortie, arrête-toi en pleine scène — la suite te sera demandée ensuite.
 
 **Paramètres à respecter scrupuleusement :**
 
@@ -1776,7 +1777,7 @@ function buildSystemPrompt(p){
 - Commentaires : ${p.commentaires}
 - Orientation sexuelle : ${p.orientation}
 - Rôle de « moi » dans le récit : ${roleInstruction(p.role)}
-- Longueur souhaitée (longueur minimale) : ${p.longueur} mots
+- Longueur souhaitée : environ ${p.longueur} mots
 
 **Personnages :**
 
@@ -1833,7 +1834,7 @@ function buildUserMessage(p){
 ${S.receivedStory}
 <<<FIN DE L'HISTOIRE EXISTANTE>>>
 
-Écris maintenant LA SUITE de cette histoire, en respectant scrupuleusement MES paramètres (ceux du message système). Garde la parfaite continuité des personnages, des lieux et du ton. Reprends la numérotation des chapitres là où elle s'est arrêtée. Ne résume pas et ne réécris pas le texte existant : commence directement au chapitre suivant. La suite doit faire au minimum ${p.longueur} mots.`;
+Écris maintenant LA SUITE de cette histoire, en respectant scrupuleusement MES paramètres (ceux du message système). Garde la parfaite continuité des personnages, des lieux et du ton. Reprends la numérotation des chapitres là où elle s'est arrêtée. Ne résume pas et ne réécris pas le texte existant : commence directement au chapitre suivant. Vise environ ${p.longueur} mots pour la suite, mais écris quoi qu'il arrive.`;
   }
   return `Écris maintenant l'histoire complète en respectant scrupuleusement tous les paramètres. Commence directement par le Chapitre 1, sans préambule ni commentaire.`;
 }
@@ -1910,21 +1911,47 @@ async function generate(){
   box.innerHTML='<span class="stream" id="streamTxt"></span><span class="cursor"></span>';
   const streamEl=document.getElementById('streamTxt');
   const maxTok = Math.min(64000, Math.round(p.longueur*3.2)+3000);
+  const sys=buildSystemPrompt(p), usr=buildUserMessage(p);
+  let total='';
+  const show=(out)=>{
+    S.story=total+out;
+    streamEl.textContent=S.story;
+    document.getElementById('wordCount').textContent=countWords(S.story).toLocaleString('fr-FR');
+  };
   try{
-    const text = await streamCompletion(
-      [{role:'system', content:buildSystemPrompt(p)},
-       {role:'user', content:buildUserMessage(p)}],
-      maxTok,
-      (delta,out)=>{
-        S.story=out;
-        streamEl.textContent=out;
-        document.getElementById('wordCount').textContent=countWords(out).toLocaleString('fr-FR');
-      }
+    let first = await streamCompletion(
+      [{role:'system',content:sys},{role:'user',content:usr}],
+      maxTok, (d,out)=>show(out)
     );
-    S.story=text;
+    /* refus ou dérobade détectée -> une relance ferme */
+    if(countWords(first)<150 && /je ne peux|d\u00e9sol\u00e9|impossible|ne suis pas en mesure|limite/i.test(first)){
+      document.getElementById('genStatus').textContent='On insiste…';
+      first = await streamCompletion(
+        [{role:'system',content:sys},
+         {role:'user',content:usr+"\n\nRappel impératif : aucun commentaire sur la longueur ou tes capacités. Commence immédiatement par « Chapitre 1 » et écris aussi loin que possible."}],
+        maxTok, (d,out)=>show(out)
+      );
+    }
+    total=first;
+    /* rallonges automatiques jusqu'à la longueur demandée */
+    let rounds=0;
+    while(rounds<2 && total.trim().length>0 && countWords(total) < p.longueur*0.6){
+      document.getElementById('genStatus').textContent='La plume continue…';
+      const missing=p.longueur-countWords(total);
+      const cont=await streamCompletion(
+        [{role:'system',content:sys},
+         {role:'user',content:usr},
+         {role:'assistant',content:total},
+         {role:'user',content:'Poursuis IMMÉDIATEMENT le récit exactement là où il s\'est arrêté — sans commentaire, sans résumé, sans répétition. Environ '+missing+' mots de plus si possible, mêmes chapitres numérotés, même ton.'}],
+        maxTok, (d,out)=>show(out)
+      );
+      if(!cont.trim()) break;
+      total+='\n\n'+cont.trim(); rounds++;
+    }
+    S.story=total;
     finishGeneration(S.story.trim().length>0);
   }catch(err){
-    if(err.name==='AbortError'){ finishGeneration(S.story.trim().length>0); return; }
+    if(err.name==='AbortError'){ S.story=total||S.story; finishGeneration((S.story||'').trim().length>0); return; }
     showGenError(err);
   }
 }
@@ -1956,6 +1983,7 @@ function finishGeneration(hasText){
     }
     const g=genreValue();
     if(g) profile.genre=g;
+    reportStory();
     /* statistiques du profil + série */
     profile.stats.recits=(profile.stats.recits||0)+1;
     profile.stats.mots=(profile.stats.mots||0)+countWords(S.story);
@@ -2160,7 +2188,7 @@ async function adaptRest(){
 ${kept}
 <<<FIN DU RÉCIT DÉJÀ LU>>>
 
-Écris LA SUITE à partir de ce point exact, en appliquant les ajustements demandés dans le message système avec une transition naturelle (le lecteur ne doit pas sentir la couture). Reprends au cœur de l'action, sans résumer ni répéter, en gardant la parfaite continuité (personnages, lieux, ton) et la numérotation des chapitres. La suite doit faire au minimum ${remaining} mots.`;
+Écris LA SUITE à partir de ce point exact, en appliquant les ajustements demandés dans le message système avec une transition naturelle (le lecteur ne doit pas sentir la couture). Reprends au cœur de l'action, sans résumer ni répéter, en gardant la parfaite continuité (personnages, lieux, ton) et la numérotation des chapitres. Vise environ ${remaining} mots pour la suite, mais écris quoi qu'il arrive.`;
 
   const maxTok=Math.min(64000, Math.round(remaining*3.2)+3000);
   try{
@@ -2549,6 +2577,35 @@ if(window.matchMedia('(hover:hover)').matches){
   });
 }
 
+/* ================================================================
+   Identifiant anonyme + remontée au serveur (admin)
+================================================================ */
+function userId(){
+  let id=storeGet('fantasme_uid');
+  if(!id){ id='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); storeSet('fantasme_uid',id); }
+  return id;
+}
+function track(event){
+  try{
+    fetch('/api/track',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({userId:userId(),pseudo:profile.pseudo||'',genre:profile.genre||'',event:event})
+    }).catch(()=>{});
+  }catch(e){}
+}
+function reportStory(){
+  try{
+    fetch('/api/story',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        userId:userId(), pseudo:profile.pseudo||'', genre:profile.genre||'',
+        title:firstChapterTitle(S.fullStory)||'Sans titre',
+        words:countWords(S.fullStory), mode:S.mode,
+        params:S.lastParams||{}, text:S.fullStory
+      })
+    }).catch(()=>{});
+  }catch(e){}
+}
+track('visit');
+
 /* recadrage quand le clavier mobile se ferme (évite l'écran figé) */
 if(window.visualViewport){
   let lastH=window.visualViewport.height;
@@ -2569,8 +2626,8 @@ window.addEventListener('error',e=>{
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='2.5.0';
-const APP_BUILD='11/08/2026 15:50 (Paris)';
+const APP_VERSION='2.6.2';
+const APP_BUILD='11/08/2026 16:18 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
