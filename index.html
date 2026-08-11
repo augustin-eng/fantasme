@@ -18,10 +18,10 @@
   --line2:rgba(244,231,225,.18);
   --txt:#F2E8E2;
   --mut:#A18F97;
-  --ember:#FF5C38;
-  --ember2:#E22A50;
-  --emberG:linear-gradient(135deg,#FF6A3D 0%,#E22A50 100%);
-  --peach:#FFB49E;
+  --ember:#E1517A;
+  --ember2:#8E2454;
+  --emberG:linear-gradient(135deg,#E1517A 0%,#8E2454 100%);
+  --peach:#F2AFC1;
   --serif:'Fraunces',Georgia,serif;
   --sans:'Inter',system-ui,-apple-system,sans-serif;
   --ease:cubic-bezier(.23,1,.32,1);
@@ -43,16 +43,16 @@ body{
 body::before{
   content:'';position:fixed;inset:-30%;pointer-events:none;z-index:0;
   background:
-    radial-gradient(38% 30% at 12% -2%, rgba(226,42,80,.36), transparent 65%),
-    radial-gradient(30% 26% at 96% 10%, rgba(255,106,61,.22), transparent 68%),
+    radial-gradient(38% 30% at 12% -2%, rgba(193,52,105,.36), transparent 65%),
+    radial-gradient(30% 26% at 96% 10%, rgba(225,81,122,.22), transparent 68%),
     radial-gradient(42% 36% at 74% 112%, rgba(122,30,96,.40), transparent 70%);
   animation:breathe 16s ease-in-out infinite alternate;
 }
 #liquid{
   position:fixed;inset:-30%;z-index:0;pointer-events:none;
   background:
-    radial-gradient(26% 22% at 30% 68%, rgba(255,92,56,.17), transparent 70%),
-    radial-gradient(22% 18% at 82% 40%, rgba(226,42,80,.15), transparent 70%),
+    radial-gradient(26% 22% at 30% 68%, rgba(225,81,122,.17), transparent 70%),
+    radial-gradient(22% 18% at 82% 40%, rgba(193,52,105,.15), transparent 70%),
     radial-gradient(18% 16% at 55% 20%, rgba(255,180,158,.07), transparent 70%);
   filter:blur(46px);
   animation:liquid 24s ease-in-out infinite alternate;
@@ -68,7 +68,7 @@ body::after{
 }
 @keyframes breathe{from{opacity:.75;transform:scale(1) translateY(0)}to{opacity:1;transform:scale(1.06) translateY(-12px)}}
 ::selection{background:var(--ember2);color:#fff}
-.wrap{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:0 22px 64px}
+.wrap{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:0 22px 8px}
 
 /* ---------- Header ---------- */
 header{
@@ -115,10 +115,10 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
   background:var(--emberG);-webkit-background-clip:text;background-clip:text;color:transparent;
   margin-bottom:14px;
 }
-.whisper{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--peach);opacity:.85;margin:-4px 0 30px}
+.whisper{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--peach);opacity:.85;margin:-4px 0 18px}
 
 /* ---------- Accueil : stats, reprise, fantasme du soir ---------- */
-.statstrip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.statstrip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
 .spill{
   display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--mut);
   padding:9px 14px;border-radius:12px;
@@ -127,7 +127,7 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 }
 .spill b{color:var(--peach);font-weight:600}
 .resume{
-  display:flex;align-items:center;gap:16px;border-radius:20px;padding:18px 20px;margin-bottom:16px;cursor:pointer;
+  display:flex;align-items:center;gap:14px;border-radius:20px;padding:16px 18px;margin-bottom:12px;cursor:pointer;
   background:rgba(26,15,23,.55);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
   border:1px solid var(--line2);border-top-color:rgba(255,255,255,.2);
   transition:all .35s var(--ease);
@@ -145,26 +145,25 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 .resume .rbar div{height:100%;background:var(--emberG);border-radius:2px}
 .resume .go2{color:var(--mut);font-size:18px;flex:0 0 auto}
 .fds{
-  position:relative;overflow:hidden;border-radius:24px;padding:26px 24px;margin-bottom:16px;
-  background:radial-gradient(120% 140% at 85% -20%, rgba(226,42,80,.28), transparent 55%),rgba(26,15,23,.55);
+  position:relative;overflow:hidden;border-radius:24px;padding:22px 22px;margin-bottom:12px;
+  background:radial-gradient(120% 140% at 85% -20%, rgba(193,52,105,.28), transparent 55%),rgba(26,15,23,.55);
   backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
-  border:1px solid rgba(226,42,80,.45);border-top-color:rgba(255,255,255,.22);
+  border:1px solid rgba(193,52,105,.45);border-top-color:rgba(255,255,255,.22);
   transform-style:preserve-3d;
 }
 .fds .ftag{
   display:inline-block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--peach);background:rgba(226,42,80,.16);padding:6px 11px;border-radius:9px;margin-bottom:14px;
+  color:var(--peach);background:rgba(193,52,105,.16);padding:6px 11px;border-radius:9px;margin-bottom:14px;
 }
 .fds h4{font-family:var(--serif);font-size:25px;font-weight:500;letter-spacing:-.015em;margin-bottom:8px}
 .fds p{color:var(--mut);font-size:13.5px;line-height:1.65;margin-bottom:18px;max-width:92%}
 .fds .frow{display:flex;gap:10px;align-items:stretch}
-.fds .frow .btn{flex:1;padding:15px 18px}
-.reroll{
-  width:52px;border-radius:16px;flex:0 0 auto;
-  background:rgba(255,255,255,.045);border:1px solid var(--line2);border-top-color:rgba(255,255,255,.2);
-  color:var(--mut);font-size:19px;cursor:pointer;transition:all .4s var(--ease);
-}
-.reroll:hover{color:var(--peach);transform:rotate(180deg)}
+.fds .frow .btn{flex:1;padding:15px 10px;font-size:14px}
+.sur{display:flex;align-items:center;justify-content:center;gap:8px}
+.sur svg{width:15px;height:15px;transition:transform .6s var(--ease)}
+.sur:hover svg{transform:rotate(180deg)}
+@keyframes fdswap{0%{opacity:.25;transform:translateY(8px) scale(.985)}100%{opacity:1;transform:none}}
+.fds.swap{animation:fdswap .45s var(--ease)}
 
 /* ---------- Découverte (rangées horizontales) ---------- */
 .shead{display:flex;align-items:baseline;justify-content:space-between;margin:34px 0 14px}
@@ -193,7 +192,11 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 .scard .sc-meta b{color:var(--peach);font-weight:600}
 
 /* ---------- Cards (home) ---------- */
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.solohero{margin-bottom:12px;padding:26px 24px 34px}
+.solohero h3{font-size:25px}
+.solohero p{font-size:13px;max-width:88%}
+.couplecard{margin-bottom:12px;padding:18px 20px 26px}
+.couplecard h3{font-size:19px}
 .card{
   position:relative;overflow:hidden;cursor:pointer;
   background:linear-gradient(150deg,rgba(255,255,255,.075),rgba(255,255,255,.015) 48%),rgba(24,14,22,.52);
@@ -201,12 +204,12 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
   border:1px solid rgba(255,255,255,.09);border-top-color:rgba(255,255,255,.22);
   border-radius:22px;padding:20px 18px 30px;
   transition:all .45s var(--ease);transform-style:preserve-3d;
-  box-shadow:0 24px 60px rgba(0,0,0,.4), 0 44px 90px -40px rgba(226,42,80,.22);
+  box-shadow:0 24px 60px rgba(0,0,0,.4), 0 44px 90px -40px rgba(193,52,105,.22);
 }
 .tilted{transition:transform .12s ease !important}
 .card::before{
   content:'';position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(70% 70% at 85% -10%, rgba(226,42,80,.22), transparent 65%);
+  background:radial-gradient(70% 70% at 85% -10%, rgba(193,52,105,.22), transparent 65%);
   opacity:0;transition:opacity .5s;
 }
 .card::after{
@@ -219,7 +222,7 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 .card:active{transform:scale(.985)}
 .card .tag{
   display:inline-block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--peach);background:rgba(226,42,80,.14);
+  color:var(--peach);background:rgba(193,52,105,.14);
   padding:6px 11px;border-radius:9px;margin-bottom:16px;
 }
 .card h3{font-family:var(--serif);font-size:20px;font-weight:500;letter-spacing:-.015em;margin-bottom:7px}
@@ -236,12 +239,12 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
   padding:17px 30px;cursor:pointer;transition:all .35s var(--ease);border-radius:16px;
 }
 .btn-primary{
-  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 45%),var(--emberG);
-  border:none;color:#fff;
-  box-shadow:0 14px 36px rgba(226,42,80,.42), 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -2px 4px rgba(120,10,30,.35);
+  background:linear-gradient(180deg,#FFF8F0,#ECDCCE);
+  border:none;color:#301325;
+  box-shadow:0 14px 34px rgba(0,0,0,.38), 0 4px 16px rgba(193,52,105,.22), inset 0 1px 0 rgba(255,255,255,.85);
 }
-.btn-primary:hover{filter:brightness(1.07);transform:translateY(-1px);box-shadow:0 20px 48px rgba(226,42,80,.5), 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -2px 4px rgba(120,10,30,.35)}
-.btn-primary:active{transform:translateY(1px);box-shadow:0 6px 18px rgba(226,42,80,.35), inset 0 1px 0 rgba(255,255,255,.2), inset 0 2px 6px rgba(120,10,30,.4)}
+.btn-primary:hover{filter:brightness(1.03);transform:translateY(-1px);box-shadow:0 18px 42px rgba(0,0,0,.42), 0 6px 20px rgba(193,52,105,.28), inset 0 1px 0 rgba(255,255,255,.85)}
+.btn-primary:active{transform:translateY(1px);box-shadow:0 6px 16px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.6)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed}
 .btn-ghost{background:rgba(255,255,255,.045);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid var(--line2);border-top-color:rgba(255,255,255,.24);color:var(--txt)}
 .btn-ghost:hover{border-color:rgba(255,180,158,.5);background:rgba(255,255,255,.06)}
@@ -267,14 +270,14 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 .tab.on{color:var(--peach)}
 .tabplus{
   width:56px;height:56px;border-radius:50%;flex:0 0 auto;margin:0 6px -2px;
-  display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;
-  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 45%),var(--emberG);
-  border:none;box-shadow:0 10px 28px rgba(226,42,80,.5), inset 0 1px 0 rgba(255,255,255,.3);
+  display:flex;align-items:center;justify-content:center;color:#301325;cursor:pointer;
+  background:linear-gradient(180deg,#FFF8F0,#ECDCCE);
+  border:none;box-shadow:0 12px 30px rgba(0,0,0,.45), 0 4px 14px rgba(193,52,105,.25), inset 0 1px 0 rgba(255,255,255,.85);
   transition:all .3s var(--ease);
 }
 .tabplus svg{width:24px;height:24px}
 .tabplus:active{transform:scale(.92)}
-#home.on,#profile.on,#discoverScreen.on{padding-bottom:104px}
+#home.on,#profile.on,#discoverScreen.on{padding-bottom:0}
 
 /* ---------- Questionnaire ---------- */
 body.wizmode footer{display:none}
@@ -285,8 +288,8 @@ body.wizmode .wrap{padding-bottom:0}
 body.wizmode{min-height:100dvh}
 #wizard.on{
   display:flex;flex-direction:column;
-  height:calc(100dvh - 104px);min-height:400px;overflow:hidden;
-  padding-bottom:calc(84px + var(--safe-b));
+  height:calc(100dvh - 178px);min-height:360px;overflow:hidden;
+  padding-bottom:78px;
 }
 #qCard{flex:1;display:flex;flex-direction:column;min-height:0;will-change:transform,opacity}
 .qtop{flex:0 0 auto}
@@ -301,7 +304,7 @@ body.wizmode{min-height:100dvh}
 .qbottom textarea{min-height:56px}
 .qprogress{margin-bottom:18px;flex:0 0 auto}
 .qprogress .track{height:2px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
-.qprogress .fill{height:100%;background:var(--emberG);width:0%;transition:width .6s var(--ease);border-radius:2px;box-shadow:0 0 14px rgba(255,92,56,.5)}
+.qprogress .fill{height:100%;background:var(--emberG);width:0%;transition:width .6s var(--ease);border-radius:2px;box-shadow:0 0 14px rgba(225,81,122,.5)}
 .qprogress .cnt{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
 .qprogress .cnt .sec{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--peach)}
 .qprogress .cnt span:last-child{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--mut)}
@@ -328,9 +331,9 @@ body.wizmode{min-height:100dvh}
 .chip:active{transform:scale(.95)}
 .chip:hover{border-color:var(--line2);color:var(--txt);background:rgba(255,255,255,.055)}
 .chip.sel{
-  background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 46%),var(--emberG);
-  border-color:transparent;color:#fff;
-  box-shadow:0 10px 26px rgba(226,42,80,.42), inset 0 -2px 4px rgba(120,10,30,.3);
+  background:linear-gradient(180deg,#FFF6EE,#EADACC);
+  border-color:transparent;color:#301325;font-weight:550;
+  box-shadow:0 8px 20px rgba(0,0,0,.32), 0 2px 10px rgba(193,52,105,.2);
 }
 
 .customwrap{margin-top:0}
@@ -340,15 +343,15 @@ input[type=text],input[type=password],textarea{
   font-family:var(--sans);font-weight:400;font-size:16px;padding:16px 18px;border-radius:16px;
   transition:all .3s var(--ease);outline:none;
 }
-input:focus,textarea:focus{border-color:rgba(255,92,56,.55);box-shadow:0 0 0 4px rgba(226,42,80,.12);background:rgba(255,255,255,.05)}
+input:focus,textarea:focus{border-color:rgba(225,81,122,.55);box-shadow:0 0 0 4px rgba(193,52,105,.12);background:rgba(255,255,255,.05)}
 textarea{resize:vertical;min-height:110px;line-height:1.65}
 ::placeholder{color:#655860;font-style:italic}
 
 /* ---------- Nav bas (sticky) ---------- */
 .qnav{
-  position:fixed;left:0;right:0;bottom:0;z-index:50;
-  padding:16px 22px calc(16px + var(--safe-b));
-  background:linear-gradient(transparent, rgba(14,9,16,.92) 34%);
+  position:fixed;left:0;right:0;bottom:calc(68px + var(--safe-b));z-index:55;
+  padding:14px 22px 10px;
+  background:linear-gradient(transparent, rgba(14,9,16,.92) 40%);
   backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
   display:none;
 }
@@ -428,8 +431,8 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
     linear-gradient(90deg, rgba(0,0,0,.32), transparent 8%, transparent 92%, rgba(0,0,0,.18)),
     linear-gradient(168deg,#1A1016,#130B10);
   border:1px solid var(--line);
-  box-shadow:0 30px 74px rgba(0,0,0,.5), 0 54px 110px -44px rgba(226,42,80,.28), inset 0 1px 0 rgba(255,255,255,.06);
-  height:calc(100dvh - 335px);min-height:380px;max-height:760px;
+  box-shadow:0 30px 74px rgba(0,0,0,.5), 0 54px 110px -44px rgba(193,52,105,.28), inset 0 1px 0 rgba(255,255,255,.06);
+  height:calc(100dvh - 268px);min-height:380px;max-height:900px;
   touch-action:pan-y;
 }
 .bookvp::after{
@@ -485,31 +488,50 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 .sheet .actions .btn{flex:1}
 
 /* ---------- Curseurs d'ajustement ---------- */
-.tslider{margin-bottom:24px}
-.ts-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.tslider{margin-bottom:22px}
+.ts-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .ts-head span{font-size:13.5px;font-weight:550;color:var(--txt)}
-.ts-head b{font-size:12px;font-weight:500;color:var(--peach)}
+.ts-head b{
+  font-size:11.5px;font-weight:600;color:var(--peach);
+  background:rgba(193,52,105,.14);border:1px solid rgba(193,52,105,.3);
+  padding:4px 11px;border-radius:999px;
+}
+@keyframes vpop{0%{transform:scale(.82)}60%{transform:scale(1.12)}100%{transform:scale(1)}}
+.vpop{animation:vpop .3s var(--ease)}
+.ts-wrap{position:relative;padding:8px 0}
+.ts-ticks{
+  position:absolute;top:50%;left:12px;right:12px;transform:translateY(-50%);
+  display:flex;justify-content:space-between;pointer-events:none;
+}
+.ts-ticks span{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.22)}
 .tslider input[type=range]{
-  -webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;
-  background:linear-gradient(90deg,rgba(255,255,255,.10),rgba(226,42,80,.6));
+  position:relative;z-index:2;
+  -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:6px;
+  background:rgba(255,255,255,.08);
   outline:none;padding:0;border:none;box-shadow:none;
+  transition:background .2s;
 }
 .tslider input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
-  background:var(--emberG);border:2px solid rgba(255,255,255,.4);
-  box-shadow:0 4px 14px rgba(226,42,80,.55);cursor:pointer;
+  -webkit-appearance:none;width:28px;height:28px;border-radius:50%;
+  background:linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0) 50%),var(--emberG);
+  border:2px solid rgba(255,255,255,.45);
+  box-shadow:0 4px 16px rgba(193,52,105,.55), inset 0 -2px 4px rgba(120,10,30,.3);
+  cursor:pointer;transition:transform .18s var(--ease), box-shadow .18s;
+}
+.tslider input[type=range]:active::-webkit-slider-thumb{
+  transform:scale(1.3);box-shadow:0 8px 26px rgba(193,52,105,.7), inset 0 -2px 4px rgba(120,10,30,.3);
 }
 .tslider input[type=range]::-moz-range-thumb{
-  width:24px;height:24px;border-radius:50%;background:#E22A50;
-  border:2px solid rgba(255,255,255,.4);cursor:pointer;
+  width:26px;height:26px;border-radius:50%;background:#B23366;
+  border:2px solid rgba(255,255,255,.45);cursor:pointer;
 }
-.ts-ends{display:flex;justify-content:space-between;margin-top:9px;font-size:11.5px;color:var(--mut);font-style:italic;font-family:var(--serif)}
+.ts-ends{display:flex;justify-content:space-between;margin-top:6px;font-size:11.5px;color:var(--mut);font-style:italic;font-family:var(--serif)}
 .adapt{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--peach);font-weight:500;white-space:nowrap}
 
 /* ---------- Partage ---------- */
 .sharebox{
-  margin-top:30px;border:1px solid rgba(226,42,80,.4);border-radius:24px;
-  background:radial-gradient(120% 120% at 20% -20%, rgba(226,42,80,.16), transparent 60%),var(--sur2);
+  margin-top:30px;border:1px solid rgba(193,52,105,.4);border-radius:24px;
+  background:radial-gradient(120% 120% at 20% -20%, rgba(193,52,105,.16), transparent 60%),var(--sur2);
   padding:28px 26px;
 }
 .sharebox h3{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-.015em;margin-bottom:9px}
@@ -527,7 +549,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
   position:fixed;bottom:calc(32px + var(--safe-b));left:50%;
   opacity:0;visibility:hidden;transform:translateX(-50%) translateY(140px);
   background:rgba(34,16,25,.72);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
-  border:1px solid rgba(255,92,56,.45);color:var(--peach);
+  border:1px solid rgba(225,81,122,.45);color:var(--peach);
   padding:14px 26px;border-radius:16px;font-size:13.5px;font-weight:500;
   transition:transform .4s var(--ease), opacity .3s, visibility 0s .4s;z-index:200;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;
   box-shadow:0 16px 44px rgba(0,0,0,.5);
@@ -560,7 +582,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
   width:76px;height:76px;border-radius:24px;display:flex;align-items:center;justify-content:center;
   font-family:var(--serif);font-size:34px;font-style:italic;color:#fff;
   background:var(--emberG);
-  box-shadow:0 14px 36px rgba(226,42,80,.45), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -3px 6px rgba(120,10,30,.35);
+  box-shadow:0 14px 36px rgba(193,52,105,.45), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -3px 6px rgba(120,10,30,.35);
   margin-bottom:22px;
 }
 .avatar::after{
@@ -577,6 +599,28 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 }
 .stat .n{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--peach)}
 .stat .l{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-top:6px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}
+select.pf{
+  width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--txt);
+  border-radius:12px;padding:12px 10px;font-family:var(--sans);font-size:13.5px;outline:none;
+  -webkit-appearance:none;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A18F97' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+select.pf option{background:#1C1119;color:#F2E8E2}
+.hslider{display:flex;align-items:center;gap:12px;margin-top:4px}
+.hslider>span{font-size:12px;color:var(--mut);min-width:38px}
+.hslider b{font-size:12px;font-weight:600;color:var(--peach);min-width:44px;text-align:right}
+.hslider input[type=range]{
+  flex:1;-webkit-appearance:none;appearance:none;height:5px;border-radius:5px;
+  background:rgba(255,255,255,.08);outline:none;border:none;padding:0;
+}
+.hslider input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(180deg,#FFF8F0,#ECDCCE);border:none;
+  box-shadow:0 3px 10px rgba(0,0,0,.4);cursor:pointer;
+}
+.hslider input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#F2E8E2;border:none;cursor:pointer}
 .privnote{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--mut);margin:18px 0 24px}
 
 /* ---------- Voies ---------- */
@@ -587,19 +631,19 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 }
 .pathcard:hover{border-color:var(--line2);transform:translateY(-2px)}
 .pathcard.active{
-  border-color:rgba(226,42,80,.55);
-  background:radial-gradient(140% 140% at 15% -30%, rgba(226,42,80,.18), transparent 55%),var(--sur2);
-  box-shadow:0 18px 44px rgba(226,42,80,.2);
+  border-color:rgba(193,52,105,.55);
+  background:radial-gradient(140% 140% at 15% -30%, rgba(193,52,105,.18), transparent 55%),var(--sur2);
+  box-shadow:0 18px 44px rgba(193,52,105,.2);
 }
 .pathcard h4{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.015em;margin-bottom:5px}
 .pathcard .pdesc{font-size:12.5px;color:var(--mut);line-height:1.6}
 .lvldots{display:flex;gap:6px;margin:12px 0 10px}
 .lvldots span{width:8px;height:8px;border-radius:50%;border:1px solid var(--line2)}
-.lvldots span.done{background:var(--ember);border-color:var(--ember);box-shadow:0 0 9px rgba(255,92,56,.6)}
+.lvldots span.done{background:var(--ember);border-color:var(--ember);box-shadow:0 0 9px rgba(225,81,122,.6)}
 .pathnext{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--peach);line-height:1.55}
 .suggest{
-  border:1px solid rgba(226,42,80,.45);border-top-color:rgba(255,255,255,.22);border-radius:24px;padding:24px;margin-bottom:26px;
-  background:radial-gradient(130% 130% at 15% -25%, rgba(226,42,80,.2), transparent 60%),rgba(26,15,23,.55);
+  border:1px solid rgba(193,52,105,.45);border-top-color:rgba(255,255,255,.22);border-radius:24px;padding:20px;margin-bottom:12px;
+  background:radial-gradient(130% 130% at 15% -25%, rgba(193,52,105,.2), transparent 60%),rgba(26,15,23,.55);
   backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
   transform-style:preserve-3d;
 }
@@ -607,13 +651,20 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 .suggest h4{font-family:var(--serif);font-size:23px;font-weight:500;letter-spacing:-.015em;margin-bottom:8px}
 .suggest p{font-size:13.5px;color:var(--mut);line-height:1.65;margin-bottom:16px}
 
+.vs{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mut);line-height:1.5;margin-top:9px}
+.vs b{color:var(--mut);font-weight:600;min-width:14px}
+.vs.done{opacity:.55}
+.vs.done b,.vs.cur b{color:var(--peach)}
+.vs.cur{color:var(--txt)}
+
 /* ---------- Divers ---------- */
 .errbox{
-  border:1px solid rgba(226,42,80,.5);background:rgba(226,42,80,.09);border-radius:16px;
+  border:1px solid rgba(193,52,105,.5);background:rgba(193,52,105,.09);border-radius:16px;
   padding:16px 18px;color:#F0AFA6;font-size:13.5px;line-height:1.65;margin-bottom:18px;display:none;
 }
 .fld-lbl{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:10px}
-footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#5F535B;font-size:11.5px;line-height:1.8;text-align:center}
+footer{margin-top:26px;padding:16px 0 calc(98px + var(--safe-b));border-top:1px solid var(--line);color:#5F535B;font-size:11.5px;line-height:1.8;text-align:center}
+body.wizmode footer{display:none}
 </style>
 </head>
 <body>
@@ -638,7 +689,6 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
 
 <header>
   <div class="logo" onclick="goHome()">fantas<span class="dot">.me</span></div>
-  <button class="iconbtn" title="Profil" onclick="openProfile()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.6-3.4 4.3-5 7.5-5s5.9 1.6 7.5 5"/></svg></button>
 </header>
 
 <!-- ============ HOME ============ -->
@@ -647,21 +697,28 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
   <h2 class="title">Quel <span class="acc">fantasme</span> vivrez-vous ce&nbsp;soir&nbsp;?</h2>
   <div class="whisper">Ce qui s'écrit ici reste entre nous.</div>
   <div class="statstrip" id="statStrip"></div>
+  <div class="card solohero" onclick="startWizard('solo')">
+    <div class="tag">Solo</div>
+    <h3>Écrire mon histoire</h3>
+    <p>Un récit sur mesure, guidé par vos envies exactes — quelques questions et l'encre coule.</p>
+  </div>
   <div id="resumeBox"></div>
   <div id="fdsBox"></div>
   <div id="suggestBox"></div>
-  <div class="cards">
-    <div class="card" onclick="startWizard('solo')">
-      <div class="tag">Solo</div>
-      <h3>Histoire personnelle</h3>
-      <p>Un récit complet, écrit selon vos paramètres exacts. À lire seul·e ou à voix haute.</p>
-    </div>
-    <div class="card" onclick="startWizard('couple')">
-      <div class="tag">À deux</div>
-      <h3>Mode couple</h3>
-      <p>Vous écrivez le premier chapitre selon vos envies, puis vous l'envoyez à votre partenaire — qui écrit la suite selon les siennes.</p>
-    </div>
+  <div class="card couplecard" onclick="startWizard('couple')">
+    <div class="tag">À deux</div>
+    <h3>Mode couple</h3>
+    <p>Vous écrivez le début selon vos envies, votre partenaire écrit la suite selon les siennes.</p>
   </div>
+</section>
+
+<!-- ============ MA VOIE ============ -->
+<section id="voieScreen" class="screen">
+  <div class="eyebrow">Ma voie</div>
+  <h2 class="title">Évoluer, <span class="acc">à votre rythme</span></h2>
+  <p class="sub">Choisissez une direction. Chaque histoire écrite vous fait franchir une étape, et les propositions du questionnaire suivent votre progression — du plus doux au plus audacieux.</p>
+  <div id="voieCurrent"></div>
+  <div id="voieList"></div>
 </section>
 
 <!-- ============ DÉCOUVRIR ============ -->
@@ -673,19 +730,25 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
 
 <!-- ============ PROFIL ============ -->
 <section id="profile" class="screen">
-  <div class="eyebrow">Votre boudoir</div>
+  <div class="eyebrow">Vous</div>
   <h2 class="title">Profil</h2>
   <p class="sub">Ces informations personnalisent vos récits : elles pré-remplissent le questionnaire à chaque nouvelle histoire.</p>
   <div class="avatar" id="avatarCircle">☾</div>
   <div class="pfield"><label class="fld-lbl">Pseudo</label><input type="text" id="pf_pseudo" placeholder="Comment faut-il vous appeler ?"></div>
-  <div class="pfield"><label class="fld-lbl">Moi</label><textarea id="pf_moi" rows="3" placeholder="Taille, cheveux, yeux, formes, tatouages, caractère…"></textarea></div>
-  <div class="pfield"><label class="fld-lbl">Mon / ma partenaire</label><textarea id="pf_partenaire" rows="3" placeholder="La personne qui revient dans vos histoires…"></textarea></div>
+  <div class="pfield"><label class="fld-lbl">Moi</label>
+    <div id="pf_moiFields"></div>
+    <textarea id="pf_moi" rows="2" placeholder="Détails libres : un tatouage précis, un style, ce qui vous rend unique…"></textarea>
+  </div>
+  <div class="pfield"><label class="fld-lbl">Mon / ma partenaire</label>
+    <div id="pf_partFields"></div>
+    <textarea id="pf_partenaire" rows="2" placeholder="Détails libres sur votre partenaire…"></textarea>
+  </div>
   <div class="pfield"><label class="fld-lbl">Orientation des récits</label><div class="chips" id="pf_orientation"></div></div>
   <div class="pfield"><label class="fld-lbl">Plume préférée</label><input type="text" id="pf_plume" placeholder="Anaïs Nin, journal intime, cru & sans détour…"></div>
   <div class="pfield">
     <label class="fld-lbl">Ma voie</label>
-    <p class="sub" style="margin-bottom:16px;font-size:13.5px">Choisissez une direction d'évolution : à chaque histoire écrite, les propositions du questionnaire vous pousseront un peu plus loin dans cette voie, en trois étapes.</p>
-    <div id="pf_paths"></div>
+    <div id="pf_voie"></div>
+    <button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="openVoie()">Gérer ma voie</button>
   </div>
   <div class="stats">
     <div class="stat"><div class="n" id="st_recits">0</div><div class="l">Récits</div></div>
@@ -717,8 +780,10 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
 
 <!-- ============ READER ============ -->
 <section id="reader" class="screen">
-  <div class="eyebrow" id="readerEyebrow">Votre récit</div>
-  <h2 class="title" id="readerTitle">L'encre coule…</h2>
+  <div id="readerHead">
+    <div class="eyebrow" id="readerEyebrow">Votre récit</div>
+    <h2 class="title" id="readerTitle">L'encre coule…</h2>
+  </div>
   <div class="genbar" id="genbar">
     <div class="st"><span class="pulse"></span><span id="genStatus">Écriture en cours</span></div>
     <div class="wc"><span id="wordCount">0</span> mots</div>
@@ -773,7 +838,6 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
   <div class="reader-actions" id="readerActions" style="display:none">
     <button class="btn btn-ghost" onclick="startAudioFromHere()">♪ Écouter</button>
     <button class="btn btn-ghost" id="viewToggle" onclick="toggleView()">Affichage défilement</button>
-    <button class="btn btn-quiet" onclick="goHome()">Nouvelle histoire</button>
   </div>
   <div class="sharebox" id="sharebox" style="display:none">
     <h3>À votre partenaire d'écrire la suite</h3>
@@ -829,7 +893,7 @@ footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#
     <div id="tuneSliders"></div>
     <div class="actions">
       <button class="btn btn-quiet" onclick="closeTune()">Annuler</button>
-      <button class="btn btn-primary" onclick="applyTune()">Adapter la suite</button>
+      <button class="btn btn-primary" onclick="applyTune()">✦ Adapter la suite</button>
     </div>
   </div>
 </div>
@@ -962,8 +1026,8 @@ const QUESTIONS = [
 
   { id:'styleEcriture', section:'Finitions', type:'single', optional:true,
     title:'Une plume en particulier ?',
-    sub:'Un écrivain, un livre ou un style — le récit en prendra la voix.',
-    sug:['Anaïs Nin — poétique & charnel','Histoire d\'O — cérémonial & envoûtant','Cinquante nuances — moderne & addictif','Marguerite Duras — épuré & obsédant','Roman de gare — direct & assumé','Journal intime — première personne','Lettre à un amant','Cru & sans détour'],
+    sub:'Écrivains connus ou styles simples — classés selon le ton de vos réponses.',
+    sug:['Cru & direct','Romantique','Poétique','Anaïs Nin — poétique & charnel','Brûlant & intense','Élégant & suggestif'],
     customPh:'Un auteur, un livre, un ton…' },
 
   { id:'commentaires', section:'Finitions', type:'multitext', optional:true,
@@ -1026,10 +1090,60 @@ profile.stats = profile.stats || {recits:0,mots:0};
 profile.paths = profile.paths || {};
 const ORIENT=['Hétérosexuel','Lesbien','Gay','Bisexuel'];
 
+const P_SIL=['Fine','Élancée','Athlétique','Pulpeuse','Généreuse','Musclée','Ronde'];
+const P_CHEV=['Bruns','Noirs','Blonds','Châtains','Roux','Poivre et sel','Colorés'];
+const P_LONG=['Rasés','Courts','Mi-longs','Longs'];
+const P_YEUX=['Marron','Verts','Bleus','Noisette','Gris','Noirs'];
+const P_TAT=['Aucun','Discrets','Quelques-uns','Nombreux'];
+const P_CAR=['Doux / douce','Joueur / joueuse','Dominant·e','Soumis·e','Timide','Passionné·e','Mystérieux·se'];
+function fmtTaille(v){ v=+v; return Math.floor(v/100)+'m'+String(v%100).padStart(2,'0'); }
+function personFieldsHtml(prefix,f){
+  f=f||{};
+  const sel=(name,opts,ph)=>{
+    let o='<select class="pf" id="'+prefix+'_'+name+'"><option value="">'+ph+'…</option>';
+    opts.forEach(x=>{ o+='<option'+(f[name]===x?' selected':'')+'>'+x+'</option>'; });
+    return o+'</select>';
+  };
+  const t=f.taille||170;
+  return '<div class="hslider"><span>Taille</span>'
+    +'<input type="range" min="150" max="200" step="1" value="'+t+'" id="'+prefix+'_taille" '
+    +(f.taille?'data-t="1" ':'')
+    +'oninput="this.dataset.t=1;document.getElementById(\''+prefix+'_tv\').textContent=fmtTaille(this.value)">'
+    +'<b id="'+prefix+'_tv">'+(f.taille?fmtTaille(t):'—')+'</b></div>'
+    +'<div class="pgrid">'
+    +sel('silhouette',P_SIL,'Silhouette')+sel('cheveux',P_CHEV,'Cheveux')
+    +sel('longcheveux',P_LONG,'Longueur')+sel('yeux',P_YEUX,'Yeux')
+    +sel('tatouages',P_TAT,'Tatouages')+sel('caractere',P_CAR,'Caractère')
+    +'</div>';
+}
+function readPersonFields(prefix){
+  const g=n=>{ const el=document.getElementById(prefix+'_'+n); return el?el.value:''; };
+  const ti=document.getElementById(prefix+'_taille');
+  return {
+    taille:(ti&&ti.dataset.t==='1')?+ti.value:0,
+    silhouette:g('silhouette'), cheveux:g('cheveux'), longcheveux:g('longcheveux'),
+    yeux:g('yeux'), tatouages:g('tatouages'), caractere:g('caractere')
+  };
+}
+function composePerson(f,free){
+  f=f||{}; const parts=[];
+  if(f.taille) parts.push(fmtTaille(f.taille));
+  if(f.silhouette) parts.push('silhouette '+f.silhouette.toLowerCase());
+  if(f.cheveux) parts.push('cheveux '+f.cheveux.toLowerCase()+(f.longcheveux?' '+f.longcheveux.toLowerCase():''));
+  else if(f.longcheveux) parts.push('cheveux '+f.longcheveux.toLowerCase());
+  if(f.yeux) parts.push('yeux '+f.yeux.toLowerCase());
+  if(f.tatouages) parts.push(f.tatouages==='Aucun'?'sans tatouage':'tatouages '+f.tatouages.toLowerCase());
+  if(f.caractere) parts.push('caractère '+f.caractere.toLowerCase());
+  let d=parts.join(', ');
+  if(free&&free.trim()) d=(d?d+'. ':'')+free.trim();
+  return d;
+}
 function openProfile(){
   document.getElementById('pf_pseudo').value=profile.pseudo||'';
   document.getElementById('pf_moi').value=profile.moi||'';
   document.getElementById('pf_partenaire').value=profile.partenaire||'';
+  document.getElementById('pf_moiFields').innerHTML=personFieldsHtml('pfm',profile.moiF);
+  document.getElementById('pf_partFields').innerHTML=personFieldsHtml('pfp',profile.partF);
   document.getElementById('pf_plume').value=profile.plume||'';
   const box=document.getElementById('pf_orientation'); box.innerHTML='';
   ORIENT.forEach(o=>{
@@ -1043,7 +1157,13 @@ function openProfile(){
     };
     box.appendChild(c);
   });
-  renderPaths();
+  const pv=document.getElementById('pf_voie');
+  if(pv){
+    const ap2=activePath();
+    pv.innerHTML = ap2
+      ? '<div class="pathnext">'+ap2.title+' — étape '+Math.min(pathProgress(ap2.id)+1,3)+' / 3</div>'
+      : '<div class="pathnext" style="color:var(--mut)">Aucune voie choisie pour l\'instant.</div>';
+  }
   updProfileUI();
   showScreen('profile');
 }
@@ -1061,6 +1181,8 @@ function saveProfile(){
   profile.pseudo=document.getElementById('pf_pseudo').value.trim();
   profile.moi=document.getElementById('pf_moi').value.trim();
   profile.partenaire=document.getElementById('pf_partenaire').value.trim();
+  profile.moiF=readPersonFields('pfm');
+  profile.partF=readPersonFields('pfp');
   profile.plume=document.getElementById('pf_plume').value.trim();
   storeSet(PKEY,profile);
   updProfileUI();
@@ -1132,8 +1254,8 @@ function activePathLevel(){
   const p=activePath(); if(!p) return 0;
   return Math.min(pathProgress(p.id),2);
 }
-function renderPaths(){
-  const box=document.getElementById('pf_paths'); if(!box) return;
+function renderPaths(cid){
+  const box=document.getElementById(cid||'voieList'); if(!box) return;
   box.innerHTML='';
   PATHS.forEach(p=>{
     const done=pathProgress(p.id);
@@ -1147,27 +1269,59 @@ function renderPaths(){
     d.onclick=()=>{
       profile.activePath = active ? '' : p.id;
       storeSet(PKEY,profile);
-      renderPaths(); renderSuggest();
+      renderPaths(cid); renderSuggest(); renderVoieCurrent();
       toast(active ? 'Voie mise en pause' : 'Voie choisie — elle guidera vos prochaines histoires');
     };
     box.appendChild(d);
   });
 }
+function openVoie(){
+  renderVoieCurrent();
+  renderPaths('voieList');
+  showScreen('voieScreen');
+}
+function renderVoieCurrent(){
+  const box=document.getElementById('voieCurrent'); if(!box) return;
+  const p=activePath();
+  if(!p){ box.innerHTML=''; return; }
+  const done=pathProgress(p.id);
+  let steps='';
+  p.steps.forEach((st,i)=>{
+    const cur=(i===Math.min(done,2)&&done<3);
+    const cls='vs'+(i<done?' done':'')+(cur?' cur':'');
+    const mark=i<done?'✓':(cur?'→':'·');
+    steps+='<div class="'+cls+'"><b>'+mark+'</b><span>Étape '+(i+1)+' — '+st+'</span></div>';
+  });
+  box.innerHTML='<div class="suggest" style="margin-bottom:22px">'
+    +'<div class="s-eyebrow">Voie en cours · étape '+Math.min(done+1,3)+' / 3</div>'
+    +'<h4>'+p.title+'</h4><p>'+p.desc+'</p>'+steps+'</div>';
+}
 function renderSuggest(){
   const box=document.getElementById('suggestBox'); if(!box) return;
-  box.innerHTML='';
-  const p=activePath(); if(!p) return;
-  const done=pathProgress(p.id);
-  if(done>=3){
-    box.innerHTML='<div class="suggest"><div class="s-eyebrow">Votre voie · '+p.title+'</div>'
-      +'<h4>Voie explorée en entier</h4>'
-      +'<p>Vous en avez parcouru les trois étapes — vos récits en gardent l\'audace. Choisissez-en une nouvelle dans votre profil quand l\'envie vous prend.</p></div>';
+  const p=activePath();
+  if(!p){
+    box.innerHTML='<div class="suggest" style="cursor:pointer" onclick="openVoie()">'
+      +'<div class="s-eyebrow">Ma voie</div>'
+      +'<h4>Choisissez votre direction</h4>'
+      +'<p>Six voies d\'évolution, du plus doux au plus audacieux — vos histoires vous y font progresser étape par étape.</p>'
+      +'<div class="pathnext">Découvrir les voies →</div></div>';
     return;
   }
-  box.innerHTML='<div class="suggest" style="cursor:pointer" onclick="openProfile()">'
-    +'<div class="s-eyebrow">Votre voie · '+p.title+' · étape '+(done+1)+' / 3</div>'
+  const done=pathProgress(p.id);
+  if(done>=3){
+    box.innerHTML='<div class="suggest" style="cursor:pointer" onclick="openVoie()">'
+      +'<div class="s-eyebrow">Ma voie · '+p.title+'</div>'
+      +'<h4>Voie explorée en entier</h4>'
+      +'<p>Trois étapes parcourues — vos récits en gardent l\'audace. Envie d\'une nouvelle direction ?</p>'
+      +'<div class="pathnext">Changer de voie →</div></div>';
+    return;
+  }
+  const pct=Math.max(6,Math.round(done/3*100));
+  box.innerHTML='<div class="suggest" style="cursor:pointer" onclick="openVoie()">'
+    +'<div class="s-eyebrow">Ma voie · '+p.title+' · étape '+(done+1)+' / 3</div>'
     +'<h4>'+p.steps[done]+'</h4>'
-    +'<p>Votre prochaine histoire vous y poussera naturellement — les propositions du questionnaire suivront cette direction.</p></div>';
+    +'<div style="height:3px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-top:4px"><div style="height:100%;width:'+pct+'%;background:var(--emberG)"></div></div>'
+    +'<div class="pathnext" style="margin-top:10px">Votre prochaine histoire vous y poussera →</div></div>';
 }
 
 /* ================================================================
@@ -1175,7 +1329,7 @@ function renderSuggest(){
 ================================================================ */
 const LIEUX_CTX=[
  {re:/chalet|neige|montagne|ski/i, tag:'le chalet', list:['Devant la cheminée','La peau de bête','La chambre sous les combles','Le sauna','Le bain nordique','La douche après le froid','Contre la fenêtre','La mezzanine']},
- {re:/ch[âa]teau|manoir|demeure/i, tag:'le château', list:['La suite à baldaquin','La bibliothèque','Le grand escalier','La cave à vin','Le boudoir','Les jardins la nuit','La piscine du parc','Les cuisines endormies']},
+ {re:/ch[âa]teau|manoir|demeure/i, tag:'le château', list:['La suite à baldaquin','La bibliothèque','Le grand escalier','La cave à vin','Le petit salon privé','Les jardins la nuit','La piscine du parc','Les cuisines endormies']},
  {re:/villa|amalfi|toscane|c[ôo]te/i, tag:'la villa', list:['La terrasse face à la mer','La chambre, volets clos','La piscine à débordement','La crique privée','La cuisine d\'été','La douche extérieure','Le ponton au crépuscule']},
  {re:/riad|marrakech|maroc|hammam/i, tag:'le riad', list:['Le patio aux mosaïques','Le hammam privé','La terrasse sous les étoiles','La chambre aux voilages','Le bassin intérieur','L\'alcôve aux lanternes']},
  {re:/loft|penthouse|new york|appartement|gratte/i, tag:'le loft', list:['Contre la baie vitrée','Le canapé du salon','La douche à l\'italienne','Le rooftop','L\'ascenseur privé','L\'îlot de la cuisine','Le dressing']},
@@ -1254,7 +1408,65 @@ function ctxRule(rules, txt){
   for(const r of rules){ if(r.re.test(txt)) return r; }
   return null;
 }
+/* Styles d'écriture : écrivains connus + styles simples, taggés par ton */
+const STYLES=[
+ {label:'Anaïs Nin — poétique & charnel', tags:['poetique','sensuel']},
+ {label:'Henry Miller — brut & vivant', tags:['cru','brut']},
+ {label:'Emmanuelle Arsan (Emmanuelle) — solaire & libre', tags:['sensuel','audacieux']},
+ {label:'Histoire d\'O — cérémonial & soumission', tags:['bdsm','litteraire']},
+ {label:'Marquis de Sade — cru & transgressif', tags:['cru','audacieux','bdsm']},
+ {label:'Marguerite Duras — épuré & obsédant', tags:['litteraire','romantique']},
+ {label:'Colette — sensuel & raffiné', tags:['poetique','litteraire']},
+ {label:'Cinquante nuances — moderne & addictif', tags:['romantique','bdsm']},
+ {label:'Milan Kundera — cérébral & sensuel', tags:['litteraire','sensuel']},
+ {label:'Cru & direct', tags:['cru','brut']},
+ {label:'Romantique', tags:['romantique']},
+ {label:'Poétique', tags:['poetique']},
+ {label:'Élégant & suggestif', tags:['litteraire']},
+ {label:'Brûlant & intense', tags:['sensuel','audacieux']},
+ {label:'Journal intime', tags:['romantique','sensuel']},
+ {label:'Roman de gare assumé', tags:['brut']},
+ {label:'Lettre à un amant', tags:['romantique','poetique']}
+];
+function toneProfile(){
+  const t={cru:0,romantique:0,bdsm:0,audacieux:0,poetique:0,litteraire:0,sensuel:0,brut:0};
+  const sel=id=>{const a=S.answers[id];return a?(Array.isArray(a.sel)?a.sel:(a.sel?[a.sel]:[])):[];};
+  sel('vibe').forEach(v=>{
+    if(/Passion brute/i.test(v)){t.cru+=2;t.brut+=2;}
+    if(/Romance lente/i.test(v)){t.romantique+=2;t.poetique+=1;}
+    if(/Tension interdite|frisson/i.test(v)){t.audacieux+=2;}
+    if(/domination/i.test(v)){t.bdsm+=2;}
+    if(/Luxe/i.test(v)){t.litteraire+=1;}
+    if(/murmur/i.test(v)){t.sensuel+=2;}
+    if(/brûlant|orage/i.test(v)){t.sensuel+=1;}
+  });
+  const pract=[...sel('A'),...sel('B'),...sel('C'),...sel('D'),...sel('E'),...sel('F')].join(' | ');
+  if(/BDSM|Menottes|Bandeau|Collier|Strap/i.test(pract)) t.bdsm+=2;
+  if(/Exhibition|Risque public|Voyeurisme/i.test(pract)) t.audacieux+=2;
+  if(/Deepthroat|Anulingus|Double pénétration|Facial|Cumplay|Avalé|Squirting/i.test(pract)) t.cru+=2;
+  if(sel('E').length>=3) t.cru+=1;
+  if(/Dentelle|Soie|Jarretelles/i.test(pract)){t.romantique+=1;t.litteraire+=1;}
+  sel('commentaires').forEach(c=>{
+    if(/très cru/i.test(c)) t.cru+=3;
+    if(/élégant/i.test(c)){t.litteraire+=3;t.cru-=2;}
+    if(/préliminaires|progressive/i.test(c)) t.romantique+=1;
+  });
+  const cust=((S.answers.scenario&&S.answers.scenario.custom)||'')+' '+((S.answers.commentaires&&S.answers.commentaires.custom)||'');
+  if(/\bcru|explicite|sans détour/i.test(cust)) t.cru+=2;
+  if(/romantique|tendre|amour/i.test(cust)) t.romantique+=2;
+  return t;
+}
 function suggestionsFor(q){
+  if(q.id==='styleEcriture'){
+    const t=toneProfile();
+    const scored=STYLES.map((st,i)=>({label:st.label, i:i, score:st.tags.reduce((n,k)=>n+(t[k]||0),0)}))
+      .sort((a,b)=>b.score-a.score||a.i-b.i);
+    const list=scored.slice(0,10).map(x=>x.label);
+    const names={cru:'plutôt cru',brut:'direct',romantique:'romantique',bdsm:'jeux de pouvoir',audacieux:'audacieux',poetique:'poétique',litteraire:'littéraire',sensuel:'sensuel'};
+    const top=Object.entries(t).sort((a,b)=>b[1]-a[1])[0];
+    const hint=(top&&top[1]>1)?'Accordées au ton de vos réponses — '+names[top[0]] : null;
+    return {list:list, hint:hint};
+  }
   if(q.id==='moi'){
     const g=genreValue();
     if(g==='Un homme') return {list:TRAITS_HOMME, hint:null};
@@ -1338,7 +1550,7 @@ function rerollFantasme(ev){
   if(ev) ev.stopPropagation();
   let n; do{ n=Math.floor(Math.random()*FANTASMES.length); }while(n===S._fdsIdx&&FANTASMES.length>1);
   S._fdsIdx=n;
-  renderFds();
+  renderFds(true);
 }
 function startFantasme(){
   const f=todayFantasme();
@@ -1352,16 +1564,18 @@ function startFantasme(){
   renderQuestion();
   toast('Décor posé — il ne reste que vous');
 }
-function renderFds(){
+function renderFds(anim){
   const box=document.getElementById('fdsBox'); if(!box) return;
   const f=todayFantasme();
-  box.innerHTML='<div class="fds">'
+  box.innerHTML='<div class="fds'+(anim?' swap':'')+'">'
     +'<div class="ftag">Le fantasme du soir</div>'
     +'<h4>'+f.t+'</h4>'
     +'<p>'+f.d+'</p>'
     +'<div class="frow">'
     +'<button class="btn btn-primary" onclick="startFantasme()">Écrire celui-ci</button>'
-    +'<button class="reroll" title="Un autre" onclick="rerollFantasme(event)">⟳</button>'
+    +'<button class="btn btn-ghost sur" onclick="rerollFantasme(event)">'
+    +'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.3"/><path d="M21 3v5h-5"/></svg>'
+    +'Surprenez-moi</button>'
     +'</div></div>';
 }
 function saveLast(){
@@ -1436,7 +1650,7 @@ const CATALOG=[
  {id:'k1',path:'slow',intens:'Douce',t:'L\'heure bleue',d:'Un rendez-vous à l\'aube sur la véranda, quand la maison dort encore et que tout est permis à voix basse.',vibe:'Romance lente & sensuelle',loc:'Maison de famille en bord de mer',lieux:'La véranda, la plage à marée basse',scen:'Deux amants se retrouvent à l\'aube sur la véranda, avant que la maison ne se réveille.'},
  {id:'k2',path:'slow',intens:'Douce',t:'Trois boutons',d:'Une robe qui se déboutonne un bouton par heure, toute une soirée durant. Le supplice le plus doux du monde.',vibe:'Tension à faire durer',loc:'Hôtel particulier à Paris',lieux:'Le salon aux moulures, le grand escalier',scen:'Un jeu : un bouton de sa robe par heure, pas un de plus, jusqu\'à la fin du dîner.'},
  {id:'k3',path:'dirty',intens:'Intense',t:'Ligne ouverte',d:'Un appel de nuit qui ne devait durer que cinq minutes. Sa voix fait le reste.',vibe:'Mots murmurés à l\'oreille',loc:'Loft à New York',lieux:'Le canapé du salon, la baie vitrée',scen:'Un appel de nuit entre deux amants séparés par un océan : tout se joue à la voix.'},
- {id:'k4',path:'power',intens:'Intense',t:'Le protocole',d:'Ce soir, chaque geste demande la permission. Et la permission a un prix.',vibe:'Jeu de domination douce',loc:'Château en Provence',lieux:'La suite à baldaquin, le boudoir',scen:'Un protocole établi entre eux : chaque geste demande une permission, chaque permission a un prix.'},
+ {id:'k4',path:'power',intens:'Intense',t:'Le protocole',d:'Ce soir, chaque geste demande la permission. Et la permission a un prix.',vibe:'Jeu de domination douce',loc:'Château en Provence',lieux:'La suite à baldaquin, le petit salon privé',scen:'Un protocole établi entre eux : chaque geste demande une permission, chaque permission a un prix.'},
  {id:'k5',path:'touch',intens:'Douce',t:'Quatre mains',d:'L\'huile chauffe dans le creux des paumes. Personne ne parle. C\'est mieux.',vibe:'Peau, huile et lenteur',loc:'Riad à Marrakech',lieux:'Le hammam privé, l\'alcôve aux lanternes',scen:'Après le hammam, un massage à l\'huile d\'argan qui prend tout son temps, en silence.'},
  {id:'k6',path:'role',intens:'Intense',t:'Madame X',d:'Elle a réservé sous un faux nom. Il a promis de jouer le jeu jusqu\'au bout.',vibe:'Se rencontrer comme des inconnus',loc:'Palace parisien',lieux:'Le bar de l\'hôtel, la suite au dernier étage',scen:'Un couple se donne rendez-vous au bar d\'un palace en jouant deux inconnus : elle a un faux nom, lui une histoire inventée.'},
  {id:'k7',path:'thrill',intens:'Intense',t:'Rangée 24',d:'Un vol de nuit, une couverture, des voisins endormis. Le cœur bat plus fort que les réacteurs.',vibe:'Le frisson d\'être surpris',loc:'Avion, vol de nuit',lieux:'La rangée 24, les toilettes de l\'avion',scen:'Sur un vol de nuit presque vide, sous une couverture, un jeu de plus en plus risqué.'},
@@ -1501,8 +1715,8 @@ function showScreen(id){
   document.body.classList.toggle('wizmode', id==='wizard');
   const tb=document.getElementById('tabbar');
   if(tb){
-    tb.classList.toggle('on', id in TAB_SCREENS);
-    if(TAB_SCREENS[id]) updateTabs(TAB_SCREENS[id]);
+    tb.classList.add('on');
+    updateTabs(TAB_SCREENS[id]||'');
   }
   window.scrollTo({top:0});
 }
@@ -1559,8 +1773,10 @@ function startWizard(mode){
   S.answers.longueur.sel = 4800;
   /* pré-remplissage depuis le profil */
   if(profile.genre) S.answers.genre.sel=profile.genre;
-  if(profile.moi) S.answers.moi.custom=profile.moi;
-  if(profile.partenaire) S.answers.partenaire.custom=profile.partenaire;
+  const moiDesc=composePerson(profile.moiF,profile.moi);
+  const partDesc=composePerson(profile.partF,profile.partenaire);
+  if(moiDesc) S.answers.moi.custom=moiDesc;
+  if(partDesc) S.answers.partenaire.custom=partDesc;
   if(profile.orientation) S.answers.orientation.sel=profile.orientation;
   if(profile.plume) S.answers.styleEcriture.sel=profile.plume;
   if(mode==='continue') prefillFromContext();
@@ -1887,6 +2103,8 @@ async function streamCompletion(messages, maxTok, onDelta, ctrl){
 ================================================================ */
 function setGenUI(statusTxt){
   stopAudio();
+  const rh=document.getElementById('readerHead');
+  if(rh) rh.style.display='block';
   document.getElementById('genbar').style.display='flex';
   document.getElementById('genStatus').textContent=statusTxt;
   document.getElementById('readerActions').style.display='none';
@@ -2038,6 +2256,8 @@ const book={page:0,pages:1,w:0,gap:56,chapters:[]};
 
 function applyView(targetPage){
   const btn=document.getElementById('viewToggle');
+  const rh=document.getElementById('readerHead');
+  if(rh) rh.style.display = S.bookMode ? 'none' : 'block';
   if(S.bookMode){
     document.getElementById('paperScroll').style.display='none';
     document.getElementById('bookWrap').classList.add('on');
@@ -2127,6 +2347,11 @@ window.addEventListener('resize', ()=>{
 /* ================================================================
    Ajustements en cours de lecture
 ================================================================ */
+function paintSlider(inp){
+  const pct=(+inp.value)/4*100;
+  const lo=Math.min(50,pct), hi=Math.max(50,pct);
+  inp.style.background='linear-gradient(90deg, rgba(255,255,255,.08) 0% '+lo+'%, rgba(225,81,122,.95) '+lo+'% '+hi+'%, rgba(255,255,255,.08) '+hi+'% 100%)';
+}
 function openTune(){
   const box=document.getElementById('tuneSliders');
   box.innerHTML='';
@@ -2135,12 +2360,22 @@ function openTune(){
     const d=document.createElement('div');
     d.className='tslider';
     d.innerHTML='<div class="ts-head"><span>'+a.label+'</span><b id="tsv_'+a.id+'">'+a.names[v]+'</b></div>'
-      +'<input type="range" min="0" max="4" step="1" value="'+v+'" id="ts_'+a.id+'">'
+      +'<div class="ts-wrap"><div class="ts-ticks"><span></span><span></span><span></span><span></span><span></span></div>'
+      +'<input type="range" min="0" max="4" step="1" value="'+v+'" id="ts_'+a.id+'"></div>'
       +'<div class="ts-ends"><span>'+a.ends[0]+'</span><span>'+a.ends[1]+'</span></div>';
     box.appendChild(d);
     const inp=d.querySelector('input');
+    paintSlider(inp);
+    let lastV=v;
     inp.addEventListener('input',()=>{
-      document.getElementById('tsv_'+a.id).textContent=a.names[+inp.value];
+      paintSlider(inp);
+      const b=document.getElementById('tsv_'+a.id);
+      b.textContent=a.names[+inp.value];
+      if(+inp.value!==lastV){
+        lastV=+inp.value;
+        b.classList.remove('vpop'); void b.offsetWidth; b.classList.add('vpop');
+        if(navigator.vibrate) navigator.vibrate(8);
+      }
     });
   });
   document.getElementById('tuneSheet').classList.add('on');
@@ -2626,8 +2861,8 @@ window.addEventListener('error',e=>{
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='2.6.2';
-const APP_BUILD='11/08/2026 16:18 (Paris)';
+const APP_VERSION='3.1.0';
+const APP_BUILD='11/08/2026 19:38 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
