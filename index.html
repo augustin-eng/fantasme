@@ -282,7 +282,7 @@ body.wizmode::before{animation:none;opacity:.5}
 body.wizmode::after{display:none}
 body.wizmode #liquid{display:none}
 body.wizmode .wrap{padding-bottom:0}
-body.wizmode{overflow:hidden;height:100dvh}
+body.wizmode{min-height:100dvh}
 #wizard.on{
   display:flex;flex-direction:column;
   height:calc(100dvh - 104px);min-height:400px;overflow:hidden;
@@ -1523,7 +1523,7 @@ function startWizard(mode){
   }
   S.answers = {};
   QUESTIONS.forEach(q=>{
-    S.answers[q.id] = { sel: (q.type==='multi') ? [] : null, custom:'' };
+    S.answers[q.id] = { sel: (q.type==='multi'||q.type==='multitext') ? [] : null, custom:'' };
   });
   S.answers.longueur.sel = 4800;
   /* pré-remplissage depuis le profil */
@@ -1672,6 +1672,8 @@ function updNextLabel(){
   btn.textContent = answered(q) ? 'Continuer' : (q.optional?'Passer':'Continuer');
 }
 function qNav(dir){
+  if(document.activeElement&&document.activeElement.blur) document.activeElement.blur();
+  window.scrollTo(0,0);
   const vis=visibleIdx();
   const pos=Math.max(0,vis.indexOf(S.qIndex));
   if(dir>0 && pos===vis.length-1){ generate(); return; }
@@ -2512,11 +2514,28 @@ if(window.matchMedia('(hover:hover)').matches){
   });
 }
 
+/* recadrage quand le clavier mobile se ferme (évite l'écran figé) */
+if(window.visualViewport){
+  let lastH=window.visualViewport.height;
+  window.visualViewport.addEventListener('resize',()=>{
+    const h=window.visualViewport.height;
+    if(h>lastH+80 && document.body.classList.contains('wizmode')){
+      window.scrollTo(0,0);
+    }
+    lastH=h;
+  });
+}
+
+/* filet de sécurité : toute erreur JS devient visible */
+window.addEventListener('error',e=>{
+  try{ toast('Erreur technique : '+(e.message||'inconnue')); }catch(_){}
+});
+
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='2.4.0';
-const APP_BUILD='11/08/2026 15:43 (Paris)';
+const APP_VERSION='2.4.2';
+const APP_BUILD='11/08/2026 15:46 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
