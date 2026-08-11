@@ -1,0 +1,12 @@
+{
+  "name": "fantasme",
+  "version": "1.0.0",
+  "private": true,
+  "description": "fantas.me — récits sur mesure",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,2412 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0E0910">
+<title>fantas.me — Récits sur mesure</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E0910;
+  --bg2:#150C13;
+  --sur:rgba(255,255,255,.035);
+  --sur2:#1C1119;
+  --line:rgba(244,231,225,.09);
+  --line2:rgba(244,231,225,.18);
+  --txt:#F2E8E2;
+  --mut:#A18F97;
+  --ember:#FF5C38;
+  --ember2:#E22A50;
+  --emberG:linear-gradient(135deg,#FF6A3D 0%,#E22A50 100%);
+  --peach:#FFB49E;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.23,1,.32,1);
+  --safe-b:env(safe-area-inset-bottom, 0px);
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--txt);
+  font-family:var(--sans);
+  font-weight:400;
+  font-size:15.5px;
+  min-height:100vh;
+  letter-spacing:-.005em;
+  overflow-x:hidden;
+}
+/* profondeur : halos de couleur + grain */
+body::before{
+  content:'';position:fixed;inset:-30%;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(38% 30% at 12% -2%, rgba(226,42,80,.36), transparent 65%),
+    radial-gradient(30% 26% at 96% 10%, rgba(255,106,61,.22), transparent 68%),
+    radial-gradient(42% 36% at 74% 112%, rgba(122,30,96,.40), transparent 70%);
+  animation:breathe 16s ease-in-out infinite alternate;
+}
+#liquid{
+  position:fixed;inset:-30%;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(26% 22% at 30% 68%, rgba(255,92,56,.17), transparent 70%),
+    radial-gradient(22% 18% at 82% 40%, rgba(226,42,80,.15), transparent 70%),
+    radial-gradient(18% 16% at 55% 20%, rgba(255,180,158,.07), transparent 70%);
+  filter:blur(46px);
+  animation:liquid 24s ease-in-out infinite alternate;
+}
+@keyframes liquid{
+  0%{transform:translate(0,0) scale(1)}
+  50%{transform:translate(4%,-3%) scale(1.09)}
+  100%{transform:translate(-3%,2%) scale(1.03)}
+}
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+@keyframes breathe{from{opacity:.75;transform:scale(1) translateY(0)}to{opacity:1;transform:scale(1.06) translateY(-12px)}}
+::selection{background:var(--ember2);color:#fff}
+.wrap{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:0 22px 64px}
+
+/* ---------- Header ---------- */
+header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 0 16px;margin-bottom:30px;
+}
+.logo{font-family:var(--serif);font-size:27px;font-weight:500;font-style:italic;letter-spacing:-.01em;color:var(--txt);cursor:pointer;user-select:none}
+.logo .dot{background:var(--emberG);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo small{display:none}
+.iconbtn{
+  background:rgba(255,255,255,.045);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);
+  border:1px solid var(--line);border-top-color:rgba(255,255,255,.2);color:var(--mut);
+  width:42px;height:42px;border-radius:14px;cursor:pointer;font-size:16px;
+  transition:all .3s var(--ease);display:flex;align-items:center;justify-content:center;flex:0 0 auto;
+}
+.iconbtn:hover{border-color:var(--line2);color:var(--peach);transform:translateY(-1px)}
+
+/* ---------- Screens ---------- */
+.screen{display:none;animation:fade .55s var(--ease)}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes slideq{from{opacity:0;transform:translateX(34px)}to{opacity:1;transform:none}}
+@keyframes slideqb{from{opacity:0;transform:translateX(-34px)}to{opacity:1;transform:none}}
+
+/* ---------- Gate (désactivée) ---------- */
+#gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px}
+#gate .inner{max-width:430px}
+#gate h1{font-family:var(--serif);font-size:52px;font-weight:500;font-style:italic;color:var(--txt);margin-bottom:6px}
+#gate h1 .dot{background:var(--emberG);-webkit-background-clip:text;background-clip:text;color:transparent}
+#gate .rule{width:56px;height:2px;background:var(--emberG);margin:26px auto;border-radius:2px}
+#gate p{color:var(--mut);font-size:14px;line-height:1.8;margin-bottom:10px}
+#gate .actions{margin-top:30px;display:flex;flex-direction:column;gap:12px;align-items:center}
+
+/* ---------- Typographie ---------- */
+h2.title{
+  font-family:var(--serif);font-weight:500;
+  font-size:clamp(34px,8.5vw,46px);letter-spacing:-.02em;line-height:1.05;
+  margin-bottom:14px;
+}
+p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-width:520px}
+.eyebrow{
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+  background:var(--emberG);-webkit-background-clip:text;background-clip:text;color:transparent;
+  margin-bottom:14px;
+}
+.whisper{font-family:var(--serif);font-style:italic;font-size:17px;color:var(--peach);opacity:.85;margin:-4px 0 30px}
+
+/* ---------- Accueil : stats, reprise, fantasme du soir ---------- */
+.statstrip{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 20px}
+.spill{
+  display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:500;color:var(--mut);
+  padding:9px 14px;border-radius:12px;
+  background:rgba(255,255,255,.045);border:1px solid var(--line);border-top-color:rgba(255,255,255,.16);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+}
+.spill b{color:var(--peach);font-weight:600}
+.resume{
+  display:flex;align-items:center;gap:16px;border-radius:20px;padding:18px 20px;margin-bottom:16px;cursor:pointer;
+  background:rgba(26,15,23,.55);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid var(--line2);border-top-color:rgba(255,255,255,.2);
+  transition:all .35s var(--ease);
+}
+.resume:hover{transform:translateY(-2px);border-color:rgba(255,180,158,.45)}
+.resume .ric{
+  width:46px;height:46px;border-radius:14px;flex:0 0 auto;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);border-top-color:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;font-size:19px;color:var(--peach);
+}
+.resume .rt2{flex:1;min-width:0}
+.resume .rt2 .l1{font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;font-weight:600;color:var(--peach);margin-bottom:4px}
+.resume .rt2 .l2{font-family:var(--serif);font-size:16.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:8px}
+.resume .rbar{height:2px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden}
+.resume .rbar div{height:100%;background:var(--emberG);border-radius:2px}
+.resume .go2{color:var(--mut);font-size:18px;flex:0 0 auto}
+.fds{
+  position:relative;overflow:hidden;border-radius:24px;padding:26px 24px;margin-bottom:16px;
+  background:radial-gradient(120% 140% at 85% -20%, rgba(226,42,80,.28), transparent 55%),rgba(26,15,23,.55);
+  backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border:1px solid rgba(226,42,80,.45);border-top-color:rgba(255,255,255,.22);
+  transform-style:preserve-3d;
+}
+.fds .ftag{
+  display:inline-block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--peach);background:rgba(226,42,80,.16);padding:6px 11px;border-radius:9px;margin-bottom:14px;
+}
+.fds h4{font-family:var(--serif);font-size:25px;font-weight:500;letter-spacing:-.015em;margin-bottom:8px}
+.fds p{color:var(--mut);font-size:13.5px;line-height:1.65;margin-bottom:18px;max-width:92%}
+.fds .frow{display:flex;gap:10px;align-items:stretch}
+.fds .frow .btn{flex:1;padding:15px 18px}
+.reroll{
+  width:52px;border-radius:16px;flex:0 0 auto;
+  background:rgba(255,255,255,.045);border:1px solid var(--line2);border-top-color:rgba(255,255,255,.2);
+  color:var(--mut);font-size:19px;cursor:pointer;transition:all .4s var(--ease);
+}
+.reroll:hover{color:var(--peach);transform:rotate(180deg)}
+
+/* ---------- Découverte (rangées horizontales) ---------- */
+.shead{display:flex;align-items:baseline;justify-content:space-between;margin:34px 0 14px}
+.shead h3{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.015em}
+.shead span{font-size:12px;color:var(--mut)}
+.hrow{
+  display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+  margin:0 -22px;padding:4px 22px 12px;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.hrow::-webkit-scrollbar{display:none}
+.scard{
+  flex:0 0 238px;scroll-snap-align:start;cursor:pointer;position:relative;
+  border-radius:20px;padding:20px;display:flex;flex-direction:column;gap:9px;min-height:190px;
+  background:linear-gradient(160deg,rgba(255,255,255,.06),rgba(255,255,255,.015) 55%),rgba(26,15,23,.55);
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.2);
+  transition:all .35s var(--ease);
+}
+.scard:hover{transform:translateY(-3px);border-color:rgba(255,180,158,.42)}
+.scard:active{transform:scale(.97)}
+.scard .sc-tag{font-size:9.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--peach)}
+.scard h5{font-family:var(--serif);font-size:19.5px;font-weight:500;letter-spacing:-.01em;line-height:1.15}
+.scard p{font-size:12.5px;color:var(--mut);line-height:1.55;flex:1}
+.scard .sc-meta{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--mut)}
+.scard .sc-meta b{color:var(--peach);font-weight:600}
+
+/* ---------- Cards (home) ---------- */
+.cards{display:grid;grid-template-columns:1fr;gap:16px;margin-bottom:28px}
+@media(min-width:700px){.cards{grid-template-columns:1fr 1fr}}
+.card{
+  position:relative;overflow:hidden;cursor:pointer;
+  background:linear-gradient(150deg,rgba(255,255,255,.075),rgba(255,255,255,.015) 48%),rgba(24,14,22,.52);
+  backdrop-filter:blur(22px) saturate(1.5);-webkit-backdrop-filter:blur(22px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.09);border-top-color:rgba(255,255,255,.22);
+  border-radius:24px;padding:30px 26px 34px;
+  transition:all .45s var(--ease);transform-style:preserve-3d;
+  box-shadow:0 24px 60px rgba(0,0,0,.4), 0 44px 90px -40px rgba(226,42,80,.22);
+}
+.tilted{transition:transform .12s ease !important}
+.card::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(70% 70% at 85% -10%, rgba(226,42,80,.22), transparent 65%);
+  opacity:0;transition:opacity .5s;
+}
+.card::after{
+  content:'→';position:absolute;right:26px;bottom:20px;
+  font-size:22px;color:var(--mut);transition:all .35s var(--ease);
+}
+.card:hover{border-color:var(--line2);transform:translateY(-3px)}
+.card:hover::before{opacity:1}
+.card:hover::after{color:var(--peach);transform:translateX(5px)}
+.card:active{transform:scale(.985)}
+.card .tag{
+  display:inline-block;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--peach);background:rgba(226,42,80,.14);
+  padding:6px 11px;border-radius:9px;margin-bottom:16px;
+}
+.card h3{font-family:var(--serif);font-size:27px;font-weight:500;letter-spacing:-.015em;margin-bottom:9px}
+.card p{color:var(--mut);font-size:13.5px;line-height:1.65;max-width:92%}
+.linklike{
+  background:none;border:none;color:var(--mut);font-family:var(--sans);font-size:14px;font-weight:500;
+  cursor:pointer;padding:7px 0;transition:color .3s;text-decoration:none;
+}
+.linklike:hover{color:var(--peach)}
+
+/* ---------- Boutons ---------- */
+.btn{
+  font-family:var(--sans);font-size:15px;font-weight:550;letter-spacing:-.005em;
+  padding:17px 30px;cursor:pointer;transition:all .35s var(--ease);border-radius:16px;
+}
+.btn-primary{
+  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0) 45%),var(--emberG);
+  border:none;color:#fff;
+  box-shadow:0 14px 36px rgba(226,42,80,.42), 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -2px 4px rgba(120,10,30,.35);
+}
+.btn-primary:hover{filter:brightness(1.07);transform:translateY(-1px);box-shadow:0 20px 48px rgba(226,42,80,.5), 0 2px 6px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.3), inset 0 -2px 4px rgba(120,10,30,.35)}
+.btn-primary:active{transform:translateY(1px);box-shadow:0 6px 18px rgba(226,42,80,.35), inset 0 1px 0 rgba(255,255,255,.2), inset 0 2px 6px rgba(120,10,30,.4)}
+.btn-primary:disabled{opacity:.4;cursor:not-allowed}
+.btn-ghost{background:rgba(255,255,255,.045);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid var(--line2);border-top-color:rgba(255,255,255,.24);color:var(--txt)}
+.btn-ghost:hover{border-color:rgba(255,180,158,.5);background:rgba(255,255,255,.06)}
+.btn-quiet{background:none;border:1px solid var(--line);color:var(--mut)}
+.btn-quiet:hover{color:var(--txt);border-color:var(--line2)}
+
+/* ---------- Questionnaire ---------- */
+#wizard{padding-bottom:124px}
+.qprogress{margin-bottom:34px}
+.qprogress .track{height:2px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.qprogress .fill{height:100%;background:var(--emberG);width:0%;transition:width .6s var(--ease);border-radius:2px;box-shadow:0 0 14px rgba(255,92,56,.5)}
+.qprogress .cnt{display:flex;justify-content:space-between;align-items:baseline;margin-top:12px}
+.qprogress .cnt .sec{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--peach)}
+.qprogress .cnt span:last-child{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--mut)}
+
+#qCard{animation:slideq .5s var(--ease)}
+#qCard.back{animation:slideqb .5s var(--ease)}
+.qtitle{
+  font-family:var(--serif);font-weight:500;
+  font-size:clamp(28px,7vw,38px);letter-spacing:-.02em;line-height:1.08;
+  margin-bottom:12px;
+}
+.qsub{color:var(--mut);font-size:14px;line-height:1.65;margin-bottom:26px;max-width:520px}
+.ctxhint{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--peach);margin:-12px 0 22px}
+
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  font-family:var(--sans);font-size:14px;font-weight:450;letter-spacing:-.005em;
+  padding:13px 18px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.17);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  color:#CDBEC5;cursor:pointer;
+  transition:all .3s var(--ease);min-height:46px;
+}
+.chip:active{transform:scale(.95)}
+.chip:hover{border-color:var(--line2);color:var(--txt);background:rgba(255,255,255,.055)}
+.chip.sel{
+  background:linear-gradient(180deg,rgba(255,255,255,.3),rgba(255,255,255,0) 46%),var(--emberG);
+  border-color:transparent;color:#fff;
+  box-shadow:0 10px 26px rgba(226,42,80,.42), inset 0 -2px 4px rgba(120,10,30,.3);
+}
+
+.customwrap{margin-top:22px}
+.customwrap .lbl{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:10px}
+input[type=text],input[type=password],textarea{
+  width:100%;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--txt);
+  font-family:var(--sans);font-weight:400;font-size:16px;padding:16px 18px;border-radius:16px;
+  transition:all .3s var(--ease);outline:none;
+}
+input:focus,textarea:focus{border-color:rgba(255,92,56,.55);box-shadow:0 0 0 4px rgba(226,42,80,.12);background:rgba(255,255,255,.05)}
+textarea{resize:vertical;min-height:110px;line-height:1.65}
+::placeholder{color:#655860;font-style:italic}
+
+/* ---------- Nav bas (sticky) ---------- */
+.qnav{
+  position:fixed;left:0;right:0;bottom:0;z-index:50;
+  padding:16px 22px calc(16px + var(--safe-b));
+  background:linear-gradient(transparent, rgba(14,9,16,.92) 34%);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  display:none;
+}
+.qnav.on{display:block}
+.qnav .inner{max-width:680px;margin:0 auto;display:flex;gap:12px;align-items:stretch}
+.qback{
+  width:56px;border-radius:16px;border:1px solid var(--line);border-top-color:rgba(255,255,255,.2);
+  background:rgba(255,255,255,.05);backdrop-filter:blur(14px) saturate(1.4);-webkit-backdrop-filter:blur(14px) saturate(1.4);
+  color:var(--mut);font-size:19px;cursor:pointer;transition:all .3s var(--ease);flex:0 0 auto;
+}
+.qback:hover{color:var(--peach);border-color:var(--line2)}
+#qNext{flex:1}
+
+/* ---------- Panneau histoire reçue ---------- */
+.received{
+  border:1px solid rgba(255,255,255,.1);border-top-color:rgba(255,255,255,.22);border-radius:20px;
+  background:rgba(26,15,23,.55);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
+  padding:24px;margin-bottom:28px;
+}
+.received .rt{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--peach);margin-bottom:12px}
+.received .excerpt{
+  font-family:var(--serif);font-size:16px;line-height:1.85;color:var(--mut);
+  max-height:140px;overflow:hidden;position:relative;
+}
+.received .excerpt.open{max-height:none}
+.received .excerpt:not(.open)::after{content:'';position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(transparent,var(--sur2))}
+
+/* ---------- Lecteur (défilement) ---------- */
+#reader .paper{
+  background:linear-gradient(168deg,#191016,#120B10);
+  border:1px solid var(--line);border-radius:24px;padding:34px 26px;min-height:260px;
+  box-shadow:0 28px 70px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.04);
+}
+@media(min-width:700px){#reader .paper{padding:54px 58px}}
+.story{font-family:var(--serif);font-size:18px;line-height:1.9;font-weight:400;color:#EBDFD6}
+@media(min-width:700px){.story{font-size:19px;line-height:1.95}}
+.story p{margin-bottom:1.4em}
+.story h3{
+  font-family:var(--serif);font-size:24px;font-weight:500;font-style:italic;color:var(--peach);
+  margin:2.1em 0 1em;letter-spacing:-.01em;
+}
+.story h3:first-child{margin-top:0}
+.story em{color:var(--peach)}
+.story .stream{white-space:pre-wrap}
+.cursor{display:inline-block;width:2px;height:1.1em;background:var(--ember);vertical-align:text-bottom;animation:blink 1s infinite}
+@keyframes blink{50%{opacity:0}}
+.genbar{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
+  margin-bottom:18px;padding:14px 18px;border-radius:18px;
+  background:rgba(26,15,23,.55);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.2);
+}
+.genbar .st{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--peach)}
+.genbar .wc{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--mut)}
+.pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:10px;animation:pulse 1.3s infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1;box-shadow:0 0 10px var(--ember)}}
+.reader-actions{display:flex;flex-direction:column;gap:11px;margin-top:26px}
+@media(min-width:700px){.reader-actions{flex-direction:row;flex-wrap:wrap}}
+.reader-actions .btn{width:100%}
+@media(min-width:700px){.reader-actions .btn{width:auto}}
+
+/* ---------- Le Livre ---------- */
+#bookWrap{display:none}
+#bookWrap.on{display:block}
+.bookhead{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  margin-bottom:12px;
+}
+.bookhead .bh-ch{
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--peach);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.bookhead span:last-child{font-family:var(--serif);font-style:italic;font-size:13px;color:var(--mut)}
+.bookvp{
+  position:relative;overflow:hidden;border-radius:24px;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.32), transparent 8%, transparent 92%, rgba(0,0,0,.18)),
+    linear-gradient(168deg,#1A1016,#130B10);
+  border:1px solid var(--line);
+  box-shadow:0 30px 74px rgba(0,0,0,.5), 0 54px 110px -44px rgba(226,42,80,.28), inset 0 1px 0 rgba(255,255,255,.06);
+  height:calc(100dvh - 335px);min-height:380px;max-height:760px;
+  touch-action:pan-y;
+}
+.bookvp::after{
+  content:'';position:absolute;top:12px;bottom:12px;right:0;width:8px;
+  border-radius:0 20px 20px 0;pointer-events:none;z-index:7;
+  background:repeating-linear-gradient(90deg, rgba(255,255,255,.06) 0 1px, rgba(0,0,0,.28) 1px 2.6px);
+  opacity:.85;
+}
+@media(min-width:700px){.bookvp{height:580px}}
+.bookpad{position:absolute;inset:36px 30px 40px;overflow:hidden}
+.bookinner{height:100%;column-fill:auto;will-change:transform}
+.story-book{
+  font-family:var(--serif);font-size:17.5px;line-height:1.88;font-weight:400;color:#EBDFD6;
+  text-align:justify;hyphens:auto;
+}
+@media(min-width:700px){.story-book{font-size:18.5px}}
+.story-book p{margin-bottom:1.25em}
+.story-book h3{
+  font-family:var(--serif);font-size:25px;font-weight:500;font-style:italic;color:var(--peach);
+  margin:0 0 1.2em;padding-top:.4em;letter-spacing:-.01em;text-align:left;
+  break-before:column;break-after:avoid;
+}
+.story-book h3:first-child{break-before:auto}
+.story-book em{color:var(--peach)}
+.tapzone{position:absolute;top:0;bottom:0;width:30%;z-index:6;cursor:pointer}
+.tapzone.l{left:0}.tapzone.r{right:0}
+.bookfoot{display:flex;align-items:center;gap:14px;margin-top:15px}
+.bookfoot .pn{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--mut);white-space:nowrap}
+.bookfoot .bar{flex:1;height:2px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.bookfoot .bar div{height:100%;width:0%;background:var(--emberG);transition:width .4s var(--ease)}
+.tunebtn{
+  background:none;border:none;color:var(--mut);opacity:.75;
+  font-family:var(--serif);font-style:italic;font-size:14px;cursor:pointer;
+  transition:all .3s;white-space:nowrap;padding:4px 2px;
+}
+.tunebtn:hover{opacity:1;color:var(--peach)}
+
+/* ---------- Ajustements (bottom sheet) ---------- */
+.sheet-bg{position:fixed;inset:0;background:rgba(8,5,9,.78);z-index:95;display:none;align-items:flex-end;justify-content:center;backdrop-filter:blur(8px)}
+.sheet-bg.on{display:flex}
+.sheet{
+  background:rgba(28,16,25,.78);backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.14);border-top-color:rgba(255,255,255,.28);border-bottom:none;
+  border-radius:28px 28px 0 0;max-width:680px;width:100%;
+  padding:26px 24px calc(30px + var(--safe-b));animation:sheetup .45s var(--ease);
+  max-height:82dvh;overflow-y:auto;
+}
+@keyframes sheetup{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.sheet .grab{width:40px;height:4px;border-radius:4px;background:rgba(255,255,255,.14);margin:0 auto 22px}
+.sheet h3{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:-.015em;margin-bottom:8px}
+.sheet p{color:var(--mut);font-size:13.5px;line-height:1.65;margin-bottom:20px}
+.sheet .actions{display:flex;gap:11px;margin-top:26px}
+.sheet .actions .btn{flex:1}
+
+/* ---------- Curseurs d'ajustement ---------- */
+.tslider{margin-bottom:24px}
+.ts-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.ts-head span{font-size:13.5px;font-weight:550;color:var(--txt)}
+.ts-head b{font-size:12px;font-weight:500;color:var(--peach)}
+.tslider input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:4px;
+  background:linear-gradient(90deg,rgba(255,255,255,.10),rgba(226,42,80,.6));
+  outline:none;padding:0;border:none;box-shadow:none;
+}
+.tslider input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:26px;height:26px;border-radius:50%;
+  background:var(--emberG);border:2px solid rgba(255,255,255,.4);
+  box-shadow:0 4px 14px rgba(226,42,80,.55);cursor:pointer;
+}
+.tslider input[type=range]::-moz-range-thumb{
+  width:24px;height:24px;border-radius:50%;background:#E22A50;
+  border:2px solid rgba(255,255,255,.4);cursor:pointer;
+}
+.ts-ends{display:flex;justify-content:space-between;margin-top:9px;font-size:11.5px;color:var(--mut);font-style:italic;font-family:var(--serif)}
+.adapt{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:var(--peach);font-weight:500;white-space:nowrap}
+
+/* ---------- Partage ---------- */
+.sharebox{
+  margin-top:30px;border:1px solid rgba(226,42,80,.4);border-radius:24px;
+  background:radial-gradient(120% 120% at 20% -20%, rgba(226,42,80,.16), transparent 60%),var(--sur2);
+  padding:28px 26px;
+}
+.sharebox h3{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-.015em;margin-bottom:9px}
+.sharebox p{color:var(--mut);font-size:13.5px;line-height:1.65;margin-bottom:18px}
+.sharerow{display:flex;flex-direction:column;gap:11px}
+@media(min-width:700px){.sharerow{flex-direction:row}}
+.codearea{
+  width:100%;background:var(--bg);border:1px dashed var(--line2);border-radius:14px;
+  color:var(--mut);font-size:11px;font-family:monospace;padding:13px;margin-bottom:14px;
+  max-height:80px;overflow:auto;word-break:break-all;display:none;
+}
+
+/* ---------- Toast ---------- */
+#toast{
+  position:fixed;bottom:calc(32px + var(--safe-b));left:50%;transform:translateX(-50%) translateY(90px);
+  background:rgba(34,16,25,.72);backdrop-filter:blur(20px) saturate(1.5);-webkit-backdrop-filter:blur(20px) saturate(1.5);
+  border:1px solid rgba(255,92,56,.45);color:var(--peach);
+  padding:14px 26px;border-radius:16px;font-size:13.5px;font-weight:500;
+  transition:transform .4s var(--ease);z-index:200;pointer-events:none;white-space:nowrap;max-width:90vw;overflow:hidden;text-overflow:ellipsis;
+  box-shadow:0 16px 44px rgba(0,0,0,.5);
+}
+#toast.on{transform:translateX(-50%) translateY(0)}
+
+/* ---------- Audio ---------- */
+.audiobar{
+  display:none;align-items:center;gap:10px;flex-wrap:wrap;
+  margin-bottom:16px;padding:14px 16px;border-radius:18px;
+  background:rgba(26,15,23,.55);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.2);
+}
+.audiobar .ab-btn{
+  background:var(--sur);border:1px solid var(--line2);color:var(--peach);
+  width:44px;height:44px;border-radius:14px;cursor:pointer;font-size:14px;
+  transition:all .3s var(--ease);flex:0 0 auto;
+}
+.audiobar .ab-btn:hover{border-color:rgba(255,180,158,.5)}
+.audiobar select{
+  background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--mut);
+  border-radius:12px;padding:10px 11px;font-family:var(--sans);font-size:12.5px;max-width:160px;outline:none;
+}
+.audiobar .rates{display:flex;gap:6px}
+.audiobar .rchip{font-size:12px;padding:9px 13px;min-height:0;border-radius:11px}
+
+/* ---------- Profil ---------- */
+.avatar{
+  position:relative;overflow:hidden;
+  width:76px;height:76px;border-radius:24px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:34px;font-style:italic;color:#fff;
+  background:var(--emberG);
+  box-shadow:0 14px 36px rgba(226,42,80,.45), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -3px 6px rgba(120,10,30,.35);
+  margin-bottom:22px;
+}
+.avatar::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 45% at 30% 16%, rgba(255,255,255,.5), transparent 60%);
+  mix-blend-mode:screen;
+}
+.pfield{margin-bottom:22px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:28px 0}
+.stat{
+  background:rgba(26,15,23,.5);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.18);
+  border-radius:18px;padding:18px 10px;text-align:center;
+}
+.stat .n{font-family:var(--serif);font-size:28px;font-weight:500;color:var(--peach)}
+.stat .l{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-top:6px}
+.privnote{font-family:var(--serif);font-style:italic;font-size:13.5px;color:var(--mut);margin:18px 0 24px}
+
+/* ---------- Voies ---------- */
+.pathcard{
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.18);border-radius:20px;
+  background:rgba(26,15,23,.5);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);
+  padding:22px 24px;margin-bottom:14px;cursor:pointer;transition:all .35s var(--ease);transform-style:preserve-3d;
+}
+.pathcard:hover{border-color:var(--line2);transform:translateY(-2px)}
+.pathcard.active{
+  border-color:rgba(226,42,80,.55);
+  background:radial-gradient(140% 140% at 15% -30%, rgba(226,42,80,.18), transparent 55%),var(--sur2);
+  box-shadow:0 18px 44px rgba(226,42,80,.2);
+}
+.pathcard h4{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.015em;margin-bottom:5px}
+.pathcard .pdesc{font-size:12.5px;color:var(--mut);line-height:1.6}
+.lvldots{display:flex;gap:6px;margin:12px 0 10px}
+.lvldots span{width:8px;height:8px;border-radius:50%;border:1px solid var(--line2)}
+.lvldots span.done{background:var(--ember);border-color:var(--ember);box-shadow:0 0 9px rgba(255,92,56,.6)}
+.pathnext{font-family:var(--serif);font-style:italic;font-size:14.5px;color:var(--peach);line-height:1.55}
+.suggest{
+  border:1px solid rgba(226,42,80,.45);border-top-color:rgba(255,255,255,.22);border-radius:24px;padding:24px;margin-bottom:26px;
+  background:radial-gradient(130% 130% at 15% -25%, rgba(226,42,80,.2), transparent 60%),rgba(26,15,23,.55);
+  backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);
+  transform-style:preserve-3d;
+}
+.suggest .s-eyebrow{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--peach);margin-bottom:10px}
+.suggest h4{font-family:var(--serif);font-size:23px;font-weight:500;letter-spacing:-.015em;margin-bottom:8px}
+.suggest p{font-size:13.5px;color:var(--mut);line-height:1.65;margin-bottom:16px}
+
+/* ---------- Divers ---------- */
+.errbox{
+  border:1px solid rgba(226,42,80,.5);background:rgba(226,42,80,.09);border-radius:16px;
+  padding:16px 18px;color:#F0AFA6;font-size:13.5px;line-height:1.65;margin-bottom:18px;display:none;
+}
+.fld-lbl{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--mut);margin-bottom:10px}
+footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);color:#5F535B;font-size:11.5px;line-height:1.8;text-align:center}
+</style>
+</head>
+<body>
+<div id="liquid"></div>
+
+<!-- ============ PORTE 18+ (désactivée temporairement : retirer display:none et réactiver l'appel enterApp() en bas du script) ============ -->
+<div id="gate" style="display:none">
+  <div class="inner">
+    <h1>fantas<span class="dot">.me</span></h1>
+    <div style="font-size:10px;letter-spacing:.4em;color:var(--muted)">RÉCITS SUR MESURE</div>
+    <div class="rule"></div>
+    <p>Cette application est réservée aux adultes. Elle génère de la fiction érotique explicite, écrite sur mesure, entre personnages adultes et consentants.</p>
+    <p>En entrant, vous confirmez avoir 18 ans ou plus.</p>
+    <div class="actions">
+      <button class="btn btn-primary" style="width:100%;max-width:300px" onclick="enterApp()">J'ai 18 ans ou plus</button>
+      <button class="btn btn-quiet" style="width:100%;max-width:300px" onclick="location.href='https://google.com'">Quitter</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header>
+  <div class="logo" onclick="goHome()">fantas<span class="dot">.me</span></div>
+  <button class="iconbtn" title="Profil" onclick="openProfile()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.6-3.4 4.3-5 7.5-5s5.9 1.6 7.5 5"/></svg></button>
+</header>
+
+<!-- ============ HOME ============ -->
+<section id="home" class="screen">
+  <div class="eyebrow" id="homeEyebrow">Votre histoire, vos règles</div>
+  <h2 class="title">Quel fantasme vivrez-vous ce&nbsp;soir&nbsp;?</h2>
+  <div class="whisper">Ce qui s'écrit ici reste entre nous.</div>
+  <div class="statstrip" id="statStrip"></div>
+  <div id="resumeBox"></div>
+  <div id="fdsBox"></div>
+  <div id="suggestBox"></div>
+  <div class="cards">
+    <div class="card" onclick="startWizard('solo')">
+      <div class="tag">Solo</div>
+      <h3>Histoire personnelle</h3>
+      <p>Un récit complet, écrit selon vos paramètres exacts. À lire seul·e ou à voix haute.</p>
+    </div>
+    <div class="card" onclick="startWizard('couple')">
+      <div class="tag">À deux</div>
+      <h3>Mode couple</h3>
+      <p>Vous écrivez le premier chapitre selon vos envies, puis vous l'envoyez à votre partenaire — qui écrit la suite selon les siennes.</p>
+    </div>
+  </div>
+  <div id="discover"></div>
+</section>
+
+<!-- ============ PROFIL ============ -->
+<section id="profile" class="screen">
+  <div class="eyebrow">Votre boudoir</div>
+  <h2 class="title">Profil</h2>
+  <p class="sub">Ces informations personnalisent vos récits : elles pré-remplissent le questionnaire à chaque nouvelle histoire.</p>
+  <div class="avatar" id="avatarCircle">☾</div>
+  <div class="pfield"><label class="fld-lbl">Pseudo</label><input type="text" id="pf_pseudo" placeholder="Comment faut-il vous appeler ?"></div>
+  <div class="pfield"><label class="fld-lbl">Moi</label><textarea id="pf_moi" rows="3" placeholder="Taille, cheveux, yeux, formes, tatouages, caractère…"></textarea></div>
+  <div class="pfield"><label class="fld-lbl">Mon / ma partenaire</label><textarea id="pf_partenaire" rows="3" placeholder="La personne qui revient dans vos histoires…"></textarea></div>
+  <div class="pfield"><label class="fld-lbl">Orientation des récits</label><div class="chips" id="pf_orientation"></div></div>
+  <div class="pfield"><label class="fld-lbl">Plume préférée</label><input type="text" id="pf_plume" placeholder="Anaïs Nin, journal intime, cru & sans détour…"></div>
+  <div class="pfield">
+    <label class="fld-lbl">Ma voie</label>
+    <p class="sub" style="margin-bottom:16px;font-size:13.5px">Choisissez une direction d'évolution : à chaque histoire écrite, les propositions du questionnaire vous pousseront un peu plus loin dans cette voie, en trois étapes.</p>
+    <div id="pf_paths"></div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="n" id="st_recits">0</div><div class="l">Récits</div></div>
+    <div class="stat"><div class="n" id="st_mots">0</div><div class="l">Mots</div></div>
+    <div class="stat"><div class="n" id="st_minutes">0</div><div class="l">Min de lecture</div></div>
+  </div>
+  <div class="privnote">Ces informations restent dans ce navigateur, sur cet appareil. Rien n'est envoyé nulle part.</div>
+  <div style="display:flex;flex-direction:column;gap:11px">
+    <button class="btn btn-primary" onclick="saveProfile()">Enregistrer</button>
+    <button class="btn btn-quiet" onclick="goHome()">Retour</button>
+  </div>
+</section>
+
+<!-- ============ WIZARD (questionnaire) ============ -->
+<section id="wizard" class="screen">
+  <div id="receivedPanel" class="received" style="display:none">
+    <div class="rt">La partie de votre partenaire</div>
+    <div class="excerpt" id="receivedExcerpt"></div>
+    <button class="linklike" style="margin-top:12px" onclick="toggleExcerpt(this)">Lire en entier</button>
+  </div>
+
+  <div class="qprogress">
+    <div class="track"><div class="fill" id="qFill"></div></div>
+    <div class="cnt"><span class="sec" id="qSection">—</span><span id="qCount"></span></div>
+  </div>
+
+  <div id="qCard"></div>
+</section>
+
+<!-- ============ READER ============ -->
+<section id="reader" class="screen">
+  <div class="eyebrow" id="readerEyebrow">Votre récit</div>
+  <h2 class="title" id="readerTitle">L'encre coule…</h2>
+  <div class="genbar" id="genbar">
+    <div class="st"><span class="pulse"></span><span id="genStatus">Écriture en cours</span></div>
+    <div class="wc"><span id="wordCount">0</span> mots</div>
+    <button class="btn btn-quiet" id="stopBtn" onclick="stopGeneration()" style="padding:9px 16px">Arrêter</button>
+  </div>
+  <div class="errbox" id="genErr"></div>
+
+  <!-- barre audio -->
+  <div class="audiobar" id="audiobar">
+    <button class="ab-btn" id="abPlay" onclick="audioPlayPause()">⏸</button>
+    <button class="ab-btn" onclick="stopAudio()">■</button>
+    <div class="rates">
+      <button class="chip rchip sel" id="gF" onclick="setGender('female',this)">voix féminine</button>
+      <button class="chip rchip" id="gM" onclick="setGender('male',this)">voix masculine</button>
+    </div>
+    <div class="rates">
+      <button class="chip rchip" onclick="setRate(0.85,this)">lent</button>
+      <button class="chip rchip sel" onclick="setRate(1,this)">normal</button>
+      <button class="chip rchip" onclick="setRate(1.15,this)">rapide</button>
+    </div>
+    <select id="voiceSel" onchange="setVoice()"></select>
+    <span id="engineTag" style="font-family:var(--serif);font-style:italic;font-size:12px;color:var(--muted)"></span>
+  </div>
+
+  <!-- flux (pendant l'écriture / mode défilement) -->
+  <div class="paper" id="paperScroll">
+    <div class="story" id="storyBox"></div>
+  </div>
+
+  <!-- le livre -->
+  <div id="bookWrap">
+    <div class="bookhead">
+      <span class="bh-ch" id="bookChapter">fantas.me</span>
+      <span class="adapt" id="adaptBadge" style="display:none"><span class="pulse"></span>la suite s'adapte…</span>
+      <span id="bookMeta"></span>
+    </div>
+    <div class="bookvp" id="bookVp">
+      <div class="bookpad" id="bookPad">
+        <div class="bookinner story-book" id="bookInner"></div>
+      </div>
+      <div class="tapzone l" onclick="turnPage(-1)"></div>
+      <div class="tapzone r" onclick="turnPage(1)"></div>
+    </div>
+    <div class="bookfoot">
+      <span class="pn" id="pageNum">1 / 1</span>
+      <div class="bar"><div id="bookFill"></div></div>
+      <button class="tunebtn" onclick="startAudioFromHere()">♪ écouter</button>
+      <button class="tunebtn" onclick="openTune()">✦ ajuster</button>
+    </div>
+  </div>
+
+  <div class="reader-actions" id="readerActions" style="display:none">
+    <button class="btn btn-ghost" onclick="startAudioFromHere()">♪ Écouter</button>
+    <button class="btn btn-ghost" id="viewToggle" onclick="toggleView()">Affichage défilement</button>
+    <button class="btn btn-quiet" onclick="goHome()">Nouvelle histoire</button>
+  </div>
+  <div class="sharebox" id="sharebox" style="display:none">
+    <h3>À votre partenaire d'écrire la suite</h3>
+    <p>Vos profils sont liés. Envoyez-lui votre partie de l'histoire : il ou elle la découvrira dans son app, puis écrira la suite selon ses propres envies.</p>
+    <div class="sharerow">
+      <button class="btn btn-primary" onclick="sendToPartner()">Envoyer à mon/ma partenaire</button>
+    </div>
+  </div>
+</section>
+
+</div><!-- /wrap -->
+
+<!-- Sticky questionnaire nav -->
+<div class="qnav" id="qnav">
+  <div class="inner">
+    <button class="qback" id="qBack" onclick="qNav(-1)">←</button>
+    <button class="btn btn-primary" id="qNext" onclick="qNav(1)">Continuer</button>
+  </div>
+</div>
+
+<footer>
+  Un projet du studio The K Ventura
+</footer>
+
+<!-- ============ AJUSTEMENTS EN LECTURE ============ -->
+<div class="sheet-bg" id="tuneSheet">
+  <div class="sheet">
+    <div class="grab"></div>
+    <h3>Ajuster la suite</h3>
+    <p>Ce que vous êtes en train de lire ne bouge pas. La suite, elle, se réécrira discrètement selon vos curseurs — sans quitter votre page.</p>
+    <div id="tuneSliders"></div>
+    <div class="actions">
+      <button class="btn btn-quiet" onclick="closeTune()">Annuler</button>
+      <button class="btn btn-primary" onclick="applyTune()">Adapter la suite</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">Copié</div>
+
+<script>
+/* ================================================================
+   fantas.me — état global
+   Les appels IA passent par le backend (server.js) qui détient les clés.
+================================================================ */
+const S = {
+  /* Les clés API vivent côté serveur (variables d'environnement). */
+  elKey: '',
+  model: 'grok-4',
+  mode: 'solo',            // 'solo' | 'couple' | 'continue'
+  qIndex: 0,
+  answers: {},
+  receivedStory: '',
+  receivedContext: null,
+  story: '',
+  fullStory: '',
+  lastParams: null,
+  adjustments: [],         // ajustements appliqués en lecture
+  sliders: {cru:2,temp:2,rythme:2,rom:2},
+  bgAbort: null,
+  abort: null,
+  bookMode: true,
+  _lastDir: 1
+};
+
+/* ================================================================
+   Le questionnaire
+================================================================ */
+const QUESTIONS = [
+  { id:'vibe', section:'Ambiance', type:'multi',
+    showIf:()=>!S._fdsPrefill,
+    title:'Quelle ambiance pour cette histoire ?',
+    sub:'Touchez une ou plusieurs propositions, ou écrivez la vôtre.',
+    sug:['Romance lente & sensuelle','Tension interdite','Passion brute','Jeu de séduction','Luxe & pouvoir','Retrouvailles','Été brûlant','Nuit d\'orage','Années folles','Époque victorienne'],
+    customPh:'Votre ambiance, votre époque…' },
+
+  { id:'localisation', section:'Ambiance', type:'single',
+    showIf:()=>!S._fdsPrefill,
+    title:'Où cela se passe-t-il ?',
+    sub:'Le grand décor de l\'histoire.',
+    sug:['Château en Provence','Hôtel particulier à Paris','Villa sur la côte amalfitaine','Chalet isolé sous la neige','Riad à Marrakech','Loft à New York','Yacht en Méditerranée','Maison de famille en bord de mer'],
+    customPh:'Ex : Château de la Gaude, Rue Dauphine…' },
+
+  { id:'lieux', section:'Ambiance', type:'multi',
+    showIf:()=>!S._fdsPrefill,
+    title:'Dans quels lieux précis ?',
+    sub:'Les endroits où les scènes se déroulent.',
+    sug:['Suite d\'hôtel','Avion','Ascenseur','Terrasse la nuit','Cuisine','Piscine','Plage déserte','Voiture','Bureau après la fermeture','Salle de bain','Cave à vin','Bibliothèque'],
+    customPh:'Un autre lieu…' },
+
+  { id:'scenario', section:'Ambiance', type:'scenario',
+    showIf:()=>!S._fdsPrefill,
+    title:'Quel point de départ ?',
+    sub:'Choisissez une trame, puis précisez-la librement — plus vous détaillez, plus le récit sera fidèle.',
+    sug:['Deux inconnus qui ne devraient pas se croiser','Un couple qui joue à se redécouvrir','Des retrouvailles après des années','Une attirance interdite qui cède enfin','Un pari qui dérape délicieusement','Un massage qui déborde','Une soirée qui s\'éternise à deux'],
+    customPh:'Racontez le scénario avec vos mots : la rencontre, la tension, ce qui doit se passer…' },
+
+  { id:'role', section:'Personnages', type:'single',
+    title:'Quel rôle voulez-vous jouer ?',
+    sub:'Au cœur de l\'action… ou dans l\'ombre, à regarder.',
+    sug:['Acteur / actrice de l\'histoire','Voyeur — je regarde sans participer','Invisible — l\'histoire se passe sans moi','Je regarde… puis je me joins'],
+    customPh:'Un autre rôle — précisez…' },
+
+  { id:'moi', section:'Personnages', type:'multitext', optional:true,
+    showIf:()=>roleValue()!==ROLE_INVISIBLE,
+    title:'Parlez-moi de vous',
+    sub:'Touchez ce qui vous ressemble, puis complétez librement — plus c\'est fidèle, plus c\'est troublant.',
+    sug:['Grand & athlétique','Silhouette fine','Formes généreuses','Brune aux yeux verts','Blonde solaire','Rousse','Poivre et sel','Tatouages discrets','Regard autoritaire','Timide en apparence','Joueur / joueuse','Dominant·e','Soumis·e','Sensuel·le et lent·e'],
+    customPh:'Ex : 1m78, un tatouage sous la clavicule, un rire facile…' },
+
+  { id:'partenaire', section:'Personnages', type:'multitext', optional:true,
+    title:'Et votre partenaire ?',
+    sub:'La personne au cœur de l\'histoire avec vous.',
+    sug:['Grand & athlétique','Silhouette fine','Formes généreuses','Brun·e ténébreux·se','Blond·e solaire','Rousse incendiaire','Regard qui déshabille','Mains expertes','Voix grave','Tatoué·e','Dominant·e','Soumis·e','Tendre & attentionné·e','Insaisissable'],
+    customPh:'Décrivez votre partenaire avec vos mots…' },
+
+  { id:'autres', section:'Personnages', type:'textarea', optional:true,
+    title:'D\'autres personnages ?',
+    sub:'Optionnel — un tiers, des silhouettes, des regards…',
+    customPh:'Ex : le serveur du bar, une amie de passage… (ou passez)' },
+
+  { id:'orientation', section:'Personnages', type:'single',
+    title:'L\'orientation du récit ?',
+    sug:['Hétérosexuel','Lesbien','Gay','Bisexuel'],
+    customPh:'Autre — précisez…' },
+
+  { id:'A', section:'Vos envies', type:'multi', optional:true,
+    title:'Jeux de bouche & léchage',
+    sub:'Ce qui n\'est pas sélectionné n\'apparaîtra pas dans le récit.',
+    sug:['Cunnilingus','Anulingus','Fellation','Deepthroat','Léchage complet du corps'],
+    customPh:'Autre…' },
+
+  { id:'B', section:'Vos envies', type:'multi', optional:true,
+    title:'Pénétration & positions',
+    sug:['Pénétration vaginale','Pénétration anale','Double pénétration','Missionnaire','Levrette','Amazone','Cuillères','Debout','Contre un mur','Sur une table','Cowgirl','Reverse cowgirl'],
+    customPh:'Autre…' },
+
+  { id:'C', section:'Vos envies', type:'multi', optional:true,
+    title:'Sex toys',
+    sug:['Godemichet (petit)','Godemichet (moyen)','Godemichet (gros)','Godemichet (très gros)','Vibromasseur / Wand','Plug anal','Strap-on','Menottes','Bandeau','Collier'],
+    customPh:'Autre…' },
+
+  { id:'D', section:'Vos envies', type:'multi', optional:true,
+    title:'Lingerie & tenue',
+    sug:['Dentelle fine','Soie','Transparent','Corset','Jarretelles','Body','String','Culotte classique','Sans lingerie','Strip-tease complet'],
+    customPh:'Autre…' },
+
+  { id:'E', section:'Vos envies', type:'multi', optional:true,
+    title:'Le finish',
+    sug:['Creampie (intérieur)','Facial','Sur les seins','Sur le corps','Dans la bouche','Avalé','Cumplay','Sur le visage et les seins'],
+    customPh:'Autre…' },
+
+  { id:'F', section:'Vos envies', type:'multi', optional:true,
+    title:'Autres pratiques',
+    sug:['Branlette espagnole','Squirting / mouille abondante','Jeux de doigts','Fisting léger','BDSM léger (fessée, attaché…)','Voyeurisme','Exhibition','Risque public','Roleplay'],
+    customPh:'Autre…' },
+
+  { id:'styleEcriture', section:'Finitions', type:'single', optional:true,
+    title:'Une plume en particulier ?',
+    sub:'Un écrivain, un livre ou un style — le récit en prendra la voix.',
+    sug:['Anaïs Nin — poétique & charnel','Histoire d\'O — cérémonial & envoûtant','Cinquante nuances — moderne & addictif','Marguerite Duras — épuré & obsédant','Roman de gare — direct & assumé','Journal intime — première personne','Lettre à un amant','Cru & sans détour'],
+    customPh:'Un auteur, un livre, un ton…' },
+
+  { id:'commentaires', section:'Finitions', type:'textarea', optional:true,
+    title:'Un dernier mot pour l\'auteur ?',
+    sub:'Limites, envies particulières, détails à ne pas oublier…',
+    customPh:'Optionnel — tout ce que l\'auteur doit savoir…' },
+
+  { id:'longueur', section:'Finitions', type:'length',
+    title:'Quelle longueur de récit ?',
+    sub:'4 800 mots recommandé — pour une vraie montée, lente.',
+    sug:[
+      {label:'L\'essentiel · ~2 400 mots', value:2400},
+      {label:'Recommandé · ~4 800 mots', value:4800},
+      {label:'Longue · ~6 400 mots', value:6400},
+      {label:'Marathon · ~8 000 mots', value:8000}
+    ] }
+];
+
+/* Axes d'ajustement en cours de lecture (curseurs 0-4, 2 = neutre) */
+const TUNE_AXES=[
+ {id:'cru',label:'Crudité',ends:['suggestif','très cru'],
+  names:['très suggestif','suggestif','équilibré','cru','très cru'],
+  instr:['Rends la suite nettement plus suggestive et elliptique : sous-entendus, hors-champ, presque rien d\'explicite.',
+         'Adoucis les descriptions : plus de suggestion, moins d\'explicite.',
+         null,
+         'Rends la suite plus crue : descriptions explicites, vocabulaire direct.',
+         'Rends la suite très crue : langage sans aucun détour, descriptions extrêmement explicites.']},
+ {id:'temp',label:'Température',ends:['tendre','incandescent'],
+  names:['très tendre','tendre','équilibré','brûlant','incandescent'],
+  instr:['Rends la suite beaucoup plus tendre et affectueuse : caresses, douceur, murmures.',
+         'Adoucis la température : plus de tendresse que d\'urgence.',
+         null,
+         'Fais monter la température : désir plus intense, corps plus pressants.',
+         'Température maximale : désir dévorant, scènes incandescentes, urgence des corps.']},
+ {id:'rythme',label:'Rythme',ends:['lent, étiré','haletant'],
+  names:['très lent','lent','équilibré','rapide','haletant'],
+  instr:['Ralentis énormément le rythme : étire chaque geste, fais durer chaque instant.',
+         'Ralentis le rythme, prends davantage le temps.',
+         null,
+         'Accélère le rythme : va plus vite aux moments forts.',
+         'Rythme haletant : enchaîne les moments forts, sans temps mort.']},
+ {id:'rom',label:'Romantisme',ends:['charnel','passionné'],
+  names:['purement charnel','peu romantique','équilibré','romantique','passionné'],
+  instr:['Assèche le romantisme : purement charnel, sans sentiments.',
+         'Moins de romantisme, plus de désir brut.',
+         null,
+         'Ajoute du romantisme : sentiments, regards, émotion.',
+         'Très romantique : les sentiments dominent chaque geste.']}
+];
+
+/* ================================================================
+   Profil (stocké sur l'appareil, avec garde-fou si stockage absent)
+================================================================ */
+const PKEY='fantasme_profile';
+function storeGet(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+function storeSet(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+let profile = storeGet(PKEY) || {pseudo:'',moi:'',partenaire:'',orientation:'',plume:'',activePath:'',paths:{},stats:{recits:0,mots:0}};
+profile.stats = profile.stats || {recits:0,mots:0};
+profile.paths = profile.paths || {};
+const ORIENT=['Hétérosexuel','Lesbien','Gay','Bisexuel'];
+
+function openProfile(){
+  document.getElementById('pf_pseudo').value=profile.pseudo||'';
+  document.getElementById('pf_moi').value=profile.moi||'';
+  document.getElementById('pf_partenaire').value=profile.partenaire||'';
+  document.getElementById('pf_plume').value=profile.plume||'';
+  const box=document.getElementById('pf_orientation'); box.innerHTML='';
+  ORIENT.forEach(o=>{
+    const c=document.createElement('button'); c.type='button';
+    c.className='chip'+(profile.orientation===o?' sel':''); c.textContent=o;
+    c.onclick=()=>{
+      const was = profile.orientation===o;
+      box.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));
+      profile.orientation = was ? '' : o;
+      if(!was) c.classList.add('sel');
+    };
+    box.appendChild(c);
+  });
+  renderPaths();
+  updProfileUI();
+  showScreen('profile');
+}
+function updProfileUI(){
+  const st=profile.stats;
+  const el=id=>document.getElementById(id);
+  if(el('st_recits')) el('st_recits').textContent=st.recits||0;
+  if(el('st_mots')) el('st_mots').textContent=(st.mots||0).toLocaleString('fr-FR');
+  if(el('st_minutes')) el('st_minutes').textContent=Math.round((st.mots||0)/180);
+  if(el('avatarCircle')) el('avatarCircle').textContent = profile.pseudo ? profile.pseudo.trim().charAt(0).toUpperCase() : '☾';
+  const eb=el('homeEyebrow');
+  if(eb) eb.textContent = profile.pseudo ? ('Bonsoir, '+profile.pseudo) : 'Votre histoire, vos règles';
+}
+function saveProfile(){
+  profile.pseudo=document.getElementById('pf_pseudo').value.trim();
+  profile.moi=document.getElementById('pf_moi').value.trim();
+  profile.partenaire=document.getElementById('pf_partenaire').value.trim();
+  profile.plume=document.getElementById('pf_plume').value.trim();
+  storeSet(PKEY,profile);
+  updProfileUI();
+  toast('Profil enregistré');
+  goHome();
+}
+
+/* ================================================================
+   Les Voies — évoluer selon ses envies, apprendre des techniques
+================================================================ */
+const PATHS=[
+ {id:'slow', title:'L\'art de l\'attente', desc:'Slow burn, anticipation, retenue — faire durer le désir.',
+  steps:[
+   'Regards appuyés, frôlements, phrases interrompues : tout se joue avant le premier baiser.',
+   'Teasing prolongé : caresses qui s\'arrêtent toujours trop tôt, vêtements qui tombent un à un.',
+   'Jeux d\'interdiction : ne pas avoir le droit de se toucher, consignes de patience, récompense finale.']},
+ {id:'dirty', title:'Le pouvoir des mots', desc:'Apprendre le dirty talk, des murmures aux mots crus.',
+  steps:[
+   'Compliments troublants murmurés à l\'oreille, mots doux qui glissent vers l\'audace.',
+   'Dire ce que l\'on fait, demander ce que l\'on veut : consignes chuchotées, questions brûlantes.',
+   'Vocabulaire cru pleinement assumé, jeux de rôles verbaux, la voix comme instrument de plaisir.']},
+ {id:'power', title:'Jeux de pouvoir', desc:'Dominer, s\'abandonner — BDSM doux et confiance.',
+  steps:[
+   'L\'un guide, l\'autre suit : consignes douces, une fessée légère, le plaisir d\'obéir.',
+   'Poignets liés d\'un foulard, bandeau sur les yeux, sens exacerbés — et un mot pour tout arrêter.',
+   'Scène construite : rituels, rôles assumés de dominant·e et soumis·e, intensité maîtrisée.']},
+ {id:'touch', title:'Le toucher parfait', desc:'Massages sensuels, zones, huiles, tantra.',
+  steps:[
+   'Massage sensuel de base : huile chaude, dos, nuque, cuisses — les gestes qui font frissonner.',
+   'Massage intégral qui déborde : zones érogènes, lenteur calculée, mains qui s\'égarent.',
+   'Approche tantrique : respiration partagée, montée contrôlée, plaisir prolongé.']},
+ {id:'role', title:'Jeux de rôle', desc:'Devenir quelqu\'un d\'autre, le temps d\'une nuit.',
+  steps:[
+   'Deux inconnus qui se rencontrent dans un bar — alors qu\'ils se connaissent par cœur.',
+   'Costumes et scénarios : le rendez-vous professionnel qui dérape, la rencontre de vacances.',
+   'Immersion complète : personnages travaillés, passés inventés, une nuit entière dans la peau d\'un autre.']},
+ {id:'thrill', title:'Le goût du risque', desc:'Frisson, exhibition légère, adrénaline à deux.',
+  steps:[
+   'Sous la robe, rien — le secret partagé en public, les regards qui ne se doutent de rien.',
+   'Caresses discrètes là où l\'on pourrait être surpris : terrasse de nuit, voiture, cabine.',
+   'Le frisson assumé : jeux de voyeurisme et d\'exhibition dans un cadre choisi et consenti.']}
+];
+/* Influence de la voie sur les propositions du questionnaire */
+const PATH_INFLUENCE={
+ slow:{vibes:['Tension à faire durer'],
+   scen:[['Un jeu : se désirer sans avoir le droit de se toucher'],['Un teasing qui dure toute la soirée'],['Interdiction formelle de se toucher avant minuit']],
+   pract:{F:['Edging / plaisir retardé']}},
+ dirty:{vibes:['Mots murmurés à l\'oreille'],
+   scen:[['Des compliments qui dérapent doucement'],['Tout dire à voix haute : ce qu\'on fait, ce qu\'on veut'],['Une soirée menée à la voix, rien qu\'à la voix']],
+   pract:{F:['Dirty talk soutenu']}},
+ power:{vibes:['Jeu de domination douce'],
+   scen:[['Ce soir, c\'est l\'un des deux qui décide de tout'],['Un foulard, un bandeau, une confiance totale'],['Une scène rituelle, réglée comme un ballet']],
+   pract:{C:['Menottes','Bandeau'],F:['BDSM léger (fessée, attaché…)']}},
+ touch:{vibes:['Peau, huile et lenteur'],
+   scen:[['Un massage qui n\'était pas censé déraper'],['Le massage intégral, sans zone interdite'],['Un rituel tantrique, souffle contre souffle']],
+   pract:{A:['Léchage complet du corps'],F:['Massage prolongé']}},
+ role:{vibes:['Se rencontrer comme des inconnus'],
+   scen:[['Refaire connaissance dans un bar, comme la première fois'],['Le rendez-vous professionnel qui dérape'],['Une nuit entière dans la peau de quelqu\'un d\'autre']],
+   pract:{F:['Roleplay']}},
+ thrill:{vibes:['Le frisson d\'être surpris'],
+   scen:[['Rien sous la robe — et personne ne le sait'],['Des caresses là où l\'on pourrait être vus'],['Se montrer, se regarder, assumer le frisson']],
+   pract:{F:['Risque public','Exhibition','Voyeurisme']}}
+};
+function pathProgress(id){ return profile.paths[id]||0; }
+function activePath(){
+  return PATHS.find(x=>x.id===profile.activePath)||null;
+}
+function activePathLevel(){
+  const p=activePath(); if(!p) return 0;
+  return Math.min(pathProgress(p.id),2);
+}
+function renderPaths(){
+  const box=document.getElementById('pf_paths'); if(!box) return;
+  box.innerHTML='';
+  PATHS.forEach(p=>{
+    const done=pathProgress(p.id);
+    const active=profile.activePath===p.id;
+    const d=document.createElement('div');
+    d.className='pathcard'+(active?' active':'');
+    const dots='<div class="lvldots">'+[0,1,2].map(i=>'<span class="'+(i<done?'done':'')+'"></span>').join('')+'</div>';
+    const nextTxt = done>=3 ? 'Voie explorée en entier — vos récits en gardent l\'audace'
+      : (active ? 'En cours — étape '+(done+1)+' : '+p.steps[Math.min(done,2)] : p.steps[Math.min(done,2)]);
+    d.innerHTML='<h4>'+p.title+'</h4><div class="pdesc">'+p.desc+'</div>'+dots+'<div class="pathnext">'+nextTxt+'</div>';
+    d.onclick=()=>{
+      profile.activePath = active ? '' : p.id;
+      storeSet(PKEY,profile);
+      renderPaths(); renderSuggest();
+      toast(active ? 'Voie mise en pause' : 'Voie choisie — elle guidera vos prochaines histoires');
+    };
+    box.appendChild(d);
+  });
+}
+function renderSuggest(){
+  const box=document.getElementById('suggestBox'); if(!box) return;
+  box.innerHTML='';
+  const p=activePath(); if(!p) return;
+  const done=pathProgress(p.id);
+  if(done>=3){
+    box.innerHTML='<div class="suggest"><div class="s-eyebrow">Votre voie · '+p.title+'</div>'
+      +'<h4>Voie explorée en entier</h4>'
+      +'<p>Vous en avez parcouru les trois étapes — vos récits en gardent l\'audace. Choisissez-en une nouvelle dans votre profil quand l\'envie vous prend.</p></div>';
+    return;
+  }
+  box.innerHTML='<div class="suggest" style="cursor:pointer" onclick="openProfile()">'
+    +'<div class="s-eyebrow">Votre voie · '+p.title+' · étape '+(done+1)+' / 3</div>'
+    +'<h4>'+p.steps[done]+'</h4>'
+    +'<p>Votre prochaine histoire vous y poussera naturellement — les propositions du questionnaire suivront cette direction.</p></div>';
+}
+
+/* ================================================================
+   Suggestions adaptatives — les réponses influencent les suivantes
+================================================================ */
+const LIEUX_CTX=[
+ {re:/chalet|neige|montagne|ski/i, tag:'le chalet', list:['Devant la cheminée','Sur la peau de bête du salon','La chambre sous les combles','Le sauna','Le bain nordique sous la neige','La douche chaude après le froid','Contre la fenêtre face à la tempête','La mezzanine']},
+ {re:/ch[âa]teau|manoir|demeure/i, tag:'le château', list:['La suite à baldaquin','La bibliothèque','Le grand escalier','La cave à vin','Le boudoir','Les jardins la nuit','La piscine du parc','Les cuisines endormies']},
+ {re:/villa|amalfi|toscane|c[ôo]te/i, tag:'la villa', list:['La terrasse face à la mer','La chambre aux volets entrouverts','La piscine à débordement','La crique privée en contrebas','La cuisine d\'été','La douche extérieure','Le ponton au crépuscule']},
+ {re:/riad|marrakech|maroc|hammam/i, tag:'le riad', list:['Le patio aux mosaïques','Le hammam privé','La terrasse sous les étoiles','La chambre aux voilages','Le bassin intérieur','L\'alcôve aux lanternes']},
+ {re:/loft|penthouse|new york|appartement|gratte/i, tag:'le loft', list:['Contre la baie vitrée face à la ville','Le canapé du salon','La douche à l\'italienne','Le rooftop','L\'ascenseur privé','L\'îlot de la cuisine','Le dressing']},
+ {re:/yacht|bateau|voilier|croisi/i, tag:'le yacht', list:['La cabine principale','Le pont arrière la nuit','Le jacuzzi du pont supérieur','La plage arrière au mouillage','La cabine de pilotage']},
+ {re:/plage|bord de mer|oc[ée]an|dune|crique/i, tag:'la maison de bord de mer', list:['La chambre d\'enfance','La plage à marée basse','La véranda','Le grenier','Les dunes au coucher du soleil','La douche de jardin','Le hamac à la tombée du soir']},
+ {re:/h[ôo]tel|palace|suite/i, tag:'l\'hôtel', list:['La suite au dernier étage','Le couloir désert','L\'ascenseur','Le spa après la fermeture','La baignoire en marbre','Le bar de l\'hôtel','Le room service qui s\'attarde']},
+ {re:/train|orient|wagon/i, tag:'le train de nuit', list:['Le compartiment privé','Le couloir étroit du wagon','La voiture-restaurant déserte','La couchette exiguë','Le quai de gare à l\'aube']},
+ {re:/cabaret|sc[èe]ne|th[ée][âa]tre/i, tag:'le cabaret', list:['La loge après le spectacle','Les coulisses','La scène après minuit','Le bar feutré','L\'escalier de service']}
+];
+const SCEN_CTX=[
+ {re:/chalet|neige|montagne|ski/i, list:['Coincés ensemble par la tempête de neige','Le chalet loué par erreur à deux inconnus','Après le ski : le feu, le vin chaud, et plus si affinités']},
+ {re:/ch[âa]teau|manoir/i, list:['Invités au mariage, perdus dans l\'aile déserte','La visite privée qui s\'égare','Un dîner aux chandelles qui ne finit jamais']},
+ {re:/villa|amalfi|plage|mer|yacht|crique/i, list:['Les vacances qui dérapent délicieusement','La sieste aux volets clos','Le dernier soir avant de rentrer']},
+ {re:/h[ôo]tel|palace/i, list:['Deux chambres voisines, une porte communicante','Le séminaire qui déborde au bar de l\'hôtel','Un room service très personnalisé']},
+ {re:/train|orient|wagon/i, list:['Deux inconnus dans le même compartiment de nuit','Le contrôleur ne repassera pas avant l\'aube']},
+ {re:/riad|marrakech|hammam/i, list:['Le hammam privatisé pour deux','La chaleur de l\'après-midi, les voilages, la sieste']}
+];
+const LOC_PAR_VIBE={
+ 'Années folles':['Cabaret parisien','Train de nuit Orient-Express'],
+ 'Époque victorienne':['Manoir anglais isolé'],
+ 'Été brûlant':['Villa sur la côte amalfitaine','Crique déserte au soleil couchant'],
+ 'Nuit d\'orage':['Vieille demeure isolée sous l\'orage'],
+ 'Luxe & pouvoir':['Penthouse avec vue sur la ville','Palace parisien'],
+ 'Retrouvailles':['Maison de famille en bord de mer']
+};
+const ROLE_ACTOR='Acteur / actrice de l\'histoire';
+const ROLE_VOYEUR='Voyeur — je regarde sans participer';
+const ROLE_INVISIBLE='Invisible — l\'histoire se passe sans moi';
+const ROLE_JOIN='Je regarde… puis je me joins';
+function roleValue(){
+  const a=S.answers.role;
+  if(!a) return ROLE_ACTOR;
+  return a.sel || (a.custom&&a.custom.trim()) || ROLE_ACTOR;
+}
+function roleInstruction(role){
+  if(role===ROLE_VOYEUR) return 'Le narrateur (« moi ») est présent dans les scènes comme VOYEUR : il observe, ressent, s\'embrase intérieurement, mais ne participe pas physiquement. L\'action charnelle se joue entre les autres personnages.';
+  if(role===ROLE_INVISIBLE) return 'Le narrateur n\'apparaît PAS dans l\'histoire : écrire à la troisième personne, l\'action se joue entièrement entre les personnages décrits.';
+  if(role===ROLE_JOIN) return 'Le narrateur (« moi ») commence en simple observateur : il regarde les autres personnages, la tension monte, puis il se joint progressivement à l\'action au fil du récit.';
+  return 'Le narrateur (« moi ») est acteur / actrice de l\'histoire, au cœur de l\'action.';
+}
+function roleOverride(q){
+  const r=roleValue();
+  if(r===ROLE_ACTOR||(r!==ROLE_VOYEUR&&r!==ROLE_INVISIBLE&&r!==ROLE_JOIN)) return {};
+  if(q.id==='moi'&&(r===ROLE_VOYEUR||r===ROLE_JOIN)){
+    return {sub:'Vous serez présent·e dans la scène, en observateur — décrivez qui regarde.'};
+  }
+  if(q.id==='partenaire'){
+    return {title:'Qui sont les protagonistes ?', sub:'Le personnage (ou le couple) que vous regarderez vivre l\'histoire.', ph:'Décrivez le personnage principal…'};
+  }
+  if(q.id==='autres'){
+    return {sub:'Les autres corps, les autres regards de l\'histoire…'};
+  }
+  return {};
+}
+function locAnswerText(){
+  const a=S.answers.localisation||{sel:null,custom:''};
+  return ((a.sel||'')+' '+(a.custom||'')).trim();
+}
+function ctxRule(rules, txt){
+  if(!txt) return null;
+  for(const r of rules){ if(r.re.test(txt)) return r; }
+  return null;
+}
+function suggestionsFor(q){
+  if(q.id==='role'&&S._fdsPrefill){
+    return {list:q.sug, hint:'Décor, lieux et scénario sont déjà posés par le fantasme du soir — il ne reste que vous.'};
+  }
+  /* influence de la voie choisie (profil) */
+  const ap=activePath();
+  const inf=(ap&&pathProgress(ap.id)<3)?PATH_INFLUENCE[ap.id]:null;
+  const lvl=activePathLevel();
+  if(inf){
+    if(q.id==='vibe'&&inf.vibes){
+      const merged=[...inf.vibes, ...q.sug.filter(s=>!inf.vibes.includes(s))].slice(0,11);
+      return {list:merged, hint:'Votre voie « '+ap.title+' » souffle les premières propositions'};
+    }
+    if(q.id==='scenario'){
+      const pathScen=inf.scen[lvl]||[];
+      const r=ctxRule(SCEN_CTX, locAnswerText());
+      const locScen=r?r.list:[];
+      const merged=[...pathScen, ...locScen.filter(s=>!pathScen.includes(s)), ...q.sug.filter(s=>!pathScen.includes(s)&&!locScen.includes(s))].slice(0,8);
+      return {list:merged, hint:'Votre voie « '+ap.title+' » inspire les premières trames'};
+    }
+    if(inf.pract&&inf.pract[q.id]){
+      const extra=inf.pract[q.id];
+      const merged=[...extra, ...q.sug.filter(s=>!extra.includes(s))];
+      return {list:merged, hint:'Suggéré par votre voie « '+ap.title+' »'};
+    }
+  }
+  if(q.id==='lieux'){
+    const r=ctxRule(LIEUX_CTX, locAnswerText());
+    if(r) return {list:r.list, hint:'Propositions adaptées à votre décor — '+r.tag};
+  }
+  if(q.id==='scenario'){
+    const r=ctxRule(SCEN_CTX, locAnswerText());
+    if(r){
+      const merged=[...r.list, ...q.sug.filter(s=>!r.list.includes(s))].slice(0,8);
+      return {list:merged, hint:'Les premières trames sont inspirées de votre décor'};
+    }
+  }
+  if(q.id==='localisation'){
+    const va=S.answers.vibe||{sel:[],custom:''};
+    const extras=[];
+    (va.sel||[]).forEach(v=>{ (LOC_PAR_VIBE[v]||[]).forEach(x=>{ if(!extras.includes(x)) extras.push(x); }); });
+    if(extras.length){
+      const merged=[...extras, ...q.sug.filter(s=>!extras.includes(s))].slice(0,9);
+      return {list:merged, hint:'Les premiers décors sont inspirés de votre ambiance'};
+    }
+  }
+  return {list:q.sug, hint:null};
+}
+
+/* ================================================================
+   Accueil addictif — fantasme du soir, reprise, série
+================================================================ */
+const FANTASMES=[
+ {t:'La porte communicante',d:'Deux chambres d\'hôtel voisines. Une porte que personne ne devrait ouvrir — entrouverte au milieu de la nuit.',vibe:'Tension interdite',loc:'Hôtel particulier à Paris',scen:'Deux chambres voisines, une porte communicante entrouverte au milieu de la nuit.',lieux:'La suite, la porte communicante'},
+ {t:'Coupure de courant',d:'L\'orage a tout éteint. Une bougie, une vieille maison, et deux corps qui n\'ont plus d\'excuse pour rester loin.',vibe:'Nuit d\'orage',loc:'Vieille demeure isolée sous l\'orage',scen:'L\'orage coupe le courant. À la lueur d\'une bougie, la distance entre eux fond.',lieux:'Le salon aux bougies, la chambre à l\'étage'},
+ {t:'Le compartiment 7',d:'Un train de nuit, un compartiment partagé avec un·e inconnu·e, et l\'aube encore très loin.',vibe:'Jeu de séduction',loc:'Train de nuit Orient-Express',scen:'Deux inconnus partagent le compartiment 7 d\'un train de nuit. Personne ne dormira.',lieux:'Le compartiment couchettes, le couloir du wagon'},
+ {t:'Le massage oublié',d:'Le spa a fermé il y a une heure. La table de massage est encore chaude.',vibe:'Peau, huile et lenteur',loc:'Hôtel particulier à Paris',scen:'Après la fermeture du spa, un massage privé qui ne s\'arrête pas là où il devrait.',lieux:'Le spa désert, la table de massage'},
+ {t:'La dégustation',d:'Dans la cave voûtée, on ne goûte pas que le vin.',vibe:'Luxe & pouvoir',loc:'Château en Provence',scen:'Une dégustation privée dans la cave du château, tard, entre deux invités du mariage.',lieux:'La cave voûtée du château'},
+ {t:'Vertige',d:'Un rooftop au-dessus de la ville, le vide en dessous, l\'audace au-dessus de tout.',vibe:'Passion brute',loc:'Loft à New York',scen:'Sur le rooftop, au-dessus des lumières de la ville, un jeu qui monte aussi haut que le vertige.',lieux:'Le rooftop, la baie vitrée du loft'},
+ {t:'Douze ans plus tard',d:'La maison de vacances n\'a pas changé. Eux, si.',vibe:'Retrouvailles',loc:'Maison de famille en bord de mer',scen:'Ils se retrouvent dans la maison de leur adolescence, douze ans après un baiser inachevé.',lieux:'La chambre d\'adolescence, la plage la nuit'},
+ {t:'Le gage',d:'Un pari perdu en fin de soirée. Un gage chuchoté qui change tout.',vibe:'Jeu de séduction',loc:'Loft à New York',scen:'Fin de soirée entre amis : un pari perdu, un gage murmuré à l\'oreille, un appartement qui se vide.',lieux:'Le canapé du salon, la cuisine du loft'},
+ {t:'Après le rideau',d:'Le cabaret est vide, la scène encore tiède, la loge ouverte.',vibe:'Années folles',loc:'Cabaret parisien',scen:'Après le dernier rappel, dans le cabaret désert, une danseuse et son admirateur de toujours.',lieux:'La loge, la scène déserte'},
+ {t:'Chaleur nordique',d:'Dehors, la neige. Dedans, un sauna à 80 degrés et plus aucune retenue.',vibe:'Été brûlant',loc:'Chalet isolé sous la neige',scen:'Après la piste, le sauna du chalet. La chaleur fait tomber les serviettes et les défenses.',lieux:'Le sauna, la peau de bête devant la cheminée'},
+ {t:'Entre deux étages',d:'L\'ascenseur s\'est arrêté. Pas eux.',vibe:'Tension interdite',loc:'Hôtel particulier à Paris',scen:'Un ascenseur bloqué entre deux étages, deux voisins qui se croisaient sans se parler.',lieux:'L\'ascenseur bloqué'},
+ {t:'La sieste interdite',d:'Volets clos, chaleur d\'août, une sieste qui n\'a jamais eu l\'intention d\'être sage.',vibe:'Été brûlant',loc:'Villa sur la côte amalfitaine',scen:'Une sieste d\'août aux volets clos, dans la chaleur de la villa, pendant que les autres sont à la plage.',lieux:'La chambre aux volets clos'}
+];
+function todayFantasme(){
+  if(S._fdsIdx==null) S._fdsIdx=Math.floor(Date.now()/86400000)%FANTASMES.length;
+  return FANTASMES[S._fdsIdx];
+}
+function rerollFantasme(ev){
+  if(ev) ev.stopPropagation();
+  let n; do{ n=Math.floor(Math.random()*FANTASMES.length); }while(n===S._fdsIdx&&FANTASMES.length>1);
+  S._fdsIdx=n;
+  renderFds();
+}
+function startFantasme(){
+  const f=todayFantasme();
+  startWizard('solo');
+  S.answers.vibe.sel=[f.vibe];
+  S.answers.localisation.sel=f.loc;
+  S.answers.scenario.sel=f.scen;
+  if(f.lieux) S.answers.lieux.sel=f.lieux.split(', ').filter(Boolean);
+  S._fdsPrefill=true;
+  S.qIndex=visibleIdx()[0]||0;
+  renderQuestion();
+  toast('Décor posé — il ne reste que vous');
+}
+function renderFds(){
+  const box=document.getElementById('fdsBox'); if(!box) return;
+  const f=todayFantasme();
+  box.innerHTML='<div class="fds">'
+    +'<div class="ftag">Le fantasme du soir</div>'
+    +'<h4>'+f.t+'</h4>'
+    +'<p>'+f.d+'</p>'
+    +'<div class="frow">'
+    +'<button class="btn btn-primary" onclick="startFantasme()">Écrire celui-ci</button>'
+    +'<button class="reroll" title="Un autre" onclick="rerollFantasme(event)">⟳</button>'
+    +'</div></div>';
+}
+function saveLast(){
+  if(S._demo) return;
+  if(!S.fullStory) return;
+  storeSet('fantasme_last',{
+    text:S.fullStory,
+    title:firstChapterTitle(S.fullStory)||'Votre récit',
+    page:book.page, pages:book.pages, ts:Date.now()
+  });
+}
+function resumeReading(){
+  const l=storeGet('fantasme_last');
+  if(!l||!l.text) return;
+  stopAudio();
+  S.story=l.text; S.fullStory=l.text; S.receivedStory='';
+  S.mode='solo'; S.adjustments=[]; S.pathStep=null; S._demo=false;
+  showScreen('reader');
+  document.getElementById('genbar').style.display='none';
+  document.getElementById('genErr').style.display='none';
+  document.getElementById('sharebox').style.display='none';
+  document.getElementById('readerEyebrow').textContent='Reprendre la lecture';
+  document.getElementById('readerTitle').textContent=l.title;
+  S.bookMode=true;
+  applyView(l.page||0);
+  document.getElementById('readerActions').style.display='flex';
+}
+function renderResume(){
+  const box=document.getElementById('resumeBox'); if(!box) return;
+  const l=storeGet('fantasme_last');
+  if(!l||!l.text){ box.innerHTML=''; return; }
+  const pct=l.pages?Math.round(((l.page+1)/l.pages)*100):0;
+  box.innerHTML='<div class="resume" onclick="resumeReading()">'
+    +'<div class="ric">❮❯</div>'
+    +'<div class="rt2"><div class="l1">Reprendre la lecture'+(l.pages?' · page '+((l.page||0)+1)+' / '+l.pages:'')+'</div>'
+    +'<div class="l2">'+l.title+'</div>'
+    +'<div class="rbar"><div style="width:'+pct+'%"></div></div></div>'
+    +'<div class="go2">→</div></div>';
+}
+function dayKey(ts){ const d=new Date(ts); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function bumpStreak(){
+  const st=profile.stats;
+  const today=dayKey(Date.now());
+  if(st.lastDay===today) return;
+  st.streak = (st.lastDay===dayKey(Date.now()-86400000)) ? (st.streak||0)+1 : 1;
+  st.lastDay=today;
+}
+function renderStats(){
+  const box=document.getElementById('statStrip'); if(!box) return;
+  const st=profile.stats||{};
+  const parts=[];
+  if(st.streak>1) parts.push('<div class="spill">✦ <b>'+st.streak+'</b> soirs de suite</div>');
+  if(st.recits>0) parts.push('<div class="spill"><b>'+st.recits+'</b> récit'+(st.recits>1?'s':'')+'</div>');
+  const ap=activePath();
+  if(ap) parts.push('<div class="spill" style="cursor:pointer" onclick="openProfile()">'+ap.title+' · <b>'+Math.min(pathProgress(ap.id)+1,3)+'/3</b></div>');
+  box.innerHTML=parts.join('');
+}
+function renderHome(){
+  updProfileUI();
+  renderStats();
+  renderResume();
+  renderFds();
+  renderSuggest();
+  renderDiscover();
+}
+
+/* ================================================================
+   Découverte — pour vous, explorer, communauté
+   (communauté simulée en local, à brancher sur le backend)
+================================================================ */
+const CATALOG=[
+ {id:'k1',path:'slow',intens:'Douce',t:'L\'heure bleue',d:'Un rendez-vous à l\'aube sur la véranda, quand la maison dort encore et que tout est permis à voix basse.',vibe:'Romance lente & sensuelle',loc:'Maison de famille en bord de mer',lieux:'La véranda, la plage à marée basse',scen:'Deux amants se retrouvent à l\'aube sur la véranda, avant que la maison ne se réveille.'},
+ {id:'k2',path:'slow',intens:'Douce',t:'Trois boutons',d:'Une robe qui se déboutonne un bouton par heure, toute une soirée durant. Le supplice le plus doux du monde.',vibe:'Tension à faire durer',loc:'Hôtel particulier à Paris',lieux:'Le salon aux moulures, le grand escalier',scen:'Un jeu : un bouton de sa robe par heure, pas un de plus, jusqu\'à la fin du dîner.'},
+ {id:'k3',path:'dirty',intens:'Intense',t:'Ligne ouverte',d:'Un appel de nuit qui ne devait durer que cinq minutes. Sa voix fait le reste.',vibe:'Mots murmurés à l\'oreille',loc:'Loft à New York',lieux:'Le canapé du salon, la baie vitrée',scen:'Un appel de nuit entre deux amants séparés par un océan : tout se joue à la voix.'},
+ {id:'k4',path:'power',intens:'Intense',t:'Le protocole',d:'Ce soir, chaque geste demande la permission. Et la permission a un prix.',vibe:'Jeu de domination douce',loc:'Château en Provence',lieux:'La suite à baldaquin, le boudoir',scen:'Un protocole établi entre eux : chaque geste demande une permission, chaque permission a un prix.'},
+ {id:'k5',path:'touch',intens:'Douce',t:'Quatre mains',d:'L\'huile chauffe dans le creux des paumes. Personne ne parle. C\'est mieux.',vibe:'Peau, huile et lenteur',loc:'Riad à Marrakech',lieux:'Le hammam privé, l\'alcôve aux lanternes',scen:'Après le hammam, un massage à l\'huile d\'argan qui prend tout son temps, en silence.'},
+ {id:'k6',path:'role',intens:'Intense',t:'Madame X',d:'Elle a réservé sous un faux nom. Il a promis de jouer le jeu jusqu\'au bout.',vibe:'Se rencontrer comme des inconnus',loc:'Palace parisien',lieux:'Le bar de l\'hôtel, la suite au dernier étage',scen:'Un couple se donne rendez-vous au bar d\'un palace en jouant deux inconnus : elle a un faux nom, lui une histoire inventée.'},
+ {id:'k7',path:'thrill',intens:'Intense',t:'Rangée 24',d:'Un vol de nuit, une couverture, des voisins endormis. Le cœur bat plus fort que les réacteurs.',vibe:'Le frisson d\'être surpris',loc:'Avion, vol de nuit',lieux:'La rangée 24, les toilettes de l\'avion',scen:'Sur un vol de nuit presque vide, sous une couverture, un jeu de plus en plus risqué.'},
+ {id:'k8',path:'touch',intens:'Douce',t:'La leçon de danse',d:'Un tango appris à deux, hanche contre hanche, jusqu\'à ce que la musique ne serve plus à rien.',vibe:'Jeu de séduction',loc:'Cabaret parisien',lieux:'La scène après minuit, la loge',scen:'Une leçon de tango privée après la fermeture, où chaque pas rapproche un peu trop.'},
+ {id:'k9',path:'power',intens:'Douce',t:'Le premier nœud',d:'Un foulard de soie, une confiance neuve, et la découverte que céder peut être une victoire.',vibe:'Jeu de domination douce',loc:'Chalet isolé sous la neige',lieux:'La chambre sous les combles, devant la cheminée',scen:'Première expérience de jeux d\'attache avec un simple foulard de soie, dans l\'isolement d\'un chalet.'},
+ {id:'k10',path:'thrill',intens:'Douce',t:'Minuit moins le quart',d:'Une piscine d\'hôtel officiellement fermée. Deux peignoirs sur une chaise longue.',vibe:'Le frisson d\'être surpris',loc:'Hôtel particulier à Paris',lieux:'La piscine après la fermeture, le spa désert',scen:'La piscine de l\'hôtel ferme à 23h. À minuit moins le quart, ils escaladent la grille.'},
+ {id:'u1',by:'Léa',likes:214,intens:'Intense',t:'Le voisin du dessus',d:'On entend tout, dans cet immeuble. Alors autant en faire un jeu.',vibe:'Tension interdite',loc:'Hôtel particulier à Paris',lieux:'L\'escalier, le palier, l\'appartement du dessus',scen:'Deux voisins qui s\'entendent tout à travers le plancher décident d\'en faire un jeu, étage contre étage.'},
+ {id:'u2',by:'Marc & Julie',likes:187,intens:'Douce',t:'Dix ans jour pour jour',d:'Refaire exactement, geste pour geste, la première nuit. En mieux.',vibe:'Retrouvailles',loc:'Maison de famille en bord de mer',lieux:'La chambre d\'enfance, les dunes au coucher du soleil',scen:'Pour leurs dix ans, un couple rejoue exactement leur première nuit, geste pour geste, dans la maison où tout a commencé.'},
+ {id:'u3',by:'Camille',likes:243,intens:'Intense',t:'La styliste',d:'Un essayage privé qui déborde largement des heures d\'ouverture.',vibe:'Luxe & pouvoir',loc:'Loft à New York',lieux:'La cabine d\'essayage, le showroom désert',scen:'Un essayage privé dans un showroom après la fermeture, entre une styliste et son client fidèle.'},
+ {id:'u4',by:'Anonyme',likes:156,intens:'Intense',t:'Fréquence pirate',d:'Une voix inconnue sur les ondes, chaque nuit à 2h. Ce soir, elle donne une adresse.',vibe:'Mots murmurés à l\'oreille',loc:'Vieille demeure isolée sous l\'orage',lieux:'Le studio radio improvisé, la chambre mansardée',scen:'Une animatrice de radio pirate nocturne et son auditeur le plus fidèle se rencontrent enfin.'},
+ {id:'u5',by:'Voyageur',likes:129,intens:'Douce',t:'Escale à Rome',d:'Sept heures entre deux avions. Une ville, une inconnue, un compte à rebours.',vibe:'Jeu de séduction',loc:'Villa sur la côte amalfitaine',lieux:'La terrasse face à la mer, la chambre aux volets entrouverts',scen:'Une escale de sept heures, une rencontre à l\'aéroport, une villa vide prêtée par un ami.'},
+ {id:'u6',by:'L. & V.',likes:98,intens:'Intense',t:'Le manuscrit',d:'Elle écrit des romans. Il vient de trouver le chapitre qui parle de lui.',vibe:'Tension interdite',loc:'Château en Provence',lieux:'La bibliothèque, le grand escalier',scen:'Il découvre dans la bibliothèque le manuscrit de sa meilleure amie : le personnage principal, c\'est lui.'}
+];
+function readCatalog(id){
+  const c=CATALOG.find(x=>x.id===id); if(!c) return;
+  startWizard('solo');
+  S.answers.vibe.sel=[c.vibe];
+  S.answers.localisation.sel=c.loc;
+  if(c.lieux) S.answers.lieux.sel=c.lieux.split(', ').filter(Boolean);
+  S.answers.scenario.sel=c.scen;
+  generate();
+}
+function scardHtml(c){
+  const tag = c.by ? 'Communauté' : ((PATHS.find(p=>p.id===c.path)||{}).title||'Histoire');
+  const meta = c.by
+    ? '<span>par '+c.by+'</span><b>♥ '+c.likes+'</b>'
+    : '<span>'+c.intens+'</span><b>Lire →</b>';
+  return '<div class="scard" onclick="readCatalog(\''+c.id+'\')">'
+    +'<div class="sc-tag">'+tag+'</div><h5>'+c.t+'</h5><p>'+c.d+'</p>'
+    +'<div class="sc-meta">'+meta+'</div></div>';
+}
+function sheadHtml(t,sub){ return '<div class="shead"><h3>'+t+'</h3><span>'+sub+'</span></div>'; }
+function hrowHtml(list){ return '<div class="hrow">'+list.map(scardHtml).join('')+'</div>'; }
+function renderDiscover(){
+  const box=document.getElementById('discover'); if(!box) return;
+  const ap=profile.activePath;
+  const editorial=CATALOG.filter(c=>!c.by);
+  /* Pour vous : la voie active d'abord, puis le ton doux */
+  let mine=editorial.filter(c=>ap?c.path===ap:c.intens==='Douce');
+  editorial.forEach(c=>{ if(mine.length<4&&!mine.includes(c)) mine.push(c); });
+  mine=mine.slice(0,4);
+  /* Explorer : tout sauf le connu, rotation quotidienne */
+  const rest=editorial.filter(c=>!mine.includes(c));
+  const day=Math.floor(Date.now()/86400000);
+  const exp=rest.slice(day%Math.max(1,rest.length)).concat(rest).slice(0,4);
+  /* Communauté */
+  const community=CATALOG.filter(c=>c.by).sort((a,b)=>b.likes-a.likes);
+  box.innerHTML =
+    sheadHtml('Pour vous', ap?'selon votre voie':'selon vos goûts')+hrowHtml(mine)
+    +sheadHtml('Explorer','changer de territoire')+hrowHtml(exp)
+    +sheadHtml('Par la communauté','les plus aimées cette semaine')+hrowHtml(community);
+}
+
+/* ================================================================
+   Navigation écrans
+================================================================ */
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  document.getElementById('qnav').classList.toggle('on', id==='wizard');
+  window.scrollTo({top:0});
+}
+function enterApp(){
+  document.getElementById('gate').style.display='none';
+  showScreen('home');
+}
+function goHome(){
+  if(S.abort){ S.abort.abort(); S.abort=null; }
+  if(S.bgAbort){ S.bgAbort.abort(); S.bgAbort=null; }
+  const ab=document.getElementById('adaptBadge'); if(ab) ab.style.display='none';
+  stopAudio();
+  renderHome();
+  showScreen('home');
+}
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg;
+  t.classList.add('on'); setTimeout(()=>t.classList.remove('on'),2200);
+}
+
+/* ================================================================
+   Questionnaire — moteur
+================================================================ */
+function startWizard(mode){
+  S.mode = mode;
+  if(mode!=='continue'){ S.receivedStory=''; S.receivedContext=null; }
+  /* la voie du profil infuse automatiquement chaque nouvelle histoire */
+  S.pathStep=null;
+  const ap=activePath();
+  if(ap && pathProgress(ap.id)<3){
+    const lvl=activePathLevel();
+    S.pathStep={id:ap.id, level:lvl, title:ap.title, focus:ap.steps[lvl]};
+  }
+  S.answers = {};
+  QUESTIONS.forEach(q=>{
+    S.answers[q.id] = { sel: (q.type==='multi') ? [] : null, custom:'' };
+  });
+  S.answers.longueur.sel = 4800;
+  /* pré-remplissage depuis le profil */
+  if(profile.moi) S.answers.moi.custom=profile.moi;
+  if(profile.partenaire) S.answers.partenaire.custom=profile.partenaire;
+  if(profile.orientation) S.answers.orientation.sel=profile.orientation;
+  if(profile.plume) S.answers.styleEcriture.sel=profile.plume;
+  if(mode==='continue') prefillFromContext();
+  S._fdsPrefill=false;
+  S.qIndex = visibleIdx()[0]||0; S._lastDir = 1;
+  document.getElementById('receivedPanel').style.display = mode==='continue' ? 'block' : 'none';
+  renderQuestion();
+  showScreen('wizard');
+}
+function prefillFromContext(){
+  const c=S.receivedContext||{};
+  if(c.vibe) S.answers.vibe.sel=c.vibe.split(', ').filter(Boolean);
+  if(c.localisation) S.answers.localisation.sel=c.localisation;
+  if(c.lieux) S.answers.lieux.sel=c.lieux.split(', ').filter(Boolean);
+  const ex=document.getElementById('receivedExcerpt');
+  ex.textContent=S.receivedStory;
+  ex.classList.remove('open');
+}
+function toggleExcerpt(btn){
+  const ex=document.getElementById('receivedExcerpt');
+  ex.classList.toggle('open');
+  btn.textContent = ex.classList.contains('open') ? 'Réduire' : 'Lire en entier';
+}
+function visibleIdx(){
+  return QUESTIONS.map((q,i)=>(!q.showIf||q.showIf())?i:-1).filter(i=>i>=0);
+}
+function renderQuestion(){
+  const q = QUESTIONS[S.qIndex];
+  const a = S.answers[q.id];
+  const vis = visibleIdx();
+  const pos = Math.max(0, vis.indexOf(S.qIndex));
+  const total = vis.length;
+
+  document.getElementById('qFill').style.width = (pos/total*100)+'%';
+  document.getElementById('qSection').textContent = q.section;
+  document.getElementById('qCount').textContent = (pos+1)+' / '+total;
+
+  const card = document.getElementById('qCard');
+  card.className = S._lastDir<0 ? 'back' : '';
+  void card.offsetWidth;
+
+  const ctx = suggestionsFor(q);
+  const sugs = [...(ctx.list || [])];
+  /* une valeur pré-sélectionnée absente des suggestions devient une pastille */
+  if(q.type!=='length'){
+    if(Array.isArray(a.sel)){ a.sel.forEach(v=>{ if(!sugs.includes(v)) sugs.push(v); }); }
+    else if(a.sel && !sugs.includes(a.sel)) sugs.push(a.sel);
+  }
+  const ov = roleOverride(q);
+  const title = ov.title||q.title, sub = ov.sub||q.sub, ph = ov.ph||q.customPh;
+  const isChips = (q.type==='multi'||q.type==='single'||q.type==='scenario'||q.type==='length'||q.type==='multitext');
+  const isMulti = (q.type==='multi'||q.type==='multitext');
+
+  let html = '<div class="qtitle">'+title+'</div>';
+  if(sub) html += '<div class="qsub">'+sub+'</div>';
+  if(ctx.hint) html += '<div class="ctxhint">✦ '+ctx.hint+'</div>';
+
+  if(isChips){
+    html += '<div class="chips" id="qChips">';
+    sugs.forEach((s,i)=>{
+      const label = (typeof s==='object') ? s.label : s;
+      const isSel = isMulti ? a.sel.includes(label)
+                  : (q.type==='length') ? a.sel===s.value
+                  : a.sel===label;
+      html += '<button type="button" class="chip'+(isSel?' sel':'')+'" data-i="'+i+'">'+label+'</button>';
+    });
+    html += '</div>';
+  }
+
+  if(q.type==='scenario'){
+    html += '<div class="customwrap"><div class="lbl">Précisez (recommandé)</div>'
+          + '<textarea id="qCustom" rows="4" placeholder="'+ph+'"></textarea></div>';
+  } else if(q.type==='multitext'){
+    html += '<div class="customwrap"><div class="lbl">Complétez librement</div>'
+          + '<textarea id="qCustom" rows="3" placeholder="'+ph+'"></textarea></div>';
+  } else if(q.type==='textarea'){
+    html += '<textarea id="qCustom" rows="4" placeholder="'+ph+'"></textarea>';
+  } else if(q.type!=='length'){
+    html += '<div class="customwrap"><div class="lbl">Ou écrivez le vôtre</div>'
+          + '<input type="text" id="qCustom" placeholder="'+ph+'">'
+          + '</div>';
+  }
+
+  card.innerHTML = html;
+
+  const cust=document.getElementById('qCustom');
+  if(cust){
+    cust.value = a.custom||'';
+    cust.addEventListener('input', ()=>{
+      a.custom=cust.value;
+      if(q.id==='localisation') S.answers.lieux.sel=[];
+      updNextLabel();
+    });
+  }
+
+  const chipsBox=document.getElementById('qChips');
+  if(chipsBox){
+    chipsBox.querySelectorAll('.chip').forEach(c=>{
+      c.addEventListener('click', ()=>{
+        const i=+c.dataset.i, s=sugs[i];
+        const label=(typeof s==='object')?s.label:s;
+        if(isMulti){
+          const k=a.sel.indexOf(label);
+          if(k>=0){ a.sel.splice(k,1); c.classList.remove('sel'); }
+          else { a.sel.push(label); c.classList.add('sel'); }
+        } else {
+          chipsBox.querySelectorAll('.chip').forEach(x=>x.classList.remove('sel'));
+          const v=(q.type==='length')?s.value:label;
+          if(a.sel===v){ a.sel=null; }
+          else { a.sel=v; c.classList.add('sel'); }
+        }
+        if(q.id==='localisation') S.answers.lieux.sel=[];
+        updNextLabel();
+      });
+    });
+  }
+
+  document.getElementById('qBack').style.visibility = pos===0?'hidden':'visible';
+  updNextLabel();
+  window.scrollTo({top:0});
+}
+function answered(q){
+  const a=S.answers[q.id];
+  if(q.type==='multi'||q.type==='multitext') return a.sel.length>0 || !!a.custom.trim();
+  if(q.type==='length') return a.sel!=null;
+  if(q.type==='single'||q.type==='scenario') return a.sel!=null || !!a.custom.trim();
+  return !!a.custom.trim();
+}
+function updNextLabel(){
+  const q=QUESTIONS[S.qIndex];
+  const btn=document.getElementById('qNext');
+  const vis=visibleIdx();
+  const last = vis.indexOf(S.qIndex)===vis.length-1;
+  if(last){ btn.textContent='✦ Écrire le récit'; return; }
+  btn.textContent = answered(q) ? 'Continuer' : (q.optional?'Passer':'Continuer');
+}
+function qNav(dir){
+  const vis=visibleIdx();
+  const pos=Math.max(0,vis.indexOf(S.qIndex));
+  if(dir>0 && pos===vis.length-1){ generate(); return; }
+  S._lastDir=dir;
+  const npos=Math.max(0,Math.min(vis.length-1,pos+dir));
+  S.qIndex=vis[npos];
+  renderQuestion();
+}
+
+/* ================================================================
+   Construction du prompt
+================================================================ */
+function joinAnswer(id, fallback){
+  const a=S.answers[id];
+  if(!a) return fallback;
+  const parts=[...(a.sel? (Array.isArray(a.sel)?a.sel:[a.sel]) : [])];
+  if(a.custom && a.custom.trim()) parts.push(a.custom.trim());
+  return parts.length ? parts.join(', ') : fallback;
+}
+function textAnswer(id, fallback){
+  const a=S.answers[id];
+  return (a && a.custom && a.custom.trim()) ? a.custom.trim() : fallback;
+}
+function practiceList(id){
+  return joinAnswer(id, 'Aucune sélection — rester dans le cadre général du scénario');
+}
+function collectParams(){
+  const sc=S.answers.scenario||{sel:null,custom:''};
+  let scenario='';
+  if(sc.sel) scenario+=sc.sel;
+  if(sc.custom.trim()) scenario+=(scenario?'. Détails : ':'')+sc.custom.trim();
+  if(!scenario) scenario='Libre — construire une histoire cohérente avec les autres paramètres';
+  return {
+    vibe: joinAnswer('vibe','Libre, cohérente avec le scénario'),
+    localisation: joinAnswer('localisation','Au choix de l\'auteur, cohérente avec le scénario'),
+    lieux: joinAnswer('lieux','Au choix de l\'auteur'),
+    scenario: scenario,
+    commentaires: textAnswer('commentaires','Aucun'),
+    orientation: joinAnswer('orientation','Hétérosexuel'),
+    role: roleValue(),
+    longueur: (S.answers.longueur && S.answers.longueur.sel) || 4800,
+    styleEcriture: joinAnswer('styleEcriture','Libre — une voix élégante, immersive et sensorielle'),
+    moi: textAnswer('moi','Non précisé — inventer une description cohérente'),
+    partenaire: textAnswer('partenaire','Non précisé — inventer une description cohérente'),
+    autres: textAnswer('autres','Aucun'),
+    A:practiceList('A'), B:practiceList('B'), C:practiceList('C'),
+    D:practiceList('D'), E:practiceList('E'), F:practiceList('F')
+  };
+}
+function buildSystemPrompt(p){
+  let prompt = `Tu es un écrivain érotique expert, extrêmement détaillé, sensoriel et réaliste. Tu écris des histoires longues, lentes, immersives et très précises.
+
+**Règles strictes à respecter :**
+- Montée en chaleur très lente et progressive (chaque avancée importante doit être décrite sur 8 à 15 phrases minimum).
+- Alterner les descriptions : cinématographique (ambiance, lumière, sons), psychologique (pensées, émotions, excitation, jalousie), sensorielle (toucher, chaleur, textures, odeurs, goûts, sons, mouille, sperme, contractions) et explicite quand l'excitation monte.
+- Toujours respecter le consentement mutuel et enthousiaste. Tous les personnages ont plus de 18 ans.
+- Décrire abondamment les fluides (mouille, sperme, salive, coulures, bruits humides).
+- Longueur minimale : ${p.longueur} mots. Quand une longueur minimale est indiquée, le texte doit réellement atteindre cette longueur, pas moins.
+- Écrire en chapitres numérotés avec titres.
+
+**Paramètres à respecter scrupuleusement :**
+
+- Vibe / époque / ambiance : ${p.vibe}
+- Localisation : ${p.localisation}
+- Lieux principaux : ${p.lieux}
+- Scénario détaillé (texte libre) : ${p.scenario}
+- Commentaires : ${p.commentaires}
+- Orientation sexuelle : ${p.orientation}
+- Rôle de « moi » dans le récit : ${roleInstruction(p.role)}
+- Longueur souhaitée (longueur minimale) : ${p.longueur} mots
+
+**Personnages :**
+
+- Moi :
+  Description : ${p.moi}
+
+- Partenaire principale :
+  Description : ${p.partenaire}
+
+- Autres personnages :
+  Description : ${p.autres}
+
+**Pratiques sexuelles (à respecter précisément) :**
+
+**A. Jeux de bouche & Léchage**
+Liste : ${p.A}
+
+**B. Pénétration & Positions**
+Liste : ${p.B}
+
+**C. Sex Toys**
+Liste : ${p.C}
+
+**D. Lingerie & Tenue**
+Liste : ${p.D}
+
+**E. Finish (fin de l'acte)**
+Liste : ${p.E}
+
+**F. Autres pratiques**
+Liste : ${p.F}
+
+**Style :**
+- Voix / plume demandée : ${p.styleEcriture}
+- Descriptif cinématographique, riche en sensations tactiles, visuelles, olfactives et émotionnelles. Prends tout ton temps. Ne va jamais trop vite. Rends l'expérience immersive et réaliste.`;
+  if(S.adjustments.length){
+    prompt += `\n\n**Ajustements demandés en cours de lecture (prioritaires sur tout le reste) :**\n`
+            + S.adjustments.map(a=>'- '+a).join('\n');
+  }
+  if(S.pathStep){
+    const lvl=['débutant — doux, découverte','intermédiaire — assumé','avancé — audacieux'][S.pathStep.level];
+    prompt += `\n\n**Progression du lecteur (à intégrer naturellement au récit) :**
+- Voie choisie : ${S.pathStep.title} — niveau ${lvl}.
+- Focus de cette histoire : ${S.pathStep.focus}
+- Fais de cette histoire une initiation vivante : les personnages pratiquent, décrivent et se transmettent ces techniques de façon concrète et sensuelle, pour que le lecteur puisse apprendre en lisant. Tous les autres paramètres continuent de s'appliquer.`;
+  }
+  return prompt;
+}
+function buildUserMessage(p){
+  if(S.mode==='continue' && S.receivedStory){
+    return `Voici la première partie de l'histoire, écrite avec les paramètres de mon/ma partenaire :
+
+<<<DÉBUT DE L'HISTOIRE EXISTANTE>>>
+${S.receivedStory}
+<<<FIN DE L'HISTOIRE EXISTANTE>>>
+
+Écris maintenant LA SUITE de cette histoire, en respectant scrupuleusement MES paramètres (ceux du message système). Garde la parfaite continuité des personnages, des lieux et du ton. Reprends la numérotation des chapitres là où elle s'est arrêtée. Ne résume pas et ne réécris pas le texte existant : commence directement au chapitre suivant. La suite doit faire au minimum ${p.longueur} mots.`;
+  }
+  return `Écris maintenant l'histoire complète en respectant scrupuleusement tous les paramètres. Commence directement par le Chapitre 1, sans préambule ni commentaire.`;
+}
+
+/* ================================================================
+   Appel API xAI (streaming, générique)
+================================================================ */
+async function streamCompletion(messages, maxTok, onDelta, ctrl){
+  const ac = ctrl || new AbortController();
+  if(!ctrl) S.abort = ac;
+  const res = await fetch('/api/chat',{
+    method:'POST',
+    signal:ac.signal,
+    headers:{ 'Content-Type':'application/json' },
+    body: JSON.stringify({
+      model:S.model, stream:true, temperature:0.9, max_tokens:maxTok, messages:messages
+    })
+  });
+  if(!res.ok){
+    let msg='Erreur API ('+res.status+')';
+    try{ const j=await res.json(); if(j.error) msg+=' — '+(j.error.message||JSON.stringify(j.error)); }catch(e){}
+    throw new Error(msg);
+  }
+  const reader=res.body.getReader();
+  const dec=new TextDecoder();
+  let buf='', out='';
+  while(true){
+    const {done,value}=await reader.read();
+    if(done) break;
+    buf+=dec.decode(value,{stream:true});
+    const lines=buf.split('\n');
+    buf=lines.pop();
+    for(const line of lines){
+      const t=line.trim();
+      if(!t.startsWith('data:')) continue;
+      const data=t.slice(5).trim();
+      if(data==='[DONE]') continue;
+      try{
+        const j=JSON.parse(data);
+        const delta=j.choices && j.choices[0] && j.choices[0].delta && j.choices[0].delta.content;
+        if(delta){ out+=delta; onDelta(delta,out); }
+      }catch(e){}
+    }
+  }
+  return out;
+}
+
+/* ================================================================
+   Génération initiale
+================================================================ */
+function setGenUI(statusTxt){
+  stopAudio();
+  document.getElementById('genbar').style.display='flex';
+  document.getElementById('genStatus').textContent=statusTxt;
+  document.getElementById('readerActions').style.display='none';
+  document.getElementById('sharebox').style.display='none';
+  document.getElementById('genErr').style.display='none';
+  document.getElementById('bookWrap').classList.remove('on');
+  document.getElementById('paperScroll').style.display='block';
+}
+async function generate(){
+  S._demo=false;
+  const p = collectParams();
+  S.lastParams = p;
+  S.adjustments = [];
+  S.sliders={cru:2,temp:2,rythme:2,rom:2};
+  if(S.bgAbort){ S.bgAbort.abort(); S.bgAbort=null; }
+  S.story='';
+  showScreen('reader');
+  document.getElementById('readerTitle').textContent='L\'encre coule…';
+  document.getElementById('readerEyebrow').textContent = S.mode==='continue' ? 'Mode couple — la suite' : (S.mode==='couple'?'Mode couple — votre partie':'Votre récit');
+  setGenUI('Écriture en cours');
+  const box=document.getElementById('storyBox');
+  box.innerHTML='<span class="stream" id="streamTxt"></span><span class="cursor"></span>';
+  const streamEl=document.getElementById('streamTxt');
+  const maxTok = Math.min(64000, Math.round(p.longueur*3.2)+3000);
+  try{
+    const text = await streamCompletion(
+      [{role:'system', content:buildSystemPrompt(p)},
+       {role:'user', content:buildUserMessage(p)}],
+      maxTok,
+      (delta,out)=>{
+        S.story=out;
+        streamEl.textContent=out;
+        document.getElementById('wordCount').textContent=countWords(out).toLocaleString('fr-FR');
+      }
+    );
+    S.story=text;
+    finishGeneration(S.story.trim().length>0);
+  }catch(err){
+    if(err.name==='AbortError'){ finishGeneration(S.story.trim().length>0); return; }
+    showGenError(err);
+  }
+}
+function showGenError(err){
+  const eb=document.getElementById('genErr');
+  let hint='';
+  if(err.message==='Failed to fetch'||/NetworkError|CORS/i.test(err.message)){
+    hint='<br><br>Vérifiez votre connexion et votre clé. Si le problème persiste, il peut s\'agir d\'un blocage CORS du navigateur — la version avec petit backend (prévue pour le développeur) le résoudra.';
+  }
+  eb.innerHTML='L\'écriture a échoué : '+escapeHtml(err.message)+hint;
+  eb.style.display='block';
+  document.getElementById('genbar').style.display='none';
+  document.getElementById('storyBox').innerHTML='';
+  document.getElementById('readerActions').style.display='flex';
+  document.getElementById('readerTitle').textContent='Un contretemps…';
+}
+function stopGeneration(){ if(S.abort) S.abort.abort(); }
+function finishGeneration(hasText){
+  S.abort=null;
+  document.getElementById('genbar').style.display='none';
+  if(hasText){
+    S.fullStory = S.receivedStory ? (S.receivedStory.trim()+'\n\n'+S.story.trim()) : S.story.trim();
+    document.getElementById('readerTitle').textContent = firstChapterTitle(S.fullStory) || 'Votre récit';
+    S.bookMode = true;
+    applyView(0);
+    document.getElementById('readerActions').style.display='flex';
+    if(S.mode==='couple' || S.mode==='continue'){
+      document.getElementById('sharebox').style.display='block';
+    }
+    /* statistiques du profil + série */
+    profile.stats.recits=(profile.stats.recits||0)+1;
+    profile.stats.mots=(profile.stats.mots||0)+countWords(S.story);
+    bumpStreak();
+    saveLast();
+    /* progression sur la voie du profil */
+    if(S.pathStep){
+      profile.paths[S.pathStep.id]=Math.min(3,(profile.paths[S.pathStep.id]||0)+1);
+      const done=profile.paths[S.pathStep.id];
+      toast(done>=3 ? 'Voie « '+S.pathStep.title+' » explorée en entier' : 'Votre voie progresse — étape '+done+' / 3');
+      S.pathStep=null;
+      renderSuggest();
+    }
+    storeSet(PKEY,profile);
+    updProfileUI();
+  } else {
+    document.getElementById('readerTitle').textContent='Rien à lire';
+    document.getElementById('readerActions').style.display='flex';
+  }
+}
+function countWords(t){ return (t.match(/\S+/g)||[]).length; }
+function firstChapterTitle(t){
+  const m=t.match(/^#*\s*(Chapitre\s+\d+[^\n]*)/im);
+  return m ? m[1].replace(/[*#]/g,'').trim() : null;
+}
+
+/* ================================================================
+   Rendu du texte
+================================================================ */
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function storyToHtml(text){
+  const blocks=text.split(/\n{2,}/);
+  let html='';
+  for(let b of blocks){
+    b=b.trim(); if(!b) continue;
+    const isTitle=/^(#{1,4}\s*)?(\*\*)?\s*Chapitre\s+\d+/i.test(b) || /^#{1,4}\s+/.test(b);
+    let inner=escapeHtml(b.replace(/^#{1,4}\s*/,''))
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g,'<em>$1</em>');
+    if(isTitle){ html+='<h3>'+inner.replace(/<\/?strong>/g,'')+'</h3>'; }
+    else { html+='<p>'+inner.replace(/\n/g,'<br>')+'</p>'; }
+  }
+  return html;
+}
+
+/* ================================================================
+   Le Livre — pagination en colonnes + pages à tourner
+================================================================ */
+const book={page:0,pages:1,w:0,gap:56,chapters:[]};
+
+function applyView(targetPage){
+  const btn=document.getElementById('viewToggle');
+  if(S.bookMode){
+    document.getElementById('paperScroll').style.display='none';
+    document.getElementById('bookWrap').classList.add('on');
+    btn.textContent='Affichage défilement';
+    openBook(targetPage||0);
+  } else {
+    document.getElementById('bookWrap').classList.remove('on');
+    document.getElementById('paperScroll').style.display='block';
+    btn.textContent='Affichage livre';
+    document.getElementById('storyBox').innerHTML=storyToHtml(S.fullStory||S.story);
+  }
+}
+function toggleView(){
+  stopAudio();
+  S.bookMode=!S.bookMode;
+  applyView(book.page);
+}
+function openBook(targetPage){
+  document.getElementById('bookInner').innerHTML=storyToHtml(S.fullStory||S.story);
+  book.page=targetPage||0;
+  if(document.fonts && document.fonts.ready){
+    document.fonts.ready.then(()=>paginate());
+  }
+  requestAnimationFrame(()=>paginate());
+}
+function paginate(){
+  if(!document.getElementById('bookWrap').classList.contains('on')) return;
+  const pad=document.getElementById('bookPad');
+  const inner=document.getElementById('bookInner');
+  book.w=pad.clientWidth;
+  inner.style.columnWidth=book.w+'px';
+  inner.style.columnGap=book.gap+'px';
+  inner.style.width=book.w+'px';
+  book.pages=Math.max(1, Math.round((inner.scrollWidth+book.gap)/(book.w+book.gap)));
+  /* repères de chapitres */
+  book.chapters=[];
+  inner.querySelectorAll('h3').forEach(h=>{
+    const pg=Math.round(h.offsetLeft/(book.w+book.gap));
+    book.chapters.push({page:pg, title:h.textContent});
+  });
+  goPage(Math.min(book.page,book.pages-1), false);
+}
+function goPage(p, animate){
+  book.page=Math.max(0,Math.min(book.pages-1,p));
+  const inner=document.getElementById('bookInner');
+  inner.style.transition = animate===false ? 'none' : 'transform .55s var(--ease)';
+  inner.style.transform='translateX(-'+(book.page*(book.w+book.gap))+'px)';
+  document.getElementById('pageNum').textContent=(book.page+1)+' / '+book.pages;
+  document.getElementById('bookFill').style.width=((book.page+1)/book.pages*100)+'%';
+  let ch='fantas.me';
+  for(const c of book.chapters){ if(c.page<=book.page) ch=c.title; }
+  document.getElementById('bookChapter').textContent=ch;
+  const rest=book.pages-book.page-1;
+  document.getElementById('bookMeta').textContent = rest>0 ? rest+' p. restantes' : 'fin';
+  saveLast();
+}
+function turnPage(dir){ goPage(book.page+dir, true); }
+
+/* gestes tactiles */
+(function(){
+  let sx=0, sy=0, st=0;
+  document.addEventListener('touchstart', e=>{
+    if(!document.getElementById('bookWrap').classList.contains('on')) return;
+    if(!e.target.closest('.bookvp')) return;
+    sx=e.touches[0].clientX; sy=e.touches[0].clientY; st=Date.now();
+  }, {passive:true});
+  document.addEventListener('touchend', e=>{
+    if(!st) return;
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    st=0;
+    if(Math.abs(dx)>42 && Math.abs(dx)>Math.abs(dy)*1.4){
+      turnPage(dx<0?1:-1);
+    }
+  }, {passive:true});
+})();
+document.addEventListener('keydown', e=>{
+  if(!document.getElementById('reader').classList.contains('on')) return;
+  if(!document.getElementById('bookWrap').classList.contains('on')) return;
+  if(e.key==='ArrowRight') turnPage(1);
+  if(e.key==='ArrowLeft') turnPage(-1);
+});
+window.addEventListener('resize', ()=>{
+  if(document.getElementById('bookWrap').classList.contains('on')) paginate();
+});
+
+/* ================================================================
+   Ajustements en cours de lecture
+================================================================ */
+function openTune(){
+  const box=document.getElementById('tuneSliders');
+  box.innerHTML='';
+  TUNE_AXES.forEach(a=>{
+    const v=S.sliders[a.id];
+    const d=document.createElement('div');
+    d.className='tslider';
+    d.innerHTML='<div class="ts-head"><span>'+a.label+'</span><b id="tsv_'+a.id+'">'+a.names[v]+'</b></div>'
+      +'<input type="range" min="0" max="4" step="1" value="'+v+'" id="ts_'+a.id+'">'
+      +'<div class="ts-ends"><span>'+a.ends[0]+'</span><span>'+a.ends[1]+'</span></div>';
+    box.appendChild(d);
+    const inp=d.querySelector('input');
+    inp.addEventListener('input',()=>{
+      document.getElementById('tsv_'+a.id).textContent=a.names[+inp.value];
+    });
+  });
+  document.getElementById('tuneSheet').classList.add('on');
+}
+function closeTune(){ document.getElementById('tuneSheet').classList.remove('on'); }
+function applyTune(){
+  TUNE_AXES.forEach(a=>{
+    const inp=document.getElementById('ts_'+a.id);
+    if(inp) S.sliders[a.id]=+inp.value;
+  });
+  closeTune();
+  const instrs=[];
+  TUNE_AXES.forEach(a=>{ const ins=a.instr[S.sliders[a.id]]; if(ins) instrs.push(ins); });
+  S.adjustments=instrs;
+  if(!instrs.length){ toast('Curseurs au neutre — la suite reste telle quelle'); return; }
+  adaptRest();
+}
+
+/* Réécriture discrète de la suite : conserve la page en cours
+   + une page d'avance, remplace le reste en arrière-plan. */
+async function adaptRest(){
+  const full=S.fullStory||S.story;
+  if(!full) return;
+  const inBook=document.getElementById('bookWrap').classList.contains('on');
+  const frac = (inBook&&book.pages>1) ? Math.min(1,(book.page+2)/book.pages) : 0.5;
+  let idx=Math.floor(full.length*frac);
+  let cut=full.lastIndexOf('\n\n', idx);
+  if(cut<300) cut=idx;
+  const kept=full.slice(0,cut).trim();
+  if(full.length-kept.length<200){
+    toast('Vous êtes presque à la fin — vos curseurs s\'appliqueront à la suite de l\'histoire');
+  }
+  const p=S.lastParams||collectParams();
+  const remaining=Math.max(700, p.longueur-countWords(kept));
+
+  if(S.bgAbort) S.bgAbort.abort();
+  const ctrl=new AbortController();
+  S.bgAbort=ctrl;
+  document.getElementById('adaptBadge').style.display='inline-flex';
+
+  const sys=buildSystemPrompt(p);
+  const user=`Voici le début du récit, que le lecteur est en train de lire (à conserver TEL QUEL, ne pas le réécrire) :
+
+<<<DÉBUT DU RÉCIT DÉJÀ LU>>>
+${kept}
+<<<FIN DU RÉCIT DÉJÀ LU>>>
+
+Écris LA SUITE à partir de ce point exact, en appliquant les ajustements demandés dans le message système avec une transition naturelle (le lecteur ne doit pas sentir la couture). Reprends au cœur de l'action, sans résumer ni répéter, en gardant la parfaite continuité (personnages, lieux, ton) et la numérotation des chapitres. La suite doit faire au minimum ${remaining} mots.`;
+
+  const maxTok=Math.min(64000, Math.round(remaining*3.2)+3000);
+  try{
+    const suite=await streamCompletion(
+      [{role:'system',content:sys},{role:'user',content:user}],
+      maxTok, ()=>{}, ctrl
+    );
+    if(ctrl.signal.aborted) return;
+    if(suite.trim()){
+      const wasPage=book.page;
+      const wasAudio=AudioR.on&&!AudioR.paused;
+      if(AudioR.on) stopAudio();
+      S.fullStory=kept+'\n\n'+suite.trim();
+      S.story=S.fullStory;
+      S.receivedStory='';
+      saveLast();
+      if(inBook&&document.getElementById('bookWrap').classList.contains('on')){
+        document.getElementById('bookInner').innerHTML=storyToHtml(S.fullStory);
+        paginate();
+        goPage(wasPage,false);
+      } else {
+        document.getElementById('storyBox').innerHTML=storyToHtml(S.fullStory);
+      }
+      if(wasAudio) startAudioFromHere();
+      toast('La suite a discrètement changé de peau');
+    }
+  }catch(err){
+    if(err.name!=='AbortError') toast(err.message||'Adaptation impossible');
+  }finally{
+    if(S.bgAbort===ctrl) S.bgAbort=null;
+    document.getElementById('adaptBadge').style.display='none';
+  }
+}
+
+/* ================================================================
+   Lecture audio — deux moteurs :
+   · ElevenLabs (clé dans ⚙) : voix premium ultra-réalistes, fluides
+   · Voix du système en repli, avec choix féminine / masculine
+================================================================ */
+const AudioR={on:false,paused:false,queue:[],i:0,rate:1,gender:'female',
+              sysVoice:null,elVoiceId:'',elVoices:[],oaiVoice:'',urls:{},player:null,_hinted:false};
+function audioEngine(){ return S._ttsDown ? 'sys' : 'oai'; }
+
+/* --- OpenAI TTS (gpt-4o-mini-tts) --- */
+const OAI_VOICES=[
+  {id:'nova',g:'female',n:'Nova'},{id:'shimmer',g:'female',n:'Shimmer'},
+  {id:'coral',g:'female',n:'Coral'},{id:'sage',g:'female',n:'Sage'},
+  {id:'onyx',g:'male',n:'Onyx'},{id:'echo',g:'male',n:'Echo'},
+  {id:'ash',g:'male',n:'Ash'},{id:'verse',g:'male',n:'Verse'}
+];
+function pickOaiVoice(){
+  const pool=OAI_VOICES.filter(v=>v.g===AudioR.gender);
+  return (pool[0]&&pool[0].id)||'nova';
+}
+async function oaiFetchChunk(i){
+  if(AudioR.urls[i]) return AudioR.urls[i];
+  const item=AudioR.queue[i];
+  const res=await fetch('/api/tts',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      voice:AudioR.oaiVoice||pickOaiVoice(),
+      input:item.text
+    })
+  });
+  if(!res.ok) throw new Error('TTS_DOWN');
+  const url=URL.createObjectURL(await res.blob());
+  AudioR.urls[i]=url;
+  return url;
+}
+
+/* --- voix du système --- */
+function frVoices(){
+  if(!('speechSynthesis' in window)) return [];
+  return speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith('fr'));
+}
+function voiceGender(v){
+  const n=v.name.toLowerCase();
+  if(/thomas|nicolas|paul|daniel|antoine|henri|guillaume|mathieu|hugo|jean|luc|olivier|bruno|claude|felix|george/.test(n)) return 'male';
+  if(/am[ée]lie|audrey|marie|c[ée]line|julie|virginie|aur[ée]lie|charlotte|hortense|sophie|l[ée]a|chantal|manon|alice|anna|eloise|coralie/.test(n)) return 'female';
+  return '';
+}
+function pickSysVoice(){
+  const vs=frVoices();
+  if(!vs.length) return null;
+  const pref=vs.filter(v=>voiceGender(v)===AudioR.gender);
+  const pool=pref.length?pref:vs;
+  return pool.find(v=>/premium|enhanced|siri|natural|neural/i.test(v.name)) || pool[0];
+}
+if('speechSynthesis' in window){ speechSynthesis.onvoiceschanged=()=>{ if(AudioR.on&&audioEngine()==='sys') fillVoices(); }; }
+
+/* --- ElevenLabs --- */
+const EL_DEFAULTS={female:'XB0fDUnXU5powFXDhCwa', male:'JBFqnCBsd6RMkjVDRZzb'};
+async function elLoadVoices(){
+  if(AudioR.elVoices.length) return;
+  try{
+    const res=await fetch('https://api.elevenlabs.io/v1/voices',{headers:{'xi-api-key':S.elKey}});
+    if(!res.ok) return;
+    const j=await res.json();
+    AudioR.elVoices=(j.voices||[]).map(v=>({
+      id:v.voice_id, name:v.name,
+      gender:((v.labels&&(v.labels.gender||''))+'').toLowerCase()
+    }));
+  }catch(e){}
+}
+function pickElVoice(){
+  const want=AudioR.gender==='male'?['male','homme']:['female','femme'];
+  const pool=AudioR.elVoices.filter(v=>want.includes(v.gender));
+  return (pool[0]&&pool[0].id) || EL_DEFAULTS[AudioR.gender];
+}
+async function elFetchChunk(i){
+  if(AudioR.urls[i]) return AudioR.urls[i];
+  const item=AudioR.queue[i];
+  const res=await fetch('https://api.elevenlabs.io/v1/text-to-speech/'+AudioR.elVoiceId+'?output_format=mp3_44100_128',{
+    method:'POST',
+    headers:{'xi-api-key':S.elKey,'Content-Type':'application/json'},
+    body:JSON.stringify({
+      text:item.text,
+      model_id:'eleven_multilingual_v2',
+      voice_settings:{stability:0.5,similarity_boost:0.75,style:0.3,use_speaker_boost:true}
+    })
+  });
+  if(!res.ok) throw new Error('Voix premium indisponible ('+res.status+') — vérifiez la clé ElevenLabs');
+  const url=URL.createObjectURL(await res.blob());
+  AudioR.urls[i]=url;
+  return url;
+}
+
+/* --- interface --- */
+function fillVoices(){
+  const sel=document.getElementById('voiceSel');
+  sel.innerHTML='';
+  if(audioEngine()==='oai'){
+    OAI_VOICES.forEach(v=>{
+      const o=document.createElement('option'); o.value=v.id; o.textContent=v.n;
+      sel.appendChild(o);
+    });
+    sel.value=AudioR.oaiVoice||pickOaiVoice();
+    document.getElementById('engineTag').textContent='voix OpenAI';
+    return;
+  }
+  if(audioEngine()==='el'){
+    if(!AudioR.elVoices.length){ sel.innerHTML='<option value="">voix premium</option>'; return; }
+    AudioR.elVoices.forEach(v=>{
+      const o=document.createElement('option'); o.value=v.id; o.textContent=v.name;
+      sel.appendChild(o);
+    });
+    sel.value=AudioR.elVoiceId||pickElVoice();
+  } else {
+    const vs=frVoices();
+    if(!vs.length){ sel.innerHTML='<option value="">voix du système</option>'; return; }
+    vs.forEach((v,i)=>{
+      const o=document.createElement('option'); o.value=i;
+      o.textContent=v.name.replace(/Microsoft |Google |Voix /g,'');
+      sel.appendChild(o);
+    });
+    if(!AudioR.sysVoice||vs.indexOf(AudioR.sysVoice)<0) AudioR.sysVoice=pickSysVoice();
+    sel.value=Math.max(0,vs.indexOf(AudioR.sysVoice));
+  }
+  document.getElementById('engineTag').textContent = audioEngine()==='el' ? 'voix premium' : 'voix du téléphone';
+}
+function setVoice(){
+  const v=document.getElementById('voiceSel').value;
+  if(audioEngine()==='oai'){ if(v){ AudioR.oaiVoice=v; AudioR.urls={}; } }
+  else if(audioEngine()==='el'){ if(v) AudioR.elVoiceId=v; }
+  else { const vs=frVoices(); if(vs[+v]) AudioR.sysVoice=vs[+v]; }
+  restartChunk();
+}
+function setGender(g,el){
+  AudioR.gender=g;
+  document.getElementById('gF').classList.toggle('sel',g==='female');
+  document.getElementById('gM').classList.toggle('sel',g==='male');
+  if(audioEngine()==='oai'){ AudioR.oaiVoice=pickOaiVoice(); AudioR.urls={}; }
+  else if(audioEngine()==='el'){ AudioR.elVoiceId=pickElVoice(); AudioR.urls={}; }
+  else AudioR.sysVoice=pickSysVoice();
+  fillVoices();
+  restartChunk();
+}
+function setRate(r,el){
+  AudioR.rate=r;
+  el.parentElement.querySelectorAll('.rchip').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  if(audioEngine()!=='sys'&&AudioR.player){ AudioR.player.playbackRate=r; }
+  else restartChunk();
+}
+function restartChunk(){
+  if(!AudioR.on||AudioR.paused) return;
+  if(audioEngine()!=='sys'){ if(AudioR.player){AudioR.player.pause();} speakCurrent(); }
+  else { speechSynthesis.cancel(); setTimeout(speakCurrent,80); }
+}
+function chunkSentences(t,max){
+  const parts=t.match(/[^.!?…]+[.!?…]*/g)||[t];
+  const out=[]; let cur='';
+  for(const s of parts){
+    if((cur+s).length>max&&cur.trim()){ out.push(cur.trim()); cur=s; }
+    else cur+=s;
+  }
+  if(cur.trim()) out.push(cur.trim());
+  return out;
+}
+function buildAudioQueue(){
+  AudioR.queue=[]; AudioR.urls={};
+  const max = audioEngine()==='sys' ? 250 : 750;
+  const inBook=S.bookMode&&document.getElementById('bookWrap').classList.contains('on');
+  const root=inBook?document.getElementById('bookInner'):document.getElementById('storyBox');
+  root.querySelectorAll('h3,p').forEach(el=>{
+    const page=inBook?Math.round(el.offsetLeft/(book.w+book.gap)):null;
+    chunkSentences(el.textContent,max).forEach(txt=>{
+      if(txt.trim()) AudioR.queue.push({text:txt,page:page});
+    });
+  });
+  AudioR.i=0;
+  if(inBook){
+    const k=AudioR.queue.findIndex(q=>q.page>=book.page);
+    if(k>=0) AudioR.i=k;
+  }
+}
+async function startAudioFromHere(){
+  if(AudioR.on){ audioPlayPause(); return; }
+  if(audioEngine()==='sys'&&!('speechSynthesis' in window)){ toast('Lecture audio non disponible sur ce navigateur'); return; }
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(audioEngine()==='oai'){
+    if(!AudioR.oaiVoice) AudioR.oaiVoice=pickOaiVoice();
+    if(!AudioR.player){ AudioR.player=new Audio(); }
+  } else if(audioEngine()==='el'){
+    await elLoadVoices();
+    if(!AudioR.elVoiceId) AudioR.elVoiceId=pickElVoice();
+    if(!AudioR.player){ AudioR.player=new Audio(); }
+  } else {
+    AudioR.sysVoice=pickSysVoice();
+  }
+  fillVoices();
+  buildAudioQueue();
+  if(!AudioR.queue.length){ toast('Rien à lire pour l\'instant'); return; }
+  AudioR.on=true; AudioR.paused=false;
+  document.getElementById('audiobar').style.display='flex';
+  document.getElementById('abPlay').textContent='⏸';
+  speakCurrent();
+}
+function speakCurrent(){
+  if(audioEngine()!=='sys') netPlayCurrent();
+  else sysSpeakCurrent();
+}
+function autoTurn(item){
+  if(item.page!=null&&item.page!==book.page&&S.bookMode&&document.getElementById('bookWrap').classList.contains('on')){
+    goPage(item.page,true);
+  }
+}
+function sysSpeakCurrent(){
+  if(!AudioR.on||AudioR.paused) return;
+  if(AudioR.i>=AudioR.queue.length){ stopAudio(); toast('Fin du récit'); return; }
+  const item=AudioR.queue[AudioR.i];
+  const u=new SpeechSynthesisUtterance(item.text);
+  u.lang='fr-FR';
+  if(AudioR.sysVoice) u.voice=AudioR.sysVoice;
+  u.rate=AudioR.rate; u.pitch=1;
+  u.onstart=()=>autoTurn(item);
+  u.onend=()=>{ if(AudioR.on&&!AudioR.paused){ AudioR.i++; sysSpeakCurrent(); } };
+  u.onerror=()=>{ if(AudioR.on&&!AudioR.paused){ AudioR.i++; sysSpeakCurrent(); } };
+  speechSynthesis.speak(u);
+}
+async function netPlayCurrent(){
+  if(!AudioR.on||AudioR.paused) return;
+  if(AudioR.i>=AudioR.queue.length){ stopAudio(); toast('Fin du récit'); return; }
+  const idx=AudioR.i;
+  const fetchChunk = audioEngine()==='oai' ? oaiFetchChunk : elFetchChunk;
+  try{
+    const url=await fetchChunk(idx);
+    if(!AudioR.on||AudioR.paused||AudioR.i!==idx) return;
+    autoTurn(AudioR.queue[idx]);
+    const a=AudioR.player;
+    a.src=url;
+    a.playbackRate=AudioR.rate;
+    a.onended=()=>{ if(AudioR.on&&!AudioR.paused){ AudioR.i++; netPlayCurrent(); } };
+    a.onerror=()=>{ if(AudioR.on&&!AudioR.paused){ AudioR.i++; netPlayCurrent(); } };
+    a.play().catch(()=>{});
+    /* pré-charge le chunk suivant pour une lecture sans coupure */
+    if(idx+1<AudioR.queue.length) fetchChunk(idx+1).catch(()=>{});
+  }catch(err){
+    if(err.message==='TTS_DOWN'&&!S._ttsDown&&('speechSynthesis' in window)){
+      S._ttsDown=true;
+      toast('Voix premium indisponibles — bascule sur les voix du téléphone');
+      AudioR.sysVoice=pickSysVoice();
+      AudioR.urls={};
+      fillVoices();
+      speakCurrent();
+      return;
+    }
+    toast(err.message==='TTS_DOWN'?'Lecture audio indisponible':err.message||'Lecture audio impossible');
+    stopAudio();
+  }
+}
+function audioPlayPause(){
+  if(!AudioR.on) return;
+  if(AudioR.paused){
+    AudioR.paused=false;
+    document.getElementById('abPlay').textContent='⏸';
+    if(audioEngine()!=='sys'&&AudioR.player&&AudioR.player.src&&!AudioR.player.ended){
+      AudioR.player.play().catch(()=>speakCurrent());
+    } else speakCurrent();
+  } else {
+    AudioR.paused=true;
+    document.getElementById('abPlay').textContent='▶';
+    if(audioEngine()!=='sys'){ if(AudioR.player) AudioR.player.pause(); }
+    else speechSynthesis.cancel();
+  }
+}
+function stopAudio(){
+  AudioR.on=false; AudioR.paused=false;
+  if('speechSynthesis' in window) speechSynthesis.cancel();
+  if(AudioR.player){ AudioR.player.pause(); AudioR.player.removeAttribute('src'); }
+  Object.values(AudioR.urls).forEach(u=>{ try{URL.revokeObjectURL(u);}catch(e){} });
+  AudioR.urls={};
+  const ab=document.getElementById('audiobar');
+  if(ab) ab.style.display='none';
+}
+
+/* ================================================================
+   Copier / Télécharger
+================================================================ */
+function copyStory(){
+  navigator.clipboard.writeText(S.fullStory||S.story).then(()=>toast('Texte copié'));
+}
+function downloadStory(){
+  const blob=new Blob([S.fullStory||S.story],{type:'text/plain;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='fantasme-recit.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ================================================================
+   Mode couple — profils liés
+   NOTE DEV : l'envoi réel passera par le backend (comptes liés).
+   Ici, l'envoi est simulé pour le prototype.
+================================================================ */
+function sendToPartner(){
+  toast('Envoyé — votre partenaire découvrira votre histoire dans son app');
+}
+
+/* ================================================================
+   Démo du livre : ouvrir le fichier avec #demo pour prévisualiser
+   l'affichage livre (et le bouton ajuster) sans consommer l'API.
+================================================================ */
+function demoBook(){
+  S._demo=true;
+  const paras=[];
+  paras.push('Chapitre 1 — L\'arrivée');
+  for(let i=0;i<10;i++){
+    paras.push('La lumière du soir glissait sur les murs de pierre, dorée, presque liquide. Elle posa sa valise dans l\'entrée et laissa son regard courir le long du couloir, là où les ombres s\'étiraient comme des promesses. Le silence de la maison avait quelque chose d\'habité, de patient. Elle sourit, à peine, en entendant des pas à l\'étage.');
+  }
+  paras.push('Chapitre 2 — Le dîner');
+  for(let i=0;i<10;i++){
+    paras.push('Les bougies tremblaient entre eux, et chaque phrase semblait durer plus longtemps que nécessaire. Il versa le vin lentement, sans la quitter des yeux, et elle sentit la chaleur lui monter aux joues — pas à cause du vin.');
+  }
+  S.story=paras.join('\n\n');
+  S.fullStory=S.story;
+  S.lastParams=null;
+  showScreen('reader');
+  document.getElementById('genbar').style.display='none';
+  document.getElementById('readerTitle').textContent='Chapitre 1 — L\'arrivée';
+  document.getElementById('readerEyebrow').textContent='Aperçu';
+  S.bookMode=true;
+  applyView(0);
+  document.getElementById('readerActions').style.display='flex';
+}
+
+/* ================================================================
+   Inclinaison 3D des cartes au pointeur (desktop)
+================================================================ */
+if(window.matchMedia('(hover:hover)').matches){
+  let tiltEl=null;
+  document.addEventListener('pointermove',e=>{
+    const el=e.target.closest('.card,.pathcard,.suggest');
+    if(tiltEl&&tiltEl!==el){ tiltEl.style.transform=''; tiltEl.classList.remove('tilted'); tiltEl=null; }
+    if(!el) return;
+    const r=el.getBoundingClientRect();
+    const dx=(e.clientX-r.left)/r.width-.5;
+    const dy=(e.clientY-r.top)/r.height-.5;
+    el.classList.add('tilted'); tiltEl=el;
+    el.style.transform='perspective(900px) rotateX('+(-dy*6).toFixed(2)+'deg) rotateY('+(dx*8).toFixed(2)+'deg) translateY(-2px)';
+  });
+  document.addEventListener('pointerdown',e=>{
+    if(tiltEl&&!e.target.closest('.card,.pathcard,.suggest')){ tiltEl.style.transform=''; tiltEl.classList.remove('tilted'); tiltEl=null; }
+  });
+}
+
+/* ---- init ---- */
+enterApp(); /* porte 18+ désactivée temporairement */
+renderHome();
+if(location.hash==='#demo') demoBook();
+</script>
+</body>
+</html>
