@@ -1474,7 +1474,9 @@ const STYLES=[
 function toneProfile(){
   const t={cru:0,romantique:0,bdsm:0,audacieux:0,poetique:0,litteraire:0,sensuel:0,brut:0};
   const sel=id=>{const a=S.answers[id];return a?(Array.isArray(a.sel)?a.sel:(a.sel?[a.sel]:[])):[];};
-  sel('vibe').forEach(v=>{
+  const vibeAll=[...sel('vibe'), cust2v()];
+  function cust2v(){const a=S.answers.vibe;return (a&&a.custom)?a.custom:'';}
+  vibeAll.forEach(v=>{
     if(/Passion brute/i.test(v)){t.cru+=2;t.brut+=2;}
     if(/Romance lente/i.test(v)){t.romantique+=2;t.poetique+=1;}
     if(/Tension interdite|frisson/i.test(v)){t.audacieux+=2;}
@@ -1483,7 +1485,9 @@ function toneProfile(){
     if(/murmur/i.test(v)){t.sensuel+=2;}
     if(/brûlant|orage/i.test(v)){t.sensuel+=1;}
   });
-  const pract=[...sel('A'),...sel('B'),...sel('C'),...sel('D'),...sel('E'),...sel('F')].join(' | ');
+  const cust2=id=>{const a=S.answers[id];return (a&&a.custom)?a.custom:'';};
+  const pract=[...sel('A'),...sel('B'),...sel('C'),...sel('D'),...sel('E'),...sel('F'),
+               cust2('A'),cust2('B'),cust2('C'),cust2('D'),cust2('E'),cust2('F')].join(' | ');
   if(/BDSM|Menottes|Bandeau|Collier|Strap/i.test(pract)) t.bdsm+=2;
   if(/Exhibition|Risque public|Voyeurisme/i.test(pract)) t.audacieux+=2;
   if(/Deepthroat|Anulingus|Double pénétration|Facial|Cumplay|Avalé|Squirting/i.test(pract)) t.cru+=2;
@@ -1560,6 +1564,17 @@ function suggestionsFor(q){
     const va=S.answers.vibe||{sel:[],custom:''};
     const extras=[];
     (va.sel||[]).forEach(v=>{ (LOC_PAR_VIBE[v]||[]).forEach(x=>{ if(!extras.includes(x)) extras.push(x); }); });
+    /* le texte libre de l'ambiance compte autant que les pastilles */
+    const vibeTxt=((va.sel||[]).join(' ')+' '+(va.custom||'')).toLowerCase();
+    [[/années folles|cabaret|charleston|r[ée]tro|jazz|guinguette/,['Cabaret parisien','Orient-Express']],
+     [/victorien|xixe|corset/,['Manoir anglais']],
+     [/été|brûlant|soleil|canicule|plage|vacances/,['Villa amalfitaine','Crique déserte']],
+     [/orage|tempête|pluie|nuit noire/,['Demeure isolée sous l\'orage']],
+     [/luxe|pouvoir|palace|champagne|patron/,['Penthouse sur la ville','Palace parisien']],
+     [/retrouvailles|ex|jeunesse|souvenir/,['Maison en bord de mer']],
+     [/montagne|neige|ski|hiver|chalet/,['Chalet sous la neige']],
+     [/orient|maroc|d[ée]sert|hammam/,['Riad à Marrakech']]
+    ].forEach(([rx,list])=>{ if(rx.test(vibeTxt)) list.forEach(x=>{ if(!extras.includes(x)) extras.push(x); }); });
     if(extras.length){
       const merged=[...extras, ...q.sug.filter(s=>!extras.includes(s))].slice(0,9);
       return {list:merged, hint:'Les premiers décors sont inspirés de votre ambiance'};
@@ -2147,8 +2162,21 @@ function collectParams(){
     partenaire: joinAnswer('partenaire','Non précisé — inventer une description cohérente'),
     autres: joinAnswer('autres','Aucun'),
     A:practiceList('A'), B:practiceList('B'), C:practiceList('C'),
-    D:practiceList('D'), E:practiceList('E'), F:practiceList('F')
+    D:practiceList('D'), E:practiceList('E'), F:practiceList('F'),
+    notes: customNotes()
   };
+}
+function customNotes(){
+  const labels={vibe:'Ambiance',localisation:'Décor',lieux:'Lieux',scenario:'Scénario',
+    role:'Rôle',genre:'Genre',moi:'Moi',partenaire:'Partenaire',autres:'Autres personnages',
+    A:'Jeux de bouche',B:'Positions',C:'Sex toys',D:'Lingerie',E:'Finish',F:'Autres pratiques',
+    styleEcriture:'Style d\'écriture',commentaires:'Consignes'};
+  const out=[];
+  Object.keys(labels).forEach(k=>{
+    const a=S.answers[k];
+    if(a&&a.custom&&a.custom.trim()) out.push('- '+labels[k]+' : « '+a.custom.trim()+' »');
+  });
+  return out.join('\n');
 }
 function buildSystemPrompt(p){
   let prompt = `Tu es un écrivain érotique expert, extrêmement détaillé, sensoriel et réaliste. Tu écris des histoires longues, lentes, immersives et très précises.
@@ -2204,7 +2232,11 @@ Liste : ${p.E}
 **F. Autres pratiques**
 Liste : ${p.F}
 
-**Style :**
+${p.notes ? `**Écrits personnels de l'utilisateur — PRIORITÉ ABSOLUE :**
+Les lignes suivantes ont été écrites à la main par l'utilisateur, avec ses propres mots. Elles priment sur toutes les options cochées et doivent se retrouver CONCRÈTEMENT dans le récit (lieux nommés, détails repris, envies exaucées) :
+${p.notes}
+
+` : ''}**Style :**
 - Voix / plume demandée : ${p.styleEcriture}
 - Descriptif cinématographique, riche en sensations tactiles, visuelles, olfactives et émotionnelles. Prends tout ton temps. Ne va jamais trop vite. Rends l'expérience immersive et réaliste.`;
   if(S.adjustments.length){
@@ -3141,8 +3173,8 @@ window.addEventListener('error',e=>{
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='3.6.0';
-const APP_BUILD='12/08/2026 21:05 (Paris)';
+const APP_VERSION='3.7.0';
+const APP_BUILD='12/08/2026 21:16 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
