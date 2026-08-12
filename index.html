@@ -463,6 +463,12 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 .bookfoot .pn{font-family:var(--serif);font-style:italic;font-size:14px;color:var(--mut);white-space:nowrap}
 .bookfoot .bar{flex:1;height:2px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
 .bookfoot .bar div{height:100%;width:0%;background:var(--emberG);transition:width .4s var(--ease)}
+.writingph{
+  break-before:column;
+  font-family:var(--serif);font-style:italic;font-size:17px;color:var(--mut);
+  padding-top:34%;text-align:center;line-height:1.9;
+}
+.writingph .pulse{width:9px;height:9px}
 .tunebtn{
   background:none;border:none;color:var(--mut);opacity:.75;
   font-family:var(--serif);font-style:italic;font-size:14px;cursor:pointer;
@@ -491,6 +497,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 .tslider{margin-bottom:22px}
 .ts-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .ts-head span{font-size:13.5px;font-weight:550;color:var(--txt)}
+.ts-desc{font-size:11.5px;color:var(--mut);margin:0 0 8px;line-height:1.4}
 .ts-head b{
   font-size:11.5px;font-weight:600;color:var(--peach);
   background:rgba(193,52,105,.14);border:1px solid rgba(193,52,105,.3);
@@ -889,7 +896,7 @@ body.wizmode footer{display:none}
   <div class="sheet">
     <div class="grab"></div>
     <h3>Ajuster la suite</h3>
-    <p>Ce que vous êtes en train de lire ne bouge pas. La suite, elle, se réécrira discrètement selon vos curseurs — sans quitter votre page.</p>
+    <p>Votre page et le paragraphe en cours restent exactement tels quels. Tout ce qui vient après se réécrit selon vos réglages, dans la continuité du récit.</p>
     <div id="tuneSliders"></div>
     <div class="actions">
       <button class="btn btn-quiet" onclick="closeTune()">Annuler</button>
@@ -1049,29 +1056,29 @@ const QUESTIONS = [
 
 /* Axes d'ajustement en cours de lecture (curseurs 0-4, 2 = neutre) */
 const TUNE_AXES=[
- {id:'cru',label:'Crudité',ends:['suggestif','très cru'],
-  names:['très suggestif','suggestif','équilibré','cru','très cru'],
+ {id:'cru',label:'Langage',desc:'Des mots suggérés… ou dits sans détour.',ends:['tout en sous-entendus','très cru'],
+  names:['tout en sous-entendus','suggéré','équilibré','cru','très cru'],
   instr:['Rends la suite nettement plus suggestive et elliptique : sous-entendus, hors-champ, presque rien d\'explicite.',
          'Adoucis les descriptions : plus de suggestion, moins d\'explicite.',
          null,
          'Rends la suite plus crue : descriptions explicites, vocabulaire direct.',
          'Rends la suite très crue : langage sans aucun détour, descriptions extrêmement explicites.']},
- {id:'temp',label:'Température',ends:['tendre','incandescent'],
-  names:['très tendre','tendre','équilibré','brûlant','incandescent'],
+ {id:'temp',label:'Intensité',desc:'La force du désir dans les scènes.',ends:['tendre','torride'],
+  names:['très tendre','tendre','équilibrée','torride','incandescente'],
   instr:['Rends la suite beaucoup plus tendre et affectueuse : caresses, douceur, murmures.',
          'Adoucis la température : plus de tendresse que d\'urgence.',
          null,
          'Fais monter la température : désir plus intense, corps plus pressants.',
          'Température maximale : désir dévorant, scènes incandescentes, urgence des corps.']},
- {id:'rythme',label:'Rythme',ends:['lent, étiré','haletant'],
+ {id:'rythme',label:'Rythme',desc:'La vitesse à laquelle les choses arrivent.',ends:['lent, étiré','haletant'],
   names:['très lent','lent','équilibré','rapide','haletant'],
   instr:['Ralentis énormément le rythme : étire chaque geste, fais durer chaque instant.',
          'Ralentis le rythme, prends davantage le temps.',
          null,
          'Accélère le rythme : va plus vite aux moments forts.',
          'Rythme haletant : enchaîne les moments forts, sans temps mort.']},
- {id:'rom',label:'Romantisme',ends:['charnel','passionné'],
-  names:['purement charnel','peu romantique','équilibré','romantique','passionné'],
+ {id:'rom',label:'Émotion',desc:'La place des sentiments dans la suite.',ends:['purement charnel','passionné'],
+  names:['purement charnel','peu d\'émotion','équilibrée','romantique','passionnée'],
   instr:['Assèche le romantisme : purement charnel, sans sentiments.',
          'Moins de romantisme, plus de désir brut.',
          null,
@@ -2131,10 +2138,18 @@ async function generate(){
   const maxTok = Math.min(64000, Math.round(p.longueur*3.2)+3000);
   const sys=buildSystemPrompt(p), usr=buildUserMessage(p);
   let total='';
+  S._liveBook=false;
+  let lastLive=0;
   const show=(out)=>{
     S.story=total+out;
-    streamEl.textContent=S.story;
     document.getElementById('wordCount').textContent=countWords(S.story).toLocaleString('fr-FR');
+    if(!S._liveBook){
+      streamEl.textContent=S.story;
+      if(S.story.length>600) startLiveBook();
+    } else if(S.story.length-lastLive>800){
+      lastLive=S.story.length;
+      liveBookUpdate();
+    }
   };
   try{
     let first = await streamCompletion(
@@ -2194,7 +2209,8 @@ function finishGeneration(hasText){
     S.fullStory = S.receivedStory ? (S.receivedStory.trim()+'\n\n'+S.story.trim()) : S.story.trim();
     document.getElementById('readerTitle').textContent = firstChapterTitle(S.fullStory) || 'Votre récit';
     S.bookMode = true;
-    applyView(0);
+    applyView(S._liveBook ? book.page : 0);
+    S._liveBook=false;
     document.getElementById('readerActions').style.display='flex';
     if(S.mode==='couple' || S.mode==='continue'){
       document.getElementById('sharebox').style.display='block';
@@ -2247,6 +2263,36 @@ function storyToHtml(text){
     else { html+='<p>'+inner.replace(/\n/g,'<br>')+'</p>'; }
   }
   return html;
+}
+
+/* ================================================================
+   Lecture en direct : le livre s'ouvre dès les premières phrases,
+   les pages déjà lues ne bougent jamais, les nouvelles s'ajoutent.
+================================================================ */
+function liveStableText(){
+  /* on ne pagine que les paragraphes complets : zéro tremblement */
+  const cut=S.story.lastIndexOf('\n\n');
+  return cut>200 ? S.story.slice(0,cut) : '';
+}
+function startLiveBook(){
+  const txt=liveStableText();
+  if(!txt) return false;
+  S._liveBook=true;
+  S.bookMode=true;
+  document.getElementById('paperScroll').style.display='none';
+  document.getElementById('bookWrap').classList.add('on');
+  const rh=document.getElementById('readerHead');
+  if(rh) rh.style.display='none';
+  document.getElementById('bookInner').innerHTML=storyToHtml(txt);
+  book.page=0;
+  paginate();
+  return true;
+}
+function liveBookUpdate(){
+  const txt=liveStableText();
+  if(!txt) return;
+  document.getElementById('bookInner').innerHTML=storyToHtml(txt);
+  paginate(); /* conserve la page courante, ajoute les nouvelles à la fin */
 }
 
 /* ================================================================
@@ -2360,6 +2406,7 @@ function openTune(){
     const d=document.createElement('div');
     d.className='tslider';
     d.innerHTML='<div class="ts-head"><span>'+a.label+'</span><b id="tsv_'+a.id+'">'+a.names[v]+'</b></div>'
+      +(a.desc?'<div class="ts-desc">'+a.desc+'</div>':'')
       +'<div class="ts-wrap"><div class="ts-ticks"><span></span><span></span><span></span><span></span><span></span></div>'
       +'<input type="range" min="0" max="4" step="1" value="'+v+'" id="ts_'+a.id+'"></div>'
       +'<div class="ts-ends"><span>'+a.ends[0]+'</span><span>'+a.ends[1]+'</span></div>';
@@ -2394,20 +2441,38 @@ function applyTune(){
   adaptRest();
 }
 
-/* Réécriture discrète de la suite : conserve la page en cours
-   + une page d'avance, remplace le reste en arrière-plan. */
+/* Réécriture de la suite : conserve EXACTEMENT les paragraphes
+   jusqu'à celui que le lecteur est en train de lire (page courante),
+   affiche une page « en cours d'écriture », puis les nouvelles pages
+   arrivent au fil de l'eau, dans la continuité. */
+function computeKeptFromBook(){
+  const full=S.fullStory||S.story;
+  const inBook=document.getElementById('bookWrap').classList.contains('on');
+  const paras=full.split(/\n{2,}/).map(x=>x.trim()).filter(Boolean);
+  if(!inBook||book.pages<2){
+    return paras.slice(0, Math.max(1,Math.ceil(paras.length/2))).join('\n\n');
+  }
+  const blocks=[...document.getElementById('bookInner').querySelectorAll('h3,p')];
+  let keepCount=0;
+  blocks.forEach((el,i)=>{
+    const pg=Math.round(el.offsetLeft/(book.w+book.gap));
+    if(pg<=book.page) keepCount=i+1;
+  });
+  keepCount=Math.max(1,Math.min(keepCount,paras.length));
+  return paras.slice(0,keepCount).join('\n\n');
+}
+function renderBookRewrite(txt,writing){
+  document.getElementById('bookInner').innerHTML=
+    storyToHtml(txt)+(writing?'<div class="writingph"><span class="pulse"></span><br>La suite s\'écrit<br>selon vos nouveaux réglages…</div>':'');
+  paginate(); /* la page courante est dans la partie conservée : elle ne bouge pas */
+}
 async function adaptRest(){
   const full=S.fullStory||S.story;
   if(!full) return;
   const inBook=document.getElementById('bookWrap').classList.contains('on');
-  const frac = (inBook&&book.pages>1) ? Math.min(1,(book.page+2)/book.pages) : 0.5;
-  let idx=Math.floor(full.length*frac);
-  let cut=full.lastIndexOf('\n\n', idx);
-  if(cut<300) cut=idx;
-  const kept=full.slice(0,cut).trim();
-  if(full.length-kept.length<200){
-    toast('Vous êtes presque à la fin — vos curseurs s\'appliqueront à la suite de l\'histoire');
-  }
+  if(AudioR.on) stopAudio();
+
+  const kept=computeKeptFromBook();
   const p=S.lastParams||collectParams();
   const remaining=Math.max(700, p.longueur-countWords(kept));
 
@@ -2416,6 +2481,11 @@ async function adaptRest(){
   S.bgAbort=ctrl;
   document.getElementById('adaptBadge').style.display='inline-flex';
 
+  /* on fige immédiatement le récit à la partie lue + page d'attente */
+  S.fullStory=kept; S.story=kept; S.receivedStory='';
+  if(inBook) renderBookRewrite(kept,true);
+  else document.getElementById('storyBox').innerHTML=storyToHtml(kept)+'<p style="color:var(--mut);font-style:italic">La suite s\'écrit selon vos nouveaux réglages…</p>';
+
   const sys=buildSystemPrompt(p);
   const user=`Voici le début du récit, que le lecteur est en train de lire (à conserver TEL QUEL, ne pas le réécrire) :
 
@@ -2423,35 +2493,37 @@ async function adaptRest(){
 ${kept}
 <<<FIN DU RÉCIT DÉJÀ LU>>>
 
-Écris LA SUITE à partir de ce point exact, en appliquant les ajustements demandés dans le message système avec une transition naturelle (le lecteur ne doit pas sentir la couture). Reprends au cœur de l'action, sans résumer ni répéter, en gardant la parfaite continuité (personnages, lieux, ton) et la numérotation des chapitres. Vise environ ${remaining} mots pour la suite, mais écris quoi qu'il arrive.`;
+Écris LA SUITE à partir de ce point exact, en appliquant les ajustements demandés dans le message système avec une transition parfaitement naturelle (le lecteur ne doit pas sentir la couture). Reprends au cœur de l'action, sans résumer ni répéter, en gardant la continuité totale (personnages, lieux, ton) et la numérotation des chapitres. Vise environ ${remaining} mots pour la suite, mais écris quoi qu'il arrive.`;
 
   const maxTok=Math.min(64000, Math.round(remaining*3.2)+3000);
+  let lastLen=0;
   try{
     const suite=await streamCompletion(
       [{role:'system',content:sys},{role:'user',content:user}],
-      maxTok, ()=>{}, ctrl
+      maxTok,
+      (d,out)=>{
+        /* les nouvelles pages arrivent au fil de l'eau, paragraphes complets seulement */
+        if(ctrl.signal.aborted) return;
+        const cutIdx=out.lastIndexOf('\n\n');
+        if(cutIdx>0 && out.length-lastLen>500){
+          lastLen=out.length;
+          S.fullStory=kept+'\n\n'+out.slice(0,cutIdx).trim();
+          S.story=S.fullStory;
+          if(inBook) renderBookRewrite(S.fullStory,true);
+        }
+      },
+      ctrl
     );
     if(ctrl.signal.aborted) return;
-    if(suite.trim()){
-      const wasPage=book.page;
-      const wasAudio=AudioR.on&&!AudioR.paused;
-      if(AudioR.on) stopAudio();
-      S.fullStory=kept+'\n\n'+suite.trim();
-      S.story=S.fullStory;
-      S.receivedStory='';
-      saveLast();
-      if(inBook&&document.getElementById('bookWrap').classList.contains('on')){
-        document.getElementById('bookInner').innerHTML=storyToHtml(S.fullStory);
-        paginate();
-        goPage(wasPage,false);
-      } else {
-        document.getElementById('storyBox').innerHTML=storyToHtml(S.fullStory);
-      }
-      if(wasAudio) startAudioFromHere();
-      toast('La suite a discrètement changé de peau');
-    }
+    S.fullStory=kept+(suite.trim()?'\n\n'+suite.trim():'');
+    S.story=S.fullStory;
+    saveLast();
+    if(inBook) renderBookRewrite(S.fullStory,false);
+    else document.getElementById('storyBox').innerHTML=storyToHtml(S.fullStory);
+    toast('La suite a changé de peau');
   }catch(err){
     if(err.name!=='AbortError') toast(err.message||'Adaptation impossible');
+    if(inBook) renderBookRewrite(S.fullStory,false);
   }finally{
     if(S.bgAbort===ctrl) S.bgAbort=null;
     document.getElementById('adaptBadge').style.display='none';
@@ -2861,8 +2933,8 @@ window.addEventListener('error',e=>{
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='3.1.0';
-const APP_BUILD='11/08/2026 19:38 (Paris)';
+const APP_VERSION='3.3.0';
+const APP_BUILD='12/08/2026 20:48 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
