@@ -191,6 +191,38 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 .scard .sc-meta{display:flex;align-items:center;justify-content:space-between;font-size:11.5px;color:var(--mut)}
 .scard .sc-meta b{color:var(--peach);font-weight:600}
 
+/* ---------- Ambiances sonores ---------- */
+.ambhead{display:flex;align-items:baseline;justify-content:space-between;margin:2px 0 10px}
+.ambhead h3{font-family:var(--serif);font-size:19px;font-weight:500;letter-spacing:-.01em}
+.ambhead span{font-size:11.5px;color:var(--mut)}
+.ambrow{display:flex;gap:9px;overflow-x:auto;margin:0 -22px 4px;padding:2px 22px 8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.ambrow::-webkit-scrollbar{display:none}
+.ambtile{
+  flex:0 0 auto;display:flex;align-items:center;gap:8px;
+  font-size:13px;font-weight:500;color:#CDBEC5;cursor:pointer;
+  padding:12px 16px;border-radius:14px;
+  border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.17);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  transition:all .3s var(--ease);white-space:nowrap;
+}
+.ambtile:active{transform:scale(.95)}
+.ambtile .dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.ambtile.on{background:linear-gradient(180deg,#FFF6EE,#EADACC);color:#301325;border-color:transparent;box-shadow:0 8px 20px rgba(0,0,0,.32)}
+.ambtile.on .dot{background:var(--ember);box-shadow:0 0 8px rgba(225,81,122,.8);animation:pulse 1.6s infinite}
+.ambvol{display:none;align-items:center;gap:10px;margin:6px 0 14px}
+.ambvol.on{display:flex}
+.ambvol span{font-size:11.5px;color:var(--mut)}
+.ambvol input[type=range]{
+  flex:1;-webkit-appearance:none;appearance:none;height:4px;border-radius:4px;
+  background:rgba(255,255,255,.1);outline:none;border:none;padding:0;
+}
+.ambvol input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:18px;height:18px;border-radius:50%;
+  background:linear-gradient(180deg,#FFF8F0,#ECDCCE);border:none;
+  box-shadow:0 3px 8px rgba(0,0,0,.4);cursor:pointer;
+}
+.ambvol input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:#F2E8E2;border:none}
+
 /* ---------- Cards (home) ---------- */
 .solohero{margin-bottom:12px;padding:26px 24px 34px}
 .solohero h3{font-size:25px}
@@ -397,6 +429,9 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
 .story em{color:var(--peach)}
 .story .stream{white-space:pre-wrap}
 .cursor{display:inline-block;width:2px;height:1.1em;background:var(--ember);vertical-align:text-bottom;animation:blink 1s infinite}
+.ink{opacity:0;animation:inkin .6s ease forwards}
+@keyframes inkin{from{opacity:0;filter:blur(2.5px)}to{opacity:1;filter:none}}
+.inkblock{animation:inkin .9s ease}
 @keyframes blink{50%{opacity:0}}
 .genbar{
   display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;
@@ -712,6 +747,7 @@ body.wizmode footer{display:none}
   <div id="resumeBox"></div>
   <div id="fdsBox"></div>
   <div id="suggestBox"></div>
+  <div id="ambBox"></div>
   <div class="card couplecard" onclick="startWizard('couple')">
     <div class="tag">À deux</div>
     <h3>Mode couple</h3>
@@ -1646,6 +1682,7 @@ function renderHome(){
   renderResume();
   renderFds();
   renderSuggest();
+  renderAmb();
   renderDiscover();
 }
 
@@ -1709,6 +1746,140 @@ function renderDiscover(){
     sheadHtml('Pour vous', ap?'selon votre voie':'selon vos goûts')+hrowHtml(mine)
     +sheadHtml('Explorer','changer de territoire')+hrowHtml(exp)
     +sheadHtml('Par la communauté','les plus aimées cette semaine')+hrowHtml(community);
+}
+
+/* ================================================================
+   Ambiances sonores — boucles immersives pendant la lecture.
+   Synthèse WebAudio embarquée. NOTE DEV : pour des enregistrements
+   réalistes (souffles voluptueux, chambre voisine…), ajouter un
+   champ url:'/sons/xxx.mp3' à une entrée AMB : il sera joué en
+   boucle à la place de la synthèse (fichiers sous licence à héberger).
+================================================================ */
+const AMB=[
+ {id:'souffle', n:'Souffles rapprochés'},
+ {id:'coeur',   n:'Battements de cœur'},
+ {id:'chambre', n:'Chambre feutrée'},
+ {id:'pluie',   n:'Pluie sur la vitre'},
+ {id:'feu',     n:'Feu de cheminée'},
+ {id:'vagues',  n:'Vagues lentes'}
+];
+const AmbE={ctx:null,master:null,live:{},vol:0.7};
+function ambCtx(){
+  if(!AmbE.ctx){
+    AmbE.ctx=new (window.AudioContext||window.webkitAudioContext)();
+    AmbE.master=AmbE.ctx.createGain();
+    AmbE.master.gain.value=AmbE.vol;
+    AmbE.master.connect(AmbE.ctx.destination);
+  }
+  if(AmbE.ctx.state==='suspended') AmbE.ctx.resume();
+  return AmbE.ctx;
+}
+function ambNoise(ctx){
+  const b=ctx.createBuffer(1,ctx.sampleRate*2,ctx.sampleRate);
+  const d=b.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  const src=ctx.createBufferSource(); src.buffer=b; src.loop=true;
+  return src;
+}
+function ambStart(id){
+  const def=AMB.find(a=>a.id===id); if(!def) return null;
+  const ctx=ambCtx();
+  const nodes=[], timers=[];
+  const out=ctx.createGain(); out.gain.value=0; out.connect(AmbE.master);
+  out.gain.linearRampToValueAtTime(1, ctx.currentTime+1.2);
+  if(def.url){
+    const a=new Audio(def.url); a.loop=true; a.crossOrigin='anonymous';
+    const src=ctx.createMediaElementSource(a); src.connect(out); a.play().catch(()=>{});
+    return {stop:()=>{a.pause();out.disconnect();}};
+  }
+  const addNoise=(type,freq,q,gain)=>{
+    const n=ambNoise(ctx), f=ctx.createBiquadFilter(), g=ctx.createGain();
+    f.type=type; f.frequency.value=freq; if(q)f.Q.value=q;
+    g.gain.value=gain;
+    n.connect(f); f.connect(g); g.connect(out); n.start();
+    nodes.push(n); return {f,g};
+  };
+  if(id==='souffle'){
+    const {g}=addNoise('bandpass',480,0.8,0.001);
+    const lfo=ctx.createOscillator(), lg=ctx.createGain();
+    lfo.frequency.value=0.21; lg.gain.value=0.05;
+    lfo.connect(lg); lg.connect(g.gain);
+    g.gain.value=0.055;
+    lfo.start(); nodes.push(lfo);
+  }
+  if(id==='coeur'){
+    const beat=()=>{
+      if(!AmbE.live[id]) return;
+      const t=ctx.currentTime;
+      [[0,0.12],[0.28,0.08]].forEach(([dt,amp])=>{
+        const o=ctx.createOscillator(), g=ctx.createGain();
+        o.frequency.value=52;
+        g.gain.setValueAtTime(0.0001,t+dt);
+        g.gain.exponentialRampToValueAtTime(amp,t+dt+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001,t+dt+0.28);
+        o.connect(g); g.connect(out); o.start(t+dt); o.stop(t+dt+0.35);
+      });
+    };
+    beat(); timers.push(setInterval(beat,1030));
+  }
+  if(id==='chambre'){ addNoise('lowpass',210,null,0.045); }
+  if(id==='pluie'){
+    addNoise('highpass',1400,null,0.028);
+    addNoise('bandpass',700,1.5,0.012);
+  }
+  if(id==='feu'){
+    addNoise('lowpass',380,null,0.05);
+    const crack=()=>{
+      if(!AmbE.live[id]) return;
+      const t=ctx.currentTime, n=ambNoise(ctx), f=ctx.createBiquadFilter(), g=ctx.createGain();
+      f.type='highpass'; f.frequency.value=2400;
+      g.gain.setValueAtTime(0.05+Math.random()*0.06,t);
+      g.gain.exponentialRampToValueAtTime(0.0001,t+0.05+Math.random()*0.08);
+      n.connect(f); f.connect(g); g.connect(out); n.start(t); n.stop(t+0.2);
+    };
+    timers.push(setInterval(()=>{ if(Math.random()<0.65) crack(); },240));
+  }
+  if(id==='vagues'){
+    const {f}=addNoise('lowpass',500,null,0.06);
+    const lfo=ctx.createOscillator(), lg=ctx.createGain();
+    lfo.frequency.value=0.07; lg.gain.value=340;
+    lfo.connect(lg); lg.connect(f.frequency);
+    lfo.start(); nodes.push(lfo);
+  }
+  return {stop:()=>{
+    out.gain.linearRampToValueAtTime(0.0001, ctx.currentTime+0.7);
+    setTimeout(()=>{ nodes.forEach(n=>{try{n.stop();}catch(e){}}); out.disconnect(); },800);
+    timers.forEach(clearInterval);
+  }};
+}
+function toggleAmb(id){
+  if(AmbE.live[id]){
+    const h=AmbE.live[id]; delete AmbE.live[id]; h.stop();
+  } else {
+    const h=ambStart(id);
+    if(h) AmbE.live[id]=h;
+  }
+  renderAmb();
+}
+function ambSetVol(v){
+  AmbE.vol=+v;
+  if(AmbE.master) AmbE.master.gain.value=AmbE.vol;
+}
+function renderAmb(){
+  const box=document.getElementById('ambBox'); if(!box) return;
+  const any=Object.keys(AmbE.live).length>0;
+  if(!box.dataset.built){
+    box.dataset.built='1';
+    box.innerHTML='<div class="ambhead"><h3>Ambiances</h3><span>à écouter pendant la lecture · 🎧</span></div>'
+      +'<div class="ambrow">'+AMB.map(a=>'<button class="ambtile" id="amb_'+a.id+'" onclick="toggleAmb(\''+a.id+'\')"><span class="dot"></span>'+a.n+'</button>').join('')+'</div>'
+      +'<div class="ambvol" id="ambVol"><span>Volume</span><input type="range" min="0" max="1" step="0.01" value="'+AmbE.vol+'" oninput="ambSetVol(this.value)"></div>';
+  }
+  AMB.forEach(a=>{
+    const el=document.getElementById('amb_'+a.id);
+    if(el) el.classList.toggle('on', !!AmbE.live[a.id]);
+  });
+  const v=document.getElementById('ambVol');
+  if(v) v.classList.toggle('on', any);
 }
 
 /* ================================================================
@@ -2065,7 +2236,7 @@ ${S.receivedStory}
 /* ================================================================
    Appel API xAI (streaming, générique)
 ================================================================ */
-async function streamCompletion(messages, maxTok, onDelta, ctrl){
+async function streamCompletion(messages, maxTok, onDelta, ctrl, model){
   const ac = ctrl || new AbortController();
   if(!ctrl) S.abort = ac;
   const res = await fetch('/api/chat',{
@@ -2073,7 +2244,7 @@ async function streamCompletion(messages, maxTok, onDelta, ctrl){
     signal:ac.signal,
     headers:{ 'Content-Type':'application/json' },
     body: JSON.stringify({
-      model:S.model, stream:true, temperature:0.9, max_tokens:maxTok, messages:messages
+      model:model||S.model, stream:true, temperature:0.9, max_tokens:maxTok, messages:messages
     })
   });
   if(!res.ok){
@@ -2139,12 +2310,20 @@ async function generate(){
   const sys=buildSystemPrompt(p), usr=buildUserMessage(p);
   let total='';
   S._liveBook=false;
-  let lastLive=0;
+  let lastLive=0, shown=0;
   const show=(out)=>{
     S.story=total+out;
     document.getElementById('wordCount').textContent=countWords(S.story).toLocaleString('fr-FR');
     if(!S._liveBook){
-      streamEl.textContent=S.story;
+      /* encre magique : chaque nouvel apport apparaît en fondu */
+      if(S.story.length<shown){ streamEl.textContent=''; shown=0; }
+      if(S.story.length>shown){
+        const sp=document.createElement('span');
+        sp.className='ink';
+        sp.textContent=S.story.slice(shown);
+        streamEl.appendChild(sp);
+        shown=S.story.length;
+      }
       if(S.story.length>600) startLiveBook();
     } else if(S.story.length-lastLive>800){
       lastLive=S.story.length;
@@ -2291,7 +2470,10 @@ function startLiveBook(){
 function liveBookUpdate(){
   const txt=liveStableText();
   if(!txt) return;
-  document.getElementById('bookInner').innerHTML=storyToHtml(txt);
+  const inner=document.getElementById('bookInner');
+  const prev=inner.querySelectorAll('h3,p').length;
+  inner.innerHTML=storyToHtml(txt);
+  [...inner.querySelectorAll('h3,p')].slice(prev).forEach(el=>el.classList.add('inkblock'));
   paginate(); /* conserve la page courante, ajoute les nouvelles à la fin */
 }
 
@@ -2408,21 +2590,36 @@ function openTune(){
     d.innerHTML='<div class="ts-head"><span>'+a.label+'</span><b id="tsv_'+a.id+'">'+a.names[v]+'</b></div>'
       +(a.desc?'<div class="ts-desc">'+a.desc+'</div>':'')
       +'<div class="ts-wrap"><div class="ts-ticks"><span></span><span></span><span></span><span></span><span></span></div>'
-      +'<input type="range" min="0" max="4" step="1" value="'+v+'" id="ts_'+a.id+'"></div>'
+      +'<input type="range" min="0" max="4" step="0.01" value="'+v+'" id="ts_'+a.id+'"></div>'
       +'<div class="ts-ends"><span>'+a.ends[0]+'</span><span>'+a.ends[1]+'</span></div>';
     box.appendChild(d);
     const inp=d.querySelector('input');
     paintSlider(inp);
-    let lastV=v;
+    let lastN=v;
     inp.addEventListener('input',()=>{
       paintSlider(inp);
-      const b=document.getElementById('tsv_'+a.id);
-      b.textContent=a.names[+inp.value];
-      if(+inp.value!==lastV){
-        lastV=+inp.value;
+      const n=Math.round(+inp.value);
+      if(n!==lastN){
+        lastN=n;
+        const b=document.getElementById('tsv_'+a.id);
+        b.textContent=a.names[n];
         b.classList.remove('vpop'); void b.offsetWidth; b.classList.add('vpop');
-        if(navigator.vibrate) navigator.vibrate(8);
+        if(navigator.vibrate) navigator.vibrate(6);
       }
+    });
+    /* au relâcher : aimantation douce vers le cran le plus proche */
+    inp.addEventListener('change',()=>{
+      const from=+inp.value, to=Math.round(from);
+      if(from===to){ paintSlider(inp); return; }
+      const t0=performance.now(), dur=160;
+      (function glide(now){
+        const k=Math.min(1,(now-t0)/dur);
+        const e=1-Math.pow(1-k,3);
+        inp.value=from+(to-from)*e;
+        paintSlider(inp);
+        if(k<1) requestAnimationFrame(glide);
+        else { inp.value=to; paintSlider(inp); }
+      })(t0);
     });
   });
   document.getElementById('tuneSheet').classList.add('on');
@@ -2431,9 +2628,10 @@ function closeTune(){ document.getElementById('tuneSheet').classList.remove('on'
 function applyTune(){
   TUNE_AXES.forEach(a=>{
     const inp=document.getElementById('ts_'+a.id);
-    if(inp) S.sliders[a.id]=+inp.value;
+    if(inp) S.sliders[a.id]=Math.round(+inp.value);
   });
   closeTune();
+  toast('Réglages appliqués — la suite change dès les prochaines lignes');
   const instrs=[];
   TUNE_AXES.forEach(a=>{ const ins=a.instr[S.sliders[a.id]]; if(ins) instrs.push(ins); });
   S.adjustments=instrs;
@@ -2462,8 +2660,11 @@ function computeKeptFromBook(){
   return paras.slice(0,keepCount).join('\n\n');
 }
 function renderBookRewrite(txt,writing){
-  document.getElementById('bookInner').innerHTML=
+  const inner=document.getElementById('bookInner');
+  const prev=inner.querySelectorAll('h3,p').length;
+  inner.innerHTML=
     storyToHtml(txt)+(writing?'<div class="writingph"><span class="pulse"></span><br>La suite s\'écrit<br>selon vos nouveaux réglages…</div>':'');
+  [...inner.querySelectorAll('h3,p')].slice(prev).forEach(el=>el.classList.add('inkblock'));
   paginate(); /* la page courante est dans la partie conservée : elle ne bouge pas */
 }
 async function adaptRest(){
@@ -2493,27 +2694,34 @@ async function adaptRest(){
 ${kept}
 <<<FIN DU RÉCIT DÉJÀ LU>>>
 
-Écris LA SUITE à partir de ce point exact, en appliquant les ajustements demandés dans le message système avec une transition parfaitement naturelle (le lecteur ne doit pas sentir la couture). Reprends au cœur de l'action, sans résumer ni répéter, en gardant la continuité totale (personnages, lieux, ton) et la numérotation des chapitres. Vise environ ${remaining} mots pour la suite, mais écris quoi qu'il arrive.`;
+Écris LA SUITE à partir de ce point exact. IMPÉRATIF : les ajustements demandés dans le message système doivent être perceptibles DÈS LA PREMIÈRE PHRASE — le lecteur vient de tourner ces réglages et doit sentir immédiatement le changement de ton, tout en gardant une transition crédible avec ce qui précède. Reprends au cœur de l'action, sans résumer ni répéter, en gardant la continuité totale (personnages, lieux, numérotation des chapitres). Vise environ ${remaining} mots pour la suite, mais écris quoi qu'il arrive.`;
 
   const maxTok=Math.min(64000, Math.round(remaining*3.2)+3000);
   let lastLen=0;
+  const onD=(d,out)=>{
+    /* premier paragraphe affiché dès qu'il est complet, puis au fil de l'eau */
+    if(ctrl.signal.aborted) return;
+    const cutIdx=out.lastIndexOf('\n\n');
+    if(cutIdx>0 && (lastLen===0 || out.length-lastLen>400)){
+      lastLen=out.length;
+      S.fullStory=kept+'\n\n'+out.slice(0,cutIdx).trim();
+      S.story=S.fullStory;
+      if(inBook) renderBookRewrite(S.fullStory,true);
+    }
+  };
+  const msgs=[{role:'system',content:sys},{role:'user',content:user}];
   try{
-    const suite=await streamCompletion(
-      [{role:'system',content:sys},{role:'user',content:user}],
-      maxTok,
-      (d,out)=>{
-        /* les nouvelles pages arrivent au fil de l'eau, paragraphes complets seulement */
-        if(ctrl.signal.aborted) return;
-        const cutIdx=out.lastIndexOf('\n\n');
-        if(cutIdx>0 && out.length-lastLen>500){
-          lastLen=out.length;
-          S.fullStory=kept+'\n\n'+out.slice(0,cutIdx).trim();
-          S.story=S.fullStory;
-          if(inBook) renderBookRewrite(S.fullStory,true);
-        }
-      },
-      ctrl
-    );
+    let suite='';
+    try{
+      /* modèle rapide d'abord : le changement arrive en quelques secondes */
+      suite=await streamCompletion(msgs, maxTok, onD, ctrl, 'grok-4-fast');
+    }catch(errFast){
+      if(errFast.name==='AbortError') throw errFast;
+      /* repli sur le modèle standard si le rapide n'est pas disponible */
+      lastLen=0; S.fullStory=kept; S.story=kept;
+      if(inBook) renderBookRewrite(kept,true);
+      suite=await streamCompletion(msgs, maxTok, onD, ctrl);
+    }
     if(ctrl.signal.aborted) return;
     S.fullStory=kept+(suite.trim()?'\n\n'+suite.trim():'');
     S.story=S.fullStory;
@@ -2933,8 +3141,8 @@ window.addEventListener('error',e=>{
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='3.3.0';
-const APP_BUILD='12/08/2026 20:48 (Paris)';
+const APP_VERSION='3.6.0';
+const APP_BUILD='12/08/2026 21:05 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
