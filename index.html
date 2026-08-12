@@ -312,6 +312,9 @@ p.sub{color:var(--mut);font-size:15px;line-height:1.7;margin-bottom:24px;max-wid
 #home.on,#profile.on,#discoverScreen.on{padding-bottom:0}
 
 /* ---------- Questionnaire ---------- */
+body.readmode header,body.readmode footer{display:none}
+body.readmode .wrap{padding-top:6px}
+body.readmode .bookvp{height:calc(100dvh - 206px)}
 body.wizmode footer{display:none}
 body.wizmode::before{animation:none;opacity:.5}
 body.wizmode::after{display:none}
@@ -440,7 +443,7 @@ textarea{resize:vertical;min-height:110px;line-height:1.65}
   border:1px solid rgba(255,255,255,.08);border-top-color:rgba(255,255,255,.2);
 }
 .genbar .st{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--peach)}
-.genbar .wc{font-family:var(--serif);font-style:italic;font-size:16px;color:var(--mut)}
+.genbar .wc{display:none}
 .pulse{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ember);margin-right:10px;animation:pulse 1.3s infinite}
 @keyframes pulse{0%,100%{opacity:.3}50%{opacity:1;box-shadow:0 0 10px var(--ember)}}
 .reader-actions{display:flex;flex-direction:column;gap:11px;margin-top:26px}
@@ -860,6 +863,7 @@ body.wizmode footer{display:none}
   <div id="bookWrap">
     <div class="bookhead">
       <span class="bh-ch" id="bookChapter">fantas.me</span>
+      <span class="adapt" id="writeBadge" style="display:none;cursor:pointer" onclick="stopGeneration()" title="Toucher pour arrêter"><span class="pulse"></span>s'écrit…</span>
       <span class="adapt" id="adaptBadge" style="display:none"><span class="pulse"></span>la suite s'adapte…</span>
       <span id="bookMeta"></span>
     </div>
@@ -1503,7 +1507,52 @@ function toneProfile(){
   if(/romantique|tendre|amour/i.test(cust)) t.romantique+=2;
   return t;
 }
+/* Décor inédit (ex : « dans une caravane ») : Grok-fast génère
+   lieux et trames adaptés pendant que l'utilisateur répond. */
+const Dyn={key:'',lieux:null,scen:null,loading:false};
+function dynKey(){ return locAnswerText(); }
+async function fetchDynSugs(){
+  const loc=locAnswerText();
+  if(!loc || ctxRule(LIEUX_CTX,loc)) return; /* règles locales suffisantes */
+  const key=dynKey();
+  if(Dyn.key===key && (Dyn.lieux||Dyn.loading)) return;
+  Dyn.key=key; Dyn.lieux=null; Dyn.scen=null; Dyn.loading=true;
+  try{
+    const vibe=joinAnswer('vibe','');
+    const res=await fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'grok-4-fast', stream:false, temperature:0.7, max_tokens:600,
+        messages:[{role:'user',content:'Décor d\'une histoire érotique pour adultes : « '+loc+' »'
+          +(vibe?' (ambiance : '+vibe+')':'')
+          +'. Réponds UNIQUEMENT avec ce JSON strict, sans aucun autre texte : {"lieux":["8 endroits précis et évocateurs DE CE DÉCOR, 2 à 5 mots chacun, en français"],"scenarios":["3 points de départ d\'histoire dans ce décor, une phrase courte chacun"]}'}]
+      })});
+    if(!res.ok) throw 0;
+    const j=await res.json();
+    const txt=(j.choices&&j.choices[0]&&j.choices[0].message&&j.choices[0].message.content)||'';
+    const m=txt.match(/\{[\s\S]*\}/);
+    const data=JSON.parse(m?m[0]:txt);
+    if(Dyn.key!==key) return; /* le décor a changé entre-temps */
+    Dyn.lieux=(data.lieux||[]).map(x=>String(x).trim()).filter(Boolean).slice(0,9);
+    Dyn.scen=(data.scenarios||[]).map(x=>String(x).trim()).filter(Boolean).slice(0,3);
+    Dyn.loading=false;
+    const q=QUESTIONS[S.qIndex];
+    if(q&&(q.id==='lieux'||q.id==='scenario')) renderQuestion();
+  }catch(e){ Dyn.loading=false; }
+}
 function suggestionsFor(q){
+  if(q.id==='lieux'){
+    if(Dyn.lieux&&Dyn.lieux.length&&Dyn.key===dynKey()){
+      return {list:Dyn.lieux, hint:'Propositions adaptées à votre décor — « '+dynKey()+' »'};
+    }
+    if(Dyn.loading&&Dyn.key===dynKey()){
+      const r0=ctxRule(LIEUX_CTX, locAnswerText());
+      return {list:(r0?r0.list:q.sug), hint:'Adaptation à votre décor en cours… les propositions vont se préciser'};
+    }
+  }
+  if(q.id==='scenario'&&Dyn.scen&&Dyn.scen.length&&Dyn.key===dynKey()){
+    const merged=[...Dyn.scen, ...q.sug.filter(x=>!Dyn.scen.includes(x))].slice(0,8);
+    return {list:merged, hint:'Les premières trames sont inspirées de votre décor'};
+  }
   if(q.id==='styleEcriture'){
     const t=toneProfile();
     const scored=STYLES.map((st,i)=>({label:st.label, i:i, score:st.tags.reduce((n,k)=>n+(t[k]||0),0)}))
@@ -1906,6 +1955,7 @@ function showScreen(id){
   document.getElementById(id).classList.add('on');
   document.getElementById('qnav').classList.toggle('on', id==='wizard');
   document.body.classList.toggle('wizmode', id==='wizard');
+  document.body.classList.toggle('readmode', id==='reader');
   const tb=document.getElementById('tabbar');
   if(tb){
     tb.classList.add('on');
@@ -2066,7 +2116,11 @@ function renderQuestion(){
     cust.value = a.custom||'';
     cust.addEventListener('input', ()=>{
       a.custom=cust.value;
-      if(q.id==='localisation') S.answers.lieux.sel=[];
+      if(q.id==='localisation'){
+        S.answers.lieux.sel=[];
+        clearTimeout(S._dynT);
+        S._dynT=setTimeout(fetchDynSugs,900); /* pré-charge pendant la frappe */
+      }
       updNextLabel();
     });
   }
@@ -2115,6 +2169,7 @@ function updNextLabel(){
 function qNav(dir){
   if(document.activeElement&&document.activeElement.blur) document.activeElement.blur();
   window.scrollTo(0,0);
+  fetchDynSugs();
   const vis=visibleIdx();
   const pos=Math.max(0,vis.indexOf(S.qIndex));
   if(dir>0 && pos===vis.length-1){ generate(); return; }
@@ -2408,6 +2463,7 @@ function showGenError(err){
   eb.innerHTML='L\'écriture a échoué : '+escapeHtml(err.message)+hint;
   eb.style.display='block';
   document.getElementById('genbar').style.display='none';
+  document.getElementById('writeBadge').style.display='none';
   document.getElementById('storyBox').innerHTML='';
   document.getElementById('readerActions').style.display='flex';
   document.getElementById('readerTitle').textContent='Un contretemps…';
@@ -2416,6 +2472,7 @@ function stopGeneration(){ if(S.abort) S.abort.abort(); }
 function finishGeneration(hasText){
   S.abort=null;
   document.getElementById('genbar').style.display='none';
+  document.getElementById('writeBadge').style.display='none';
   if(hasText){
     S.fullStory = S.receivedStory ? (S.receivedStory.trim()+'\n\n'+S.story.trim()) : S.story.trim();
     document.getElementById('readerTitle').textContent = firstChapterTitle(S.fullStory) || 'Votre récit';
@@ -2489,6 +2546,8 @@ function startLiveBook(){
   const txt=liveStableText();
   if(!txt) return false;
   S._liveBook=true;
+  document.getElementById('genbar').style.display='none';
+  document.getElementById('writeBadge').style.display='inline-flex';
   S.bookMode=true;
   document.getElementById('paperScroll').style.display='none';
   document.getElementById('bookWrap').classList.add('on');
@@ -2567,7 +2626,7 @@ function goPage(p, animate){
   inner.style.transform='translateX(-'+(book.page*(book.w+book.gap))+'px)';
   document.getElementById('pageNum').textContent=(book.page+1)+' / '+book.pages;
   document.getElementById('bookFill').style.width=((book.page+1)/book.pages*100)+'%';
-  let ch='fantas.me';
+  let ch='';
   for(const c of book.chapters){ if(c.page<=book.page) ch=c.title; }
   document.getElementById('bookChapter').textContent=ch;
   const rest=book.pages-book.page-1;
@@ -3173,8 +3232,8 @@ window.addEventListener('error',e=>{
 /* ---- version ----
    À incrémenter à chaque déploiement ; la date de build est
    régénérée automatiquement quand Claude produit le fichier. */
-const APP_VERSION='3.7.0';
-const APP_BUILD='12/08/2026 21:16 (Paris)';
+const APP_VERSION='3.9.0';
+const APP_BUILD='12/08/2026 21:26 (Paris)';
 (function(){
   const bt=document.getElementById('buildTag');
   if(bt) bt.textContent='v'+APP_VERSION+' · build '+APP_BUILD;
